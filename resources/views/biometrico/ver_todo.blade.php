@@ -1,0 +1,32 @@
+@extends('layout.main')
+
+
+@section('content')
+
+	@if(isset($checadas))
+	 	<div class="row">
+            <table class="table table-striped">
+                <tr>
+                    <th colspan="7">Data Attendance</th>
+                </tr>
+                <tr>
+                    <th>Numero de empleado</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                </tr>
+                    @if (count($checadas) > 0) 
+                        @foreach ($checadas as $attItem) 
+                            <tr>
+                                <td>{{ $attItem['id'] }} </td>
+                                <td>{{ date("d/m/Y", strtotime($attItem['timestamp'])) }}</td>
+                                <td>{{ date("H:i", strtotime($attItem['timestamp'])) }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+            </table>
+		</div>
+	@endif
+
+@endsection
+
+    

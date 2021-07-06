@@ -1,0 +1,72 @@
+.social {
+	position: fixed; /* Hacemos que la posición en pantalla sea fija para que siempre se muestre en pantalla*/
+	bottom: 20px;
+	right: 20px;
+}
+
+	.social ul {
+		list-style: none;
+	}
+
+	.social ul li a {
+		display: inline-block;
+		color:#fff;
+		background: #2980B9;
+		padding: 10px 15px;
+		text-decoration: none;
+		-webkit-transition:all 500ms ease;
+		-o-transition:all 500ms ease;
+		transition:all 500ms ease; /* Establecemos una transición a todas las propiedades */
+
+		-webkit-border-radius: 220px;
+		-moz-border-radius: 220px;
+		border-radius: 220px;
+	}
+
+	.social ul li .icon-pdf {background:#337AB7;} /* Establecemos los colores de cada red social, aprovechando su class */
+	.social ul li .icon-twitter {background: #00abf0;}
+	.social ul li .icon-googleplus {background: #d95232;}
+	.social ul li .icon-pinterest {background: #ae181f;}
+	.social ul li .icon-mail {background: #666666;}
+
+	.social ul li a:hover {
+		background: #6441A5; /* Cambiamos el fondo cuando el usuario pase el mouse */
+		padding: 10px 30px; /* Hacemos mas grande el espacio cuando el usuario pase el mouse */
+	}
+
+
+.social-left {
+	position: fixed; /* Hacemos que la posición en pantalla sea fija para que siempre se muestre en pantalla*/
+	bottom: 100px;
+	right: 20px;
+}
+
+	.social-left ul {
+		list-style: none;
+	}
+
+	.social-left ul li a {
+		display: inline-block;
+		color:#fff;
+		background: #f44242;
+		padding: 10px 15px;
+		text-decoration: none;
+		-webkit-transition:all 500ms ease;
+		-o-transition:all 500ms ease;
+		transition:all 500ms ease; /* Establecemos una transición a todas las propiedades */
+
+		-webkit-border-radius: 220px;
+		-moz-border-radius: 220px;
+		border-radius: 220px;
+	}
+
+	.social-left ul li .icon-pdf {background:#f44242;} /* Establecemos los colores de cada red social, aprovechando su class */
+	.social-left ul li .icon-twitter {background: #00abf0;}
+	.social-left ul li .icon-googleplus {background: #d95232;}
+	.social-left ul li .icon-pinterest {background: #ae181f;}
+	.social-left ul li .icon-mail {background: #666666;}
+
+	.social-left ul li a:hover {
+		background: #fc1616; /* Cambiamos el fondo cuando el usuario pase el mouse */
+		padding: 10px 30px; /* Hacemos mas grande el espacio cuando el usuario pase el mouse */
+	}

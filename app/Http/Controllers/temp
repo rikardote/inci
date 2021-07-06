@@ -1,0 +1,34 @@
+       //$dptos = \Auth::user()->centros->lists('id')->toArray();
+        //$qna_active = Qna::find($qna_id);
+        //$employee = Employe::where('num_empleado', '=', $num_empleado)->whereIn('deparment_id', $dptos)->first();
+     /*   if(!$employee){
+            $error = "Empleado no encontrado, o no pertenece a su adscripcion.<br>Informacion en Recursos Humanos";
+            return view('incidencias.noencontrado')->with('qna_id', $qna_id)->with('error', $error);;
+        }
+        if (!$qna_active->active) {
+            $error = "Qna ". $qna_active->qna . "/" .$qna_active->year. " - ". $qna_active->description. " Ya no esta activada";
+            return view('incidencias.noencontrado')->with('qna_id', $qna_id)->with('error', $error);
+           
+        }
+*/         if (isset($num_empleado) && isset($qna_id)) {
+                dd('hola');
+            }
+            else{
+                dd(' en else');
+                $qna = Qna::find($qna_id);
+                $incidencias = Incidencia::getIncidencias($qna_id, $num_empleado);
+
+                $periodos = Periodo::all()->lists('periodoo', 'id')->toArray();
+                arsort($periodos);
+
+                $codigosdeincidencias = Codigo_De_Incidencia::all()->lists('codigo', 'id')->toArray();
+                asort($codigosdeincidencias);
+                
+                return view('incidencias.create')
+                    ->with('incidencias', $incidencias)
+                    ->with('qna', $qna)
+                    ->with('employee', $employee)
+                    ->with('periodos', $periodos)
+                    ->with('codigosdeincidencias', $codigosdeincidencias);
+        
+            }
