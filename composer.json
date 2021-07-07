@@ -15,8 +15,8 @@
         "itsgoingd/clockwork": "~1.10",
         "uxweb/sweet-alert": "~1.1",
         "maatwebsite/excel": "~2.1.0",
-        "mpdf/mpdf": "dev-development",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "mpdf/mpdf": "6.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
