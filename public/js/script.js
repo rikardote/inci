@@ -29,7 +29,7 @@ $(document).ready(function () {
     });
     $("#auto").autocomplete({
     minLength:3,
-    source: 'http://incidencias.slyip.com/getdata',
+    source: 'http://incidencias.ddns.net/getdata',
     select: function (event, item)
     {
         if (event.keyCode == 13){

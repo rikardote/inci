@@ -21,7 +21,7 @@
             //var route = "http://192.161.59.137/incidencias/employees/"+num_empleado+"/destroy";
             //var route = "http://192.168.1.95/employees/"+num_empleado+"/destroy;
             //var route = "http://incidencias.app/employees/"+num_empleado+"/destroy";
-            var route = "http://incidencias.slyip.com/employees/"+num_empleado+"/destroy";
+            var route = "http://incidencias.ddns.net/employees/"+num_empleado+"/destroy";
             var token = $("#token").val();
             swal({
 		        title: "Seguro de borrar este Empleado?",   

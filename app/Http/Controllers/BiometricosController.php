@@ -15,7 +15,6 @@ use App\Qna;
 use Carbon\Carbon;
 use App\Attendance;
 use Rats\Zkteco\Lib\ZKTeco;
-//use ZKTeco;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -123,7 +122,8 @@ class BiometricosController extends Controller
     {
        
         //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.160.141.37");
+        $zk = new ZKTeco("192.160.1.206");
+	
         $zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
@@ -133,13 +133,13 @@ class BiometricosController extends Controller
         sleep(1);
 
         //BIOMETRICO 2 DELEGACION (COMEDOR)
-        $zk2 = new ZKTeco("192.160.141.38");
+/*        $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
         $zk2->disconnect();
-/*
+
         //BIOMETRICO 3 MESA DE OTAY
         $zk3 = new ZKTeco("192.168.201.7");
         $zk3->connect();
@@ -148,7 +148,7 @@ class BiometricosController extends Controller
         sleep(1);
         $zk3->disconnect();
 */
-        $checadas = array_merge($checadas_1, $checadas_2);
+        //$checadas = array_merge($checadas_1,checadas_2);
 
         
         foreach($checadas as $checada){
