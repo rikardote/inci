@@ -62,19 +62,20 @@ class Biometrico extends Command
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
         $zk2->disconnect();
-/*
-        //BIOMETRICO 3 MESA DE OTAY
-        $zk3 = new ZKTeco("192.168.201.7");
+
+        //BIOMETRICO 3 EBDI34
+       
+    /* $zk3 = new ZKTeco("192.161.170.253");
         $zk3->connect();
         sleep(1);
-        $checadas =  $zk3->getAttendance();
+        $checadas_3 =  $zk3->getAttendance();
         sleep(1);
         $zk3->disconnect();
-*/
+    */  
         $checadas = array_merge($checadas_1, $checadas_2);
-	$progressBar = $this->output->createProgressBar(count($checadas));
-	$this->info('Iniciando Guardado en base de datos...'."\n");
-	$progressBar->start();
+        $progressBar = $this->output->createProgressBar(count($checadas));
+        $this->info('Iniciando Guardado en base de datos...'."\n");
+        $progressBar->start();
 
 
         foreach($checadas as $checada){

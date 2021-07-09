@@ -118,6 +118,7 @@ class Employe extends Model
                  ->leftjoin('jornadas', 'jornadas.id', '=', 'employees.jornada_id')
                  ->whereNull('deleted_at')
                  ->where('deparment_id', $department_id)
+                 ->orderBy('num_empleado', 'ASC')
                  ->get();
             return $empleados;
     }

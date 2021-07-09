@@ -51,13 +51,15 @@ class BiometricosController extends Controller
             $qna-=1;
       }
 
-      //$qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
+      $qnas = Qna::orderby('id', 'desc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
      // krsort($qnas);
-        $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
+       // $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
 
       return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
    		
     }
+    
+    /* REPORTE DE CHECADAS DEL BIOMETRICO  */ 
     public function buscar(Request $request){
     	$dpto = $request->deparment_id;
         $dpto_des = Deparment::find($dpto);
@@ -122,12 +124,13 @@ class BiometricosController extends Controller
     {
        
         //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.160.1.206");
-	
+        $zk = new ZKTeco("192.161.170.253");
+        
         $zk->connect();
         sleep(1);
-        $checadas_1 =  $zk->getAttendance();
+        $checadas =  $zk->getAttendance();
         sleep(1);
+        //dd($zk);
         $zk->disconnect();
         
         sleep(1);
