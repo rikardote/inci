@@ -8,8 +8,8 @@
 {!! Form::open(['route' => ['biometrico.buscar'], 'method' => 'POST']) !!}	
 <table class="table table-striped">
 	<thead>
-		<th>Fecha Inicial</th>
-		<th>Fecha Final</th>
+		<th>Departamento</th>
+		<th>Quincena</th>
 	</thead>
 	<tbody>
 		<tr>
