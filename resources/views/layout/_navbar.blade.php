@@ -58,7 +58,7 @@
                                 <li><a href="{{ route('reports.estadistica') }}"></i> REPORTES ESTADISTICO</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ route('reports.por_incidencia') }}"></i> REPORTE POR INCIDENCIA</a></li>
-                                <!-- <li><a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-4x"></i><br>Ver Checadas</a></li> -->
+                                <li><a href="{{ route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-4x"></i><br>Ver Checadas</a></li> 
                                 <li><a href="{{ route('reports.val_aguinaldo') }}"></i> REPORTE ANUAL DE FALTAS Y LICENCIAS S/G</a></li>
                             </ul>
                         </li>
