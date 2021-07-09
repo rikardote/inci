@@ -13,7 +13,7 @@
 
                 <!-- Branding Image -->
                 
-                <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/logo_trans2.png') }}"style="width: 60px; height: 60px;"></a> 
+                 <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/logo_trans2.png') }}"style="width: 60px; height: 60px;"></a>  
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -25,7 +25,7 @@
                         <li class="{{ Request::segment(1) === 'incidencias' ? 'active' : null  }}"><a href="{{route('incidencias.index')}}"><i class="fa fa-pencil-square-o fa-3x"></i>CAPTURA DE INCIDENCIAS</a></li>
                     @endif
 
-                    <li class="{{ Request::segment(1) === 'biometrico_getchecadas' ? 'active' : null  }}"><a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-2x"></i> BIOMETRICO</a></li>
+                   <!-- <li class="{{ Request::segment(1) === 'biometrico_getchecadas' ? 'active' : null  }}"><a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-2x"></i> BIOMETRICO</a></li> -->
 
                     <li class="dropdown {{ Request::segment(1) === 'reporte' ? 'active' : null  }}">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
