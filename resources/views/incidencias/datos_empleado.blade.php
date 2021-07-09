@@ -2,13 +2,13 @@
 
     <div class="social">
         <ul>
-        <!--<li><a data-url="{{ route('biometrico.show', [$employee->num_empleado]) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'><i class="fa fa-plus "></i> Ver Checadas</a></li>
+        <!--<li><a data-url="{{ route('biometrico.show', [$employee->num_empleado]) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'><i class="fa fa-plus "></i> Ver Checadas</a></li>
             -->
-            <li><a data-url="{{ route('incidencias.create.comment', [$employee->emp_id]) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'><i class="fa fa-plus "></i> Comentario</a></li>
+            <li><a data-url="{{ route('incidencias.create.comment', [$employee->emp_id]) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'><i class="fa fa-plus "></i> Comentario</a></li>
         </ul>
     </div>
             <div class="notice notice-info notice-sm">
-                <h4 align="center"><strong>{{$employee->num_empleado}} - {{$employee->name}} {{$employee->father_lastname}} {{$employee->mother_lastname}}</strong></h4>  
+                <h2 align="center"><strong>{{$employee->num_empleado}} - {{$employee->name}} {{$employee->father_lastname}} {{$employee->mother_lastname}}</strong></h2>  
             </div>
 
               <div align="center">

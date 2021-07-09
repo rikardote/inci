@@ -124,7 +124,7 @@
 
 
 <div class="form-group pull-right">
-  {!! link_to('#', $title='Registrar', $attributes= ['id' => 'register', 'class' => 'btn btn-info'], $secure=null) !!} 
+  {!! link_to('#', $title='Registrar', $attributes= ['id' => 'register', 'class' => 'btn btn-primary'], $secure=null) !!} 
 
 </div>
 

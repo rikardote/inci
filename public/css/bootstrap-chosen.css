@@ -1,12 +1,12 @@
 .chosen-select {
-  width: 100%; }
+  width: 500%; }
 
 .chosen-select-deselect {
-  width: 100%; }
+  width: 500%; }
 
 .chosen-container {
   display: inline-block;
-  font-size: 14px;
+  font-size: 10px;
   position: relative;
   vertical-align: middle; }
   .chosen-container .chosen-drop {

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="supreme-container">
-<a data-url="{{ route('users.create') }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
+<a data-url="{{ route('users.create') }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
     <span class="fa fa-user-plus fa-2x" aria-hidden='true'></span>
   </a> 
 	<table class="table table-striped">
@@ -24,10 +24,10 @@
 			 <td>{{ $user->email }}</td>
 
 			 <td>
-				<a data-url="{{ route('users.edit', $user->id) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
+				<a data-url="{{ route('users.edit', $user->id) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
 			 		<span class="fa fa-pencil-square-o fa-2x" aria-hidden='true'></span>
   				</a> 
-  				<a data-url="{{ route('user.change', $user->id) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
+  				<a data-url="{{ route('user.change', $user->id) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
 			 		<span class="fa fa-user-secret fa-2x" aria-hidden='true'></span>
   				</a> 
 			 	<a href="{{route('user.destroy', $user->id) }}" <span class="fa fa-times fa-2x" aria-hidden="true"></span></a>

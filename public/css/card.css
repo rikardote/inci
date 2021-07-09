@@ -9,7 +9,7 @@
 }
 .notice-sm {
     padding: 10px;
-    font-size: 80%;
+    font-size: 100%;
 }
 .notice-lg {
     padding: 35px;
@@ -22,7 +22,7 @@
     color: #80D651;
 }
 .notice-info {
-    color: #45ABCD;
+    color: #022c3a;
     animation: myanimation 5s infinite;
 }
 .notice-info>strong {
