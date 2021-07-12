@@ -23,20 +23,21 @@
 				 <td>{{ $qna->description }}</td>
 				 <td>
 				
-					<a id="button" class="switch" onClick=check({{$qna->id}}) href="#"> {!! $qna->active ? '<input type="checkbox" checked><span class="slider round"></span>':'<input type="checkbox"> <span class="slider round"></span>' !!}	</a> 
+					<a id="" class="switch" onClick=check({{$qna->id}}) href="#"> {!! $qna->active ? '<input type="checkbox" checked><span class="slider round"></span>':'<input type="checkbox"> <span class="slider round"></span>' !!}	</a> 
 					
-					 </td>
-			<!--		 
+				  </td>
+
+				
+				<!--	 
 					 <td>
 					 	<a data-url="{{ route('qnas.edit', $qna->id) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
 					 		<span class="fa fa-pencil-square-o fa-2x" aria-hidden='true'></span>
 		  				</a> 
 					 	<a href="{{route('qnas.destroy', $qna->id) }}"><span class="fa fa-times fa-2x" aria-hidden="true"></span></a>
-
-					 	
 					 </td>
-			-->
-					</tr>
+					-->
+			
+				</tr>
 
 			@endforeach
 		</tbody>
