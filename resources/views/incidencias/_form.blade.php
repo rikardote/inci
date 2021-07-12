@@ -102,7 +102,7 @@
 
   {!! Form::text('fecha_inicio', null, [
     'class' => 'form-control',
-    'placeholder' => 'Fecha Inicial', 
+    'placeholder' => 'DD/MM/AAAA', 
     'required',
     'autocomplete' => 'off',
     'id' => 'datepicker_inicial'
@@ -113,7 +113,7 @@
 
   {!! Form::text('fecha_final', null, [
     'class' => 'form-control',
-    'placeholder' => 'Fecha Final', 
+    'placeholder' => 'DD/MM/AAAA', 
     'required',
     'autocomplete' => 'off',
     'id' => 'datepicker_final'

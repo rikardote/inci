@@ -11,7 +11,7 @@
 
 	<!-- <link rel="stylesheet" href="{{ asset('css/bootstrap-chosen.css') }}"> -->
 
-	
+	<link rel="stylesheet" href="{{ asset('plugins/flatpickr/flatpickr.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('plugins/datetextentry/datetextentry.css') }}">
 	<link rel="stylesheet" href="{{ asset('plugins/sweetalert/dist/sweetalert.css') }}">
 
@@ -66,6 +66,8 @@
 <script src="{{ asset('plugins/datetextentry/datetextentry.js') }}"></script>
 <script src="{{ asset('plugins/sweetalert/dist/sweetalert.min.js') }}"></script>
 <script src="{{ asset('plugins/toastr/js/toastr.min.js') }}"></script>
+<script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
 <script src="{{ asset('js/script.js') }}"></script>
 
 
