@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/logo_trans2.png') }}"style="width: 60px; height: 60px;"></a>
+          <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/avatar.png') }}"style="width: 60px; height: 60px;"></a>
         </div>
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
