@@ -45,7 +45,7 @@ class BiometricoTime extends Command
         $zk->connect();
 
         sleep(1);
-        $zk->setTime($t);
+        //$zk->setTime($t);
         $time = $zk->getTime();
 
         sleep(1);
@@ -56,7 +56,7 @@ class BiometricoTime extends Command
         $zk2->connect();
         sleep(1);
 
-        $zk2->setTime($t);
+        //$zk2->setTime($t);
         $time2 = $zk2->getTime();
         
 
