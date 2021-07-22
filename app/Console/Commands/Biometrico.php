@@ -49,6 +49,8 @@ class Biometrico extends Command
         $zk = new ZKTeco("192.160.141.37");
         $zk->connect();
         sleep(1);
+        $zk->setTime(Carbon::now()->toDateTimeString());
+        sleep(1);
         $checadas_1 =  $zk->getAttendance();
         sleep(1);
         $zk->disconnect();
@@ -58,6 +60,8 @@ class Biometrico extends Command
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
+        sleep(1);
+        $zk2->setTime(Carbon::now()->toDateTimeString());
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
@@ -93,6 +97,6 @@ class Biometrico extends Command
         }
 	$progressBar->finish();
 
-	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente');
+	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
     }
 }

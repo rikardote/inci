@@ -124,17 +124,21 @@ class BiometricosController extends Controller
     {
        
         //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.161.170.253");
+        
+        $zk = new ZKTeco("192.160.141.37");
         
         $zk->connect();
         sleep(1);
-        $checadas =  $zk->getAttendance();
+        //$checadas =  $zk->getAttendance();
         sleep(1);
-        //dd($zk);
+        $time = $zk->getTime(); 
+        //$zk->setTime(Carbon::now()->toDateTimeString());
+        //$time_now = $zk->getTime(); 
         $zk->disconnect();
         
         sleep(1);
 
+        dd();
         //BIOMETRICO 2 DELEGACION (COMEDOR)
 /*        $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
@@ -153,7 +157,7 @@ class BiometricosController extends Controller
 */
         //$checadas = array_merge($checadas_1,checadas_2);
 
-        
+        /*
         foreach($checadas as $checada){
             $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
@@ -167,9 +171,9 @@ class BiometricosController extends Controller
             }
             
         }
-     
+     */
         
-        return view('biometrico.ver_todo')->with('checadas', $checadas);
+        //return view('biometrico.ver_todo')->with('checadas', $checadas);
 
     }
     public function show_checadas()
