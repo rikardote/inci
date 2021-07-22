@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-         'App\Console\Commands\Biometrico'
+         'App\Console\Commands\Biometrico',
+         'App\Console\Commands\BiometricoTime'
     ];
 
     /**

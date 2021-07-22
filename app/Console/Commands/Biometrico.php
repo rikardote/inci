@@ -44,6 +44,7 @@ class Biometrico extends Command
     public function handle()
     {
 	$this->info('Iniciando descarga de checadas espere un momento:' ."\n");
+        $t = date("Y-m-d H:i:s");
 
         //BIOMETRICO 1 DELEGACION
         $zk = new ZKTeco("192.160.141.37");
@@ -51,7 +52,7 @@ class Biometrico extends Command
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
         sleep(1);
-        $zk->setTime(Carbon::now()->toDateTimeString());
+        $zk->setTime($t);
         sleep(1);
         $zk->disconnect();
         sleep(1);
@@ -63,7 +64,7 @@ class Biometrico extends Command
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
-        $zk2->setTime(Carbon::now()->toDateTimeString());
+        $zk2->setTime($t);
         sleep(1);
         $zk2->disconnect();
 
