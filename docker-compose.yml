@@ -13,25 +13,32 @@ services:
   nginx:
       image: nginx:1.15
       container_name: inci_nginx
+      env_file:
+        - .env
       working_dir: /usr/share/nginx/inci
       networks:
         - inci
       ports:
-          - "8080:80"
+          - "80:80"
       volumes:
           - ./:/usr/share/nginx/inci
           - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
 
-  mysql:
+  db:
       image: mysql:5.7
-      container_name: inci_mysql
+      container_name: db
+      restart: unless-stopped
+      tty: true
+      ports:
+        - "3306:3306"
       networks:
         - inci
       environment:
-        - MYSQL_DATABASE=sistemas
-        - MYSQL_ROOT_PASSWORD=password
-        - MYSQL_USER=inci
-        - MYSQL_PASSWORD=password
+        MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+        MYSQL_DATABASE: "${DB_DATABASE}"
+        MYSQL_USER: "${DB_USERNAME}"
+        MYSQL_PASSWORD: "${DB_PASSWORD}"
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
   # phpMyAdmin container
   phpmyadmin:
     # Use phpmyadmin/phpmyadmin:5.0.2 image
@@ -45,12 +52,10 @@ services:
       - "8081:80"
     # Pass a list of environment variables to the container
     environment:
-      PMA_HOST: mysql
+      MYSQL_USERNAME: "${DB_USERNAME}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      PMA_HOST: db
       UPLOAD_LIMIT: 64M
-    # Wait for "mysql" container to start first
-    depends_on:
-      - mysql
-
 networks:
   inci:
     driver: bridge

@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
     git \
     libzip-dev \
     zip \
+    nano \
     unzip
 
 RUN docker-php-ext-configure zip --with-libzip
