@@ -33,6 +33,7 @@ class BiometricosController extends Controller
             return view('home')->with('qna', $qna);
         }
         else {
+        $t = date("Y-m-d H:i:s");    
              //BIOMETRICO 1 DELEGACION
         $zk = new ZKTeco("192.160.141.37");
         $zk->connect();
