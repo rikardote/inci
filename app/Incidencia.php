@@ -696,7 +696,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->whereNotIn('codigos_de_incidencias.code', [900])
-                 ->whereIn('codigos_de_incidencias.code', [908, 909])
+                 ->whereIn('codigos_de_incidencias.code', [908, 909, 912])
                  //->whereIn('codigos_de_incidencias.code', [907, 908, 909])
                  ->where('qna_id', $qna_id)
                  ->where('deparments.id', '=', $dpto_id)                 

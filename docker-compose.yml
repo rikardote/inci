@@ -26,7 +26,7 @@ services:
 
   db:
       image: mysql:5.7
-      container_name: db
+      container_name: db_inci
       restart: unless-stopped
       tty: true
       ports:
@@ -54,7 +54,7 @@ services:
     environment:
       MYSQL_USERNAME: "${DB_USERNAME}"
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-      PMA_HOST: db
+      PMA_HOST: db_inci
       UPLOAD_LIMIT: 64M
 networks:
   inci:
