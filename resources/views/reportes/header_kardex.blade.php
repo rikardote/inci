@@ -39,7 +39,10 @@
 			<p><td><span style="font-size:16px;">CLAVE DE ADSCRIPCION: <strong>{{($dpto->code == "00104") ? "00105":$dpto->code}}</strong></span></td></p>
 			<td align='right'><span style="font-size:16px;">DESCRIPCION: <strong>{{$dpto->description}}</strong></span></td></p>
 		</tr>
-		
+		<tr><td></td>
+		<td align='right'><span style="font-size:16px;">RANGO DE FECHAS: <strong>{{fecha_dmy($fecha_inicio)}} AL {{fecha_dmy($fecha_final)}}</strong></span></td>
+			
+		</tr>
 		
 	</tbody>
 	
