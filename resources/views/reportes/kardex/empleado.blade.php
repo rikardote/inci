@@ -24,26 +24,41 @@
 <script src="{{ asset('js/ajax.js') }}"></script>
 
 <script type="text/javascript">
-  $(function() {
-    $( "#datepicker_inicial" ).datepicker();
-  });
-  </script>
-<script>
-$.datepicker.setDefaults($.datepicker.regional['es-MX']);
-$('#datepicker_inicial').datepicker({
-    dateFormat: 'dd/mm/yy',
-    changeMonth: true,
-    changeYear: true,
-    firstDay: 1,
-    onClose: function () {
-        $('#datepicker_final').val(this.value);
-    }
-});
-$('#datepicker_final').datepicker({
-    dateFormat: 'dd/mm/yy',
-    changeMonth: true,
-    changeYear: true,
-    firstDay: 1
-});
+    $("#datepicker_inicial").flatpickr({
+        enableTime: false,
+        allowInput: true,
+        dateFormat: "d/m/Y",
+        locale: 'es',
+        onChange : function() {
+        document.getElementById("datepicker_final").value = document.getElementById("datepicker_inicial").value;
+        }
+    });
+
+    $("#datepicker_final").flatpickr({
+        enableTime: false,
+        allowInput: true,
+        dateFormat: "d/m/Y",
+        locale: 'es',
+    });
+//   $(function() {
+//     $( "#datepicker_inicial" ).datepicker();
+//   });
+
+// $.datepicker.setDefaults($.datepicker.regional['es-MX']);
+// $('#datepicker_inicial').datepicker({
+//     dateFormat: 'dd/mm/yy',
+//     changeMonth: true,
+//     changeYear: true,
+//     firstDay: 1,
+//     onClose: function () {
+//         $('#datepicker_final').val(this.value);
+//     }
+// });
+// $('#datepicker_final').datepicker({
+//     dateFormat: 'dd/mm/yy',
+//     changeMonth: true,
+//     changeYear: true,
+//     firstDay: 1
+// });
 </script> 
 @endsection
