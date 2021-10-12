@@ -552,7 +552,7 @@ class ReportsController extends Controller
         $header = \View('reportes.aguinaldo.header', compact('fecha_inicial', 'fecha_final'))->render();
         //$mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
         $html =  \View('reportes.aguinaldo.aguinaldo_pdf', compact('incidencias'))->render();
-        $pdfFilePath = 'Reporte_aguinaldo_2019.pdf';
+        $pdfFilePath = 'Reporte_aguinaldo_2021.pdf';
         $mpdf->setAutoTopMargin = 'stretch';
         $mpdf->setAutoBottomMargin = 'stretch';
         $mpdf->setHTMLHeader($header);
