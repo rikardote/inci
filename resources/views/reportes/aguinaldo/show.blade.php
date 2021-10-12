@@ -15,7 +15,7 @@
            
         </ul>
  </div>
-<h3><strong>IMPORTANTE!  VALIDAR DOBLEMENTE LAS LICENCIAS SIN GOCE DE SUELDO PERIODO 01/01/2020 AL 31/12/2020</strong></h3>
+<h3><strong>IMPORTANTE!  VALIDAR DOBLEMENTE LAS LICENCIAS SIN GOCE DE SUELDO PERIODO 01/01/2021 AL 31/12/2021</strong></h3>
 <table class="table table-hover table-striped table-condensed" style="width:100%;" id="myTable" >
 	<thead>
 			<th>Departamento</th>

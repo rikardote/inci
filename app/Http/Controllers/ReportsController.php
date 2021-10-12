@@ -534,8 +534,8 @@ class ReportsController extends Controller
     return view('reportes.inasistencias.show')->with('incidencias', $incidencias);
   }
   public function val_aguinaldo(Request $request){
-    $fecha_inicial = "2020-01-01";
-    $fecha_final = "2020-12-31";
+    $fecha_inicial = "2021-01-01";
+    $fecha_final = "2021-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
  
     
@@ -544,8 +544,8 @@ class ReportsController extends Controller
     return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
   }
   public function val_aguinaldo_pdf(Request $request){
-    $fecha_inicial = "2020-01-01";
-    $fecha_final = "2020-12-31";
+    $fecha_inicial = "2021-01-01";
+    $fecha_final = "2021-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
     $incidencias = Incidencia::valAguinaldo($fecha_inicial, $fecha_final, $dptos);
     $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
