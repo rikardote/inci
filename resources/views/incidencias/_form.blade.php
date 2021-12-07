@@ -68,6 +68,14 @@
    ]) !!}
 </div>
 
+<div id="becas" class="well well-sm">
+    {!! Form::label('becas_comments', 'Dictamen de beca') !!}
+    {!! Form::text('becas_comments', null, [
+      'class' => 'form-control',
+      'placeholder' => 'Dictamen de beca', 
+     ]) !!}
+  </div>
+
 <div id="div_saltar_validacion_lic" class="well well-sm">
       {!! Form::label('saltar_validacion_lic', 'Ignorar validación de Licencias Economicas: ') !!}
       <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />  
