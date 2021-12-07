@@ -22,6 +22,10 @@
 						 		<br>
                                 <small>{{ $incidencia->otorgado }} </small>
                          @endif
+                         @if(isset($incidencia->becas_comments))
+						 		<br>
+                                <small>{{ $incidencia->becas_comments }} </small>
+                         @endif
 					</td>
 					@if($incidencia->code == 901)
 					 	<td align=center>OT</td>
@@ -58,6 +62,10 @@
 						 	@if(isset($incidencia->otorgado))
 						 		<br>
                                 <small>{{ $incidencia->otorgado }} </small>
+                         	@endif
+                             @if(isset($incidencia->becas_comments))
+						 		<br>
+                                <small>{{ $incidencia->becas_comments }} </small>
                          	@endif
 
 

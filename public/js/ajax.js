@@ -11,6 +11,7 @@
     var frmotorgado = "";
     var frmotorgado = $("#otorgado_id").val();
     var frmpendientes = $("#pendientes_com").val();
+    var frmbecas_comments = $("#becas_comments").val();
     var frmqna_id = $("#qna_id").val();
     var frmsaltavalidacion = '';
     var frmsaltar_validacion_inca = '';
@@ -47,10 +48,11 @@
     var tablaDatos = $("#after_tr");
 
     //var route = "http://incidencias.local/incidencias";
+    //var route = "http://localhost/incidencias";
     //var route = "http://incidencias.slyip.com/incidencias/";
     var route = "http://incidencias.ddns.net/incidencias/";
 
-    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&saltar_validacion_txt='+frmsaltar_validacion_txt+'&qna_id='+frmqna_id; 
+    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&saltar_validacion_txt='+frmsaltar_validacion_txt+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments; 
     $.ajax({
       url: route,
       headers: {'X-CSRF-TOKEN': token},
@@ -116,6 +118,7 @@ function Eliminar(btn){
   //var route = "http://incidencias.local/incidencias/"+btn.value+"";
   //var route = "http://incidencias.slyip.com/incidencias/"+btn.value+"";
   var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
+  //var route = "http://localhost/incidencias/"+btn.value+"";
 
   var token = $("#token").val();
   var tablaDatos = $("#after_tr");

@@ -91,6 +91,7 @@ $('#datepicker_expedida').flatpickr({
     $('#datepicker_inicial').hide();
     $('#datepicker_final').hide();
     $('#register').hide();
+    $('#becas').hide();
     $('#qnas').hide();
 
   });
@@ -152,6 +153,22 @@ $('#datepicker_expedida').flatpickr({
     }
   });
 </script>
+<script>
+    $('#codigo').on('change', function() {
+        //alert( 'hola' ); // or $(this).val()
+      if(this.value == 24) {
+        
+        $('#becas').show();
+        //
+      } else {
+        //
+        $('#becas').hide();
+        document.getElementById("becas").value = null;
+       
+      }
+    });
+  </script>
+
 <script>
   $('#codigo').on('change', function() {
       //alert( this.value ); // or $(this).val()
