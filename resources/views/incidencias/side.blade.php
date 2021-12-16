@@ -7,6 +7,7 @@
 					<th>Fecha Final</th>
 					<th>Total</th>
 					<th>Periodo</th>
+                    <th>Capturado Por</th>
 					<th>Accion</th>
 
 				</thead>
@@ -24,12 +25,17 @@
 								 @else
 								 			<td></td>
 								 @endif
-								 
+								 @if(isset($incidencia->capturado_por))
+										 <td align=center>{{ capturado_por( $incidencia->capturado_por ) }}</td>
+								 @else
+								 			<td></td>
+								 @endif
 								 <td>
 								 @if(!$incidencia->capturada)
 								 	<button class="fa fa-trash fa-2x button button-info" value="{{$incidencia->token}}/{{$employee->num_empleado}}/{{$incidencia->id}}/destroy" OnClick='Eliminar(this);'></button>
 								 	
 								 </td>
+                                 
 								 @endif
 							</tr>
 				@endforeach
