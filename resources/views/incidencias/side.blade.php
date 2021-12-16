@@ -27,8 +27,6 @@
 								 @endif
 								 @if(isset($incidencia->capturado_por))
 										 <td align=center>{{ capturado_por( $incidencia->capturado_por ) }}</td>
-								 @else
-								 			<td></td>
 								 @endif
 								 <td>
 								 @if(!$incidencia->capturada)
