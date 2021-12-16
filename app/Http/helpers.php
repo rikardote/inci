@@ -1,5 +1,6 @@
 <?php
 use Carbon\Carbon;
+use App\User;
 use App\Qna;
 use App\Employe;
 use App\Incidencia;
@@ -20,6 +21,23 @@ function genToken(){
     }
 	return hash('sha1',$randomString.time());
 }
+
+function capturado_por($id){
+    $user = User::find($id);
+    if ($user) {
+      $notocar = Array('del','de');
+      $trozos = explode(' ',$user->name);
+      $iniciales = '';
+      for($i=0;$i<count($trozos);$i++){
+        if(in_array($trozos[$i],$notocar)) $iniciales .= $trozos[$i]." ";
+        else $iniciales .= substr($trozos[$i],0,1).". ";
+      }
+      return $iniciales;
+      //return $user->name;  
+    }
+   
+    
+  }
 
 function fecha_ymd($date){
 	return date('Y-m-d', strtotime(str_replace('/', '-', $date)));
