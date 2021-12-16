@@ -35,6 +35,9 @@ function capturado_por($id){
       return $iniciales;
       //return $user->name;  
     }
+    else {
+        return "";
+    }
    
     
   }
