@@ -48,9 +48,9 @@
     var tablaDatos = $("#after_tr");
 
     //var route = "http://incidencias.local/incidencias";
-    //var route = "http://localhost/incidencias";
+    var route = "http://localhost/incidencias";
     //var route = "http://incidencias.slyip.com/incidencias/";
-    var route = "http://incidencias.ddns.net/incidencias/";
+    //var route = "http://incidencias.ddns.net/incidencias/";
 
     var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&saltar_validacion_txt='+frmsaltar_validacion_txt+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments; 
     $.ajax({
@@ -67,10 +67,10 @@
                 var ffinal = moment(value.fecha_final);
 
                 if (value.periodo==null) {
-                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td>"+value.capturado_por+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td></tr>");                  
+                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");                  
                 }
                 else{
-                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td>"+value.capturado_por+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td></tr>"); 
+                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>"); 
                 };
               });
                //$('#periodo').hide();
@@ -117,8 +117,8 @@ function zPad(n, l, r){
 function Eliminar(btn){
   //var route = "http://incidencias.local/incidencias/"+btn.value+"";
   //var route = "http://incidencias.slyip.com/incidencias/"+btn.value+"";
-  var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
-  //var route = "http://localhost/incidencias/"+btn.value+"";
+  //var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
+  var route = "http://localhost/incidencias/"+btn.value+"";
 
   var token = $("#token").val();
   var tablaDatos = $("#after_tr");
@@ -138,10 +138,10 @@ function Eliminar(btn){
         var finicio = moment(value.fecha_inicio);
         var ffinal = moment(value.fecha_final);
           if (value.periodo==null) {
-             tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td>"+value.capturado_por+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td></tr>");                  
+             tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");                  
           }
           else{
-             tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td>"+value.capturado_por+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td></tr>"); 
+             tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>"); 
           };
       });
       function toasterOptions() {
