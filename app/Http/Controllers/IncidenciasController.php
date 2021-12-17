@@ -119,7 +119,7 @@ class IncidenciasController extends Controller
             $incidencia->token = genToken();
             $incidencia->total_dias = $total_dias;
             $incidencia->fecha_expedida = $fecha_expedida;
-            $incidencia->capturado_por = \Auth::user()->id;
+            $incidencia->capturado_por = capturado_por(\Auth::user()->id);
 
             $incidencia->fecha_capturado =  Carbon::now();
              
