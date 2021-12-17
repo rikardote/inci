@@ -78,7 +78,7 @@
 	                     @endif
 	                     <td>{{ $incidencia->total_dias }}</td>
 	                     <td>{{ $incidencia->otorgado }}</td>
-                         <td align=center>{{ capturado_por( $incidencia->capturado_por ) }}</td>
+                         <td align=center>{{$incidencia->capturado_por }}</td>
 	                     
 	            </tr>
 	        @endforeach

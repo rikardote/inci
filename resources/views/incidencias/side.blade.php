@@ -25,13 +25,16 @@
 								 @else
 								 			<td></td>
 								 @endif
+                                 
 								 @if(isset($incidencia->capturado_por))
-										 <td align=center>{{ capturado_por( $incidencia->capturado_por ) }}</td>
+										 <td align=center>{{ $incidencia->capturado_por }}</td>
+                                 @else
+                                         <td></td>
 								 @endif
-								 <td>
+								 
 								 @if(!$incidencia->capturada)
+                                 <td>
 								 	<button class="fa fa-trash fa-2x button button-info" value="{{$incidencia->token}}/{{$employee->num_empleado}}/{{$incidencia->id}}/destroy" OnClick='Eliminar(this);'></button>
-								 	
 								 </td>
                                  
 								 @endif
