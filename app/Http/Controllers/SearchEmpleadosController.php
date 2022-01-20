@@ -36,6 +36,7 @@ class SearchEmpleadosController extends Controller
 			$noencontrado = null;
 			$periodos = Periodo::orderBy('year', 'desc')->orderBy('periodo', 'desc')->get();
         	$codigosdeincidencias = Codigo_De_Incidencia::all()->pluck('codigo', 'id')->toArray();
+            unset($codigosdeincidencias[94]);
 			natcasesort($codigosdeincidencias);
 			$incidencias = Incidencia::getIncidencias($empleado->num_empleado);
 			$comentario = Comentario::where('employee_id', '=', $empleado->emp_id)->get()->first();
