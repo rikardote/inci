@@ -9,7 +9,7 @@
 
     <h1>En mantenimiento...</h1>
     <div>
-        <p>Una disculpa por el incoveniente pero estamos realizando tareas de mantenimiento en este momento. Si necesitas apoyo marca la extension 53033 en el Area de incidencias, de otra forma el sistema regresara pronto</p>
+        <p>Una disculpa por el incoveniente pero estamos realizando tareas de mantenimiento en este momento. Si necesitas apoyo marca a la extension 53033 en el Area de incidencias, de otra forma el sistema regresara pronto</p>
         <p>&mdash; Departamento de Recursos Humanos</p>
     </div>
 </article>
