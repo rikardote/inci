@@ -70,10 +70,6 @@
 
 <script src="{{ asset('js/moment-with-locales.js') }}"></script>
 
-<script>
-    $('#codigo option[value='94']').remove();
-</script>
-
 <script type="text/javascript">
   $(function() {
     $( "#datepicker_inicial" ).datepicker();

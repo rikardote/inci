@@ -178,6 +178,9 @@ class IncidenciasController extends Controller
             }
             
         */
+            if ($codigo->code == 912) {
+                return response()->json('Codigo 912 ya no se encuentra activo, acude a Recursos Humanos',500);
+            }
             /* Validando pases de salida */
             if ($codigo->code == 905 && $empleado->condicion_id != 1 ) {
                 return response()->json('Pases de salida solo validos para el personal de BASE',500); 
