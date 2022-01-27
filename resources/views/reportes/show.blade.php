@@ -68,8 +68,13 @@
 				@else
 			
 					<tr>
-						<td align=center>{{ $incidencia->num_empleado }}</td>
-						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</td>
+						<td align=center>{{ $incidencia->num_empleado }}  </td>
+						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
+                           <br>
+                            @if ($incidencia->lactancia)
+                                Lactancia: {{ fecha_dmy($incidencia->lactancia_inicio) }} AL {{  fecha_dmy($incidencia->lactancia_fin) }}
+                            @endif
+                        </td>
 						 <td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
@@ -104,7 +109,7 @@
             //var route = "http://incidencias.app/incidencias_del/"+btn;
             //var route = "http://192.168.1.95/incidencias/incidencias_del/"+btn;
             //var route = "http://192.161.59.137/incidencias/incidencias_del/"+btn;
-            var route = "http://incidencias.slyip.com/incidencias_del/"+btn;
+            var route = "http://incidencias.ddns.net/incidencias_del/"+btn;
             var token = $("#token").val();
             $.ajax({
                 url: route,
