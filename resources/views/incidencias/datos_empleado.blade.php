@@ -22,8 +22,10 @@
                 
                 <div align="center" >{{$employee->horario}} | {{$employee->jornada}} &nbsp;
                 {{$employee->estancia ? '| ESTANCIA &nbsp;':''}} 
-                {{$employee->lactancia ? '| LACTANCIA &nbsp; ':''}} 
                 {{$employee->comisionado ? '| COMISIONADO &nbsp;':''}}
+                <br>
+                {{$employee->lactancia ? 'LACTANCIA: '.fecha_dmy($employee->lactancia_inicio)." AL ".fecha_dmy($employee->lactancia_fin) :''}} 
+                
 
                 </div>
                 <div align="center">

@@ -47,7 +47,7 @@
 
     var tablaDatos = $("#after_tr");
 
-    //var route = "http://incidencias.local/incidencias";
+    //var route = "http://incidencias.test/incidencias";
     //var route = "http://localhost/incidencias";
     //var route = "http://incidencias.slyip.com/incidencias/";
     var route = "http://incidencias.ddns.net/incidencias/";
@@ -115,7 +115,7 @@ function zPad(n, l, r){
 }
 
 function Eliminar(btn){
-  //var route = "http://incidencias.local/incidencias/"+btn.value+"";
+  //var route = "http://incidencias.test/incidencias/"+btn.value+"";
   //var route = "http://incidencias.slyip.com/incidencias/"+btn.value+"";
   var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
   //var route = "http://localhost/incidencias/"+btn.value+"";

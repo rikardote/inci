@@ -10,7 +10,7 @@ class Employe extends Model
     //use SoftDeletes;
     protected $table = 'employees';
 
-    protected $fillable = ['num_empleado', 'name', 'father_lastname', 'mother_lastname', 'deparment_id', 'condicion_id', 'puesto_id', 'horario_id', 'num_plaza', 'num_seguro','jornada_id', 'lactancia', 'comisionado', 'estancia'];
+    protected $fillable = ['num_empleado', 'name', 'father_lastname', 'mother_lastname', 'deparment_id', 'condicion_id', 'puesto_id', 'horario_id', 'num_plaza', 'num_seguro','jornada_id', 'lactancia', 'lactancia_inicio', 'lactancia_fin', 'comisionado', 'estancia'];
     
     protected $dates = ['deleted_at'];
     

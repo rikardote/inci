@@ -80,8 +80,10 @@ class EmployeesController extends Controller
     public function store(EmployessRequest $request)
     {
         $employe = new Employe($request->all());
-        //dd($request->all());
         $employe->fecha_ingreso = fecha_ymd($request->fecha_ingreso);
+        $employe->lactancia_inicio = fecha_ymd($request->lactancia_inicio);
+        $employe->lactancia_fin = fecha_ymd($request->lactancia_fin);
+
         $employe->save();
 
         Flash::success('Empleado registrado con exito!');
@@ -143,6 +145,15 @@ class EmployeesController extends Controller
         $employe->estancia = $request->has('estancia') ? 1:0;
         $employe->lactancia = $request->has('lactancia') ? 1:0;
         $employe->comisionado = $request->has('comisionado') ? 1:0;
+        
+        if ($employe->lactancia) {
+            $employe->lactancia_inicio = fecha_ymd($request->lactancia_inicio);
+            $employe->lactancia_fin = fecha_ymd($request->lactancia_fin);
+        }else {
+            $employe->lactancia_inicio = null;
+            $employe->lactancia_fin = null;
+        }
+
         $employe->save();
         Flash::success('Empleado editado con exito!');
         return redirect()->route('employees.index');

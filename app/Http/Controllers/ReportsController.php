@@ -42,7 +42,6 @@ class ReportsController extends Controller
       $title = "Reporte General Qna: " . $qna->qna . "/" . $qna->year . " - " . $qna->description;
       //$title = "<a href='{{route('reporte.pdf', [$qna->id, $dpto->code])}}'>pdf</a>";
 
-
    	return view('reportes.show')
          ->with('incidencias', $incidencias)
          ->with('title', $title)

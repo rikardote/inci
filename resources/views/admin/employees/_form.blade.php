@@ -120,7 +120,28 @@
 			{!! Form::label('lactancia', 'LACTANCIA: ') !!}
 			{!! Form::checkbox('lactancia') !!}
 		</div>
-		<div class="form-group">
+
+        
+        <div id="lactancia_well" class="form-group well well-sm">
+            <div class="form-group">
+                {!! Form::label('lactancia_inicio', 'Fecha de Inicio') !!}
+                {!! Form::text('lactancia_inicio', $employe->lactancia_inicio ? fecha_dmy($employe->lactancia_inicio):"", [
+                    'class' => 'form-control',
+                    'id' => 'lactancia_inicio',
+                ]) !!}
+            </div>
+
+            <div class="form-group">
+                {!! Form::label('lactancia_fin', 'Fecha final') !!}
+                {!! Form::text('lactancia_fin', $employe->lactancia_fin ? fecha_dmy($employe->lactancia_fin):"", [
+                    'class' => 'form-control',
+                    'id' => 'lactancia_fin',
+                ]) !!}
+            </div>
+
+        </div>
+       
+        <div class="form-group">
 			{!! Form::label('comisionado', 'COMISIONADO: ') !!}
 			{!! Form::checkbox('comisionado') 
 			!!}
