@@ -721,7 +721,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereIn('codigos_de_incidencias.code', ['908', '909'])
                  //->whereBetween('fecha_inicio',['2022-01-20','2022-01-31'])
-                 ->whereRaw('? between fecha_inicio and fecha_final', ['2022-01-27'])
+                 ->whereRaw('? between fecha_inicio and fecha_final', ['2022-01-03'])
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
