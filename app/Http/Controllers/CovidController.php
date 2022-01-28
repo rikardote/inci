@@ -28,9 +28,14 @@ class CovidController extends Controller
             
     }
     public function show(Request $request, $dpto){
-        $dpto = Deparment::where('code', '=', $dpto)->first();
-
-        $incidencias = Incidencia::getIncidenciasCovid($request->qna_id, $dpto->id);
+        //$dpto = Deparment::where('code', '=', $dpto)->first();
+        
+       // $incidencias = Incidencia::getIncidenciasCovid($request->qna_id, $dpto->id);
+        //$dpto = Deparment::();
+        
+        $incidencias = Incidencia::getIncidenciasCovid2();
+        
+        
         //dd($incidencias);
         $qna = Qna::find($request->qna_id);
         $title = "Reporte General Qna: " . $qna->qna . "/" . $qna->year . " - " . $qna->description;

@@ -8,12 +8,25 @@
 
 @section('content')
 
+<div class="social">
+		<ul>
+			<li><a href="{{route('covid.reporte.pdf', [$qna->id, $dpto->code])}}" class="icon-pdf"><i class="fa fa-file-pdf-o fa-1x "> Generar Reporte PDF</i></a></li>
+		</ul>
+</div>
+
+<!--
+<div class="social-left">
+		<ul>
+			<li><a href="{{route('reporte.pdf.diario', [$qna->id, $dpto->code])}}" class="icon-pdf"><i class="fa fa-file-pdf-o fa-2x "> Diario</i></a></li>
+		</ul>
+</div>
+-->
 <table class="table table-hover table-condensed" style="width:100%;" id="myTable" >
 		<thead>
 			<th>Num Empleado</th>
 			<th>Empleado</th>
 			<th>Codigo</th>
-			<th>Centro</th>
+			<th>Puesto</th>
 			<th>Fecha Inicial</th>
 			<th>Fecha Final</th>
 			<th>Total</th>
