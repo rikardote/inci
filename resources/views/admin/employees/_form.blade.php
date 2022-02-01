@@ -108,7 +108,7 @@
 				
 		</div> 
 		
-<!--
+
 <br>
 		
 		<div class="form-group">
@@ -116,7 +116,8 @@
 			{!! Form::checkbox('estancia') 
 			!!}
 		</div>
-		<div class="form-group">
+<!--
+        <div class="form-group">
 			{!! Form::label('lactancia', 'LACTANCIA: ') !!}
 			{!! Form::checkbox('lactancia') !!}
 		</div>
