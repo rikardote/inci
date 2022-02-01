@@ -1,10 +1,6 @@
 @extends('layout.main')
 
-@section('title', $title)
-
-@section('css')
-	<link rel="stylesheet" href="{{ asset('css/flotante.css') }}">
-@endsection
+@section('title', 'REPORTE COVID GENERAL')
 
 @section('content')
 
@@ -13,7 +9,8 @@
 			<th>Num Empleado</th>
 			<th>Empleado</th>
 			<th>Codigo</th>
-			<th>Centro</th>
+			<th>Adscripcion</th>
+            <th>Centro</th>
 			<th>Fecha Inicial</th>
 			<th>Fecha Final</th>
 			<th>Total</th>
@@ -22,28 +19,16 @@
 		{{--*/ $tmp = "" /*--}}
 		@foreach($incidencias as $incidencia)
 			 <tr id="tr_table" class="no-table">
-				@if($incidencia->num_empleado == $tmp)
-				
-					<td></td>
-					<td></td>
-					 <td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
-					 <td align=center>{{ $incidencia->puesto}}</td>
-					 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
-					 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-					 <td align=center>{{ $incidencia->total_dias }}</td>
-				</tr>
-				@else
 					<tr>
 						<td align=center>{{ $incidencia->num_empleado }}</td>
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</td>
 						 <td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
-						 <td align=center>{{ $incidencia->puesto}}</td>
+						 <td align=center>{{ $incidencia->depa_code}}</td>
+                         <td align=center>{{ $incidencia->depa_description}}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
 						 <td align=center>{{ $incidencia->total }}</td>
 					</tr>
-					{{--*/ $tmp = $incidencia->num_empleado /*--}}
-				@endif
 		@endforeach
 		</tbody>
 	</table>
