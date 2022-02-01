@@ -42,7 +42,7 @@
                             <li><a href="{{ route('reports.sinderecho') }}"></i> REPORTE SIN DERECHO A NOTA BUENA</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ route('covid.index') }}"></i> REPORTE COVID-19</a></li>
-                            <li><a href="{{ route('covid.todos') }}"></i> REPORTE COVID-19 GENERAL</a></li>
+
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ route('reports.licencias') }}"></i> REPORTES LIC. MEDICAS EXPEDIDAS</a></li>
                             <li><a href="{{ route('reports.exceso_incapacidades') }}"></i> REPORTES EXCESO DE INCAPACIDADES</a></li>
