@@ -72,4 +72,13 @@ class CovidController extends Controller
               $mpdf->Output($pdfFilePath, "D");
           }
     }
+    public function todos(){
+        
+        $incidencias = Incidencia::getIncidenciasCovid2();
+        
+        //dd($incidencias);
+        return view('admin.covid.todos')
+            ->with('incidencias', $incidencias);
+
+    }
 }

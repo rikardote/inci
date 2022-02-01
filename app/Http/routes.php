@@ -430,6 +430,10 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'CovidController@reporte_pdf',
         'as' => 'covid.reporte.pdf'
     ]);
+    Route::get('covid/todos', [
+        'uses' => 'CovidController@todos',
+        'as' => 'covid.todos'
+    ]);
 
     /* PAGINA DE MANTENIMIENTO */
     Route::get('mantenimiento/', [

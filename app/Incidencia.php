@@ -711,7 +711,7 @@ class Incidencia extends Model
     {
       $conteo_total = DB::raw('SUM(total_dias) as total');
       $incidencias = Incidencia::getQuery()
-                 ->select('*','employees.id as empleado_id','incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p','puestos.puesto as puesto_p', DB::raw($conteo_total))
+                 ->select('*','employees.id as empleado_id', 'incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p','puestos.puesto as puesto_p','deparments.code as depa_code','deparments.description as depa_description', DB::raw($conteo_total))
                  ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
                  ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
                  ->leftJoin('puestos', 'puestos.id', '=', 'employees.puesto_id')
@@ -720,12 +720,10 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->whereIn('codigos_de_incidencias.code', ['908', '909'])
-                 //->whereBetween('fecha_inicio',['2022-01-20','2022-01-31'])
-                 ->whereRaw('? between fecha_inicio and fecha_final', ['2022-01-03'])
-                 ->groupBy('token')
+                 ->whereBetween('fecha_inicio',['2021-08-01','2021-12-31'])
+                 //->whereRaw('? between fecha_inicio and fecha_final', ['2022-01-03'])
+                 ->groupBy('num_empleado')
                  ->orderBy('num_empleado', 'ASC')
-                 ->orderBy('codigos_de_incidencias.code', 'ASC')
-                 ->orderBy('fecha_inicio', 'ASC')
                  ->get();
      return $incidencias;
     }
