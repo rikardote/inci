@@ -108,7 +108,7 @@
 				
 		</div> 
 		
-
+<!--
 <br>
 		
 		<div class="form-group">
@@ -140,7 +140,7 @@
             </div>
 
         </div>
-       
+    -->
         <div class="form-group">
 			{!! Form::label('comisionado', 'COMISIONADO: ') !!}
 			{!! Form::checkbox('comisionado') 
