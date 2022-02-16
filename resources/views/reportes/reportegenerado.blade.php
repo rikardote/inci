@@ -68,13 +68,6 @@
 						 		<br>
                                 <small>{{ $incidencia->becas_comments }} </small>
                          	@endif
-                             
-                             @if ($incidencia->lactancia)
-                                <small>   
-                                    Lactancia: {{ fecha_dmy($incidencia->lactancia_inicio) }} AL {{  fecha_dmy($incidencia->lactancia_fin) }}
-                                </small>
-                             @endif
-
 
 						 </td>
 						 

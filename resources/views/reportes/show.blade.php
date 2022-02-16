@@ -70,10 +70,6 @@
 					<tr>
 						<td align=center>{{ $incidencia->num_empleado }}  </td>
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
-                           <br>
-                            @if ($incidencia->lactancia)
-                                Lactancia: {{ fecha_dmy($incidencia->lactancia_inicio) }} AL {{  fecha_dmy($incidencia->lactancia_fin) }}
-                            @endif
                         </td>
 						 <td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
