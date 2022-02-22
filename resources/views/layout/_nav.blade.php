@@ -17,9 +17,9 @@
                     <li><a href="#">Fecha de Cierre: {{ getFechaCierre() }}</a></li>
                     <li><a href="{{route('employees.index')}}">Empleados</a></li>
                     <li><a href="{{route('incidencias.index')}}">Captura de Incidencias</a></li>
+                    <li><a href="{{route('biometrico.get_checadas')}}"> Biometrico</a></li>
                 @endif
-
-               <!-- <li class="{{ Request::segment(1) === 'biometrico_getchecadas' ? 'active' : null  }}"><a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-2x"></i> BIOMETRICO</a></li> -->
+          
 
                 <li>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -57,6 +57,7 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ route('reports.por_incidencia') }}"></i> REPORTE POR INCIDENCIA</a></li>
                             <li><a href="{{ route('reports.val_aguinaldo') }}"></i> REPORTE ANUAL DE FALTAS Y LICENCIAS S/G</a></li>
+                            <li><a href="{{ route('biometrico.get_checadas') }}"></i> REPORTE BIOMETRICO</a></li>
                         </ul>
                     </li>
                 
