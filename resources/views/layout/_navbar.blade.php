@@ -24,9 +24,6 @@
                         <li class="{{ Request::segment(1) === 'employees' ? 'active' : null  }}"><a href="{{route('employees.index')}}"><i class="fa fa-users fa-3x"></i>EMPLEADOS</a></li>
                         <li class="{{ Request::segment(1) === 'incidencias' ? 'active' : null  }}"><a href="{{route('incidencias.index')}}"><i class="fa fa-pencil-square-o fa-3x"></i>CAPTURA DE INCIDENCIAS</a></li>
                     @endif
-
-                   <!-- <li class="{{ Request::segment(1) === 'biometrico_getchecadas' ? 'active' : null  }}"><a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-clock-o fa-2x"></i> BIOMETRICO</a></li> -->
-
                     <li class="dropdown {{ Request::segment(1) === 'reporte' ? 'active' : null  }}">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <i class="fa fa-file-pdf-o fa-3x"></i> REPORTES<span class="caret"></span>
@@ -63,6 +60,7 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ route('reports.por_incidencia') }}"></i> REPORTE POR INCIDENCIA</a></li>
                                 <li><a href="{{ route('reports.val_aguinaldo') }}"></i> REPORTE ANUAL DE FALTAS Y LICENCIAS S/G</a></li>
+                                <li><a href="{{ route('biometrico_getchecadas') }}"></i> REPORTE BIOMETRICO</a></li>
                             </ul>
                         </li>
                     
