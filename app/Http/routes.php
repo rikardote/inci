@@ -385,7 +385,6 @@ Route::group(['middleware' => 'web'], function () {
     ]);
 
     /* B IO M E T R I C O  */
-
     Route::get('biometrico', [
         'uses' => 'BiometricosController@index',
         'as' => 'biometrico.index'

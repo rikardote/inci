@@ -19,7 +19,7 @@
 		<table border="0" cellpadding="1" cellspacing="1" style="width:500px;">
 			<tbody>
 				<tr>
-					<p><td style="width:100%; background-color: rgb(102, 102, 102);"><span style="color:#FFFFFF;">REPORTE DE CONTROL DE ASISTENCIA</span></td></p>
+					<p><td style="width:100%; background-color: rgb(102, 102, 102);" align="right"><span style="color:#FFFFFF;">REPORTE DE CONTROL DE ASISTENCIA</span></td></p>
 				</tr>
 			</tbody>
 		</table>

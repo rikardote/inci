@@ -63,11 +63,10 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
-        'mysql-pacientes' => [
+        'mysql-biometrico' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => 'pacientes',
+            'database' => 'biometrico',
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
