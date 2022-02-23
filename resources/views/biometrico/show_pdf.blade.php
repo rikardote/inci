@@ -17,7 +17,7 @@
     <table>
         <thead>
             <tr>
-                <th colspan="5">{{ $empleado->num_empleado }}  
+                <th colspan="5">{{ $empleado->num_empleado }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     {{ $empleado->father_lastname }} {{ $empleado->mother_lastname }} {{ $empleado->name }} 
                 </th>
                 <th colspan="7" align="right">
@@ -25,19 +25,23 @@
                 </th>
             </tr>
         </thead>
-        <tr>
-            @foreach ( $daterange as $date)
-                    {{--*/ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
-                    {{--*/ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
-                    @if(!isweekend($date->format("Y-m-d")))
-                        <td> {{ $date->format("d/m/Y") }}
-                            <h6> {{ $entrada }} -
-                        @if($entrada != $salida) 
-                             {{ $salida }}
-                            </h6></td>
+        <tbody>
+            <tr>
+                @foreach ( $daterange as $date)
+                        {{--*/ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
+                        {{--*/ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
+                        @if(!isweekend($date->format("Y-m-d")))
+                            <td> {{ $date->format("d/m/Y") }}
+                                <h6> {{ $entrada }} -
+                            @if($entrada != $salida) 
+                                {{ $salida }}
+                                </h6></td>
+                            @endif
                         @endif
-                    @endif
-            @endforeach
-        </tr>    
+                        
+                @endforeach           
+            </tr>    
+        </tbody>
     </table>
+    <br>
 @endforeach
