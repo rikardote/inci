@@ -17,12 +17,12 @@
     <table>
         <thead>
             <tr>
-                <th colspan="5">{{ $empleado->num_empleado }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                <td colspan="5"  style="border:0px">{{ $empleado->num_empleado }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                     {{ $empleado->father_lastname }} {{ $empleado->mother_lastname }} {{ $empleado->name }} 
-                </th>
-                <th colspan="7" align="right">
-                    {{ $empleado->horario }}
-                </th>
+                </td>
+                <td colspan="7" align="right"  style="border:0px">
+                   HORARIO:&nbsp;&nbsp;    {{ $empleado->horario }}
+                </td>
             </tr>
         </thead>
         <tbody>
@@ -32,11 +32,12 @@
                         {{--*/ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
                         @if(!isweekend($date->format("Y-m-d")))
                             <td> {{ $date->format("d/m/Y") }}
-                                <h6> {{ $entrada }} -
-                            @if($entrada != $salida) 
-                                {{ $salida }}
-                                </h6></td>
-                            @endif
+                                    <h6> {{ $entrada }} -
+                                @if($entrada != $salida) 
+                                    {{ $salida }}
+                                    </h6>
+                                @endif
+                            </td>
                         @endif
                         
                 @endforeach           
