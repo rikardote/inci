@@ -1,6 +1,15 @@
 @extends('layout.main')
 @section('title', "Listado de Checadas correspondientes a la Qna: ".$qna->qna.'/'.$qna->year.' | '.$dpto->code.' - '.$dpto->description)
+@section('css')
+	<link rel="stylesheet" href="{{ asset('css/flotante.css') }}">
+@endsection
 @section('content')
+
+<div class="social">
+    <ul>
+        <li><a href="{{route('biometrico.pdf', [$qna->id, $dpto->id])}}" class="icon-pdf"><i class="fa fa-file-pdf-o fa-1x "> Generar Reporte</i></a></li>
+    </ul>
+</div>
 
 	@if(isset($empleados))
 	 	<div class="row">

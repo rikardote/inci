@@ -8,6 +8,9 @@ class Checada extends Model
 {
     protected $fillable = ['num_empleado','fecha','identificador'];
 
+    //protected $connection = 'mysql-biometrico';
+    //protected $table = 'checadas';
+
     public function employee()
     {
       return $this->belongsTo('App\employe');

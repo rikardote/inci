@@ -18,6 +18,7 @@ use Rats\Zkteco\Lib\ZKTeco;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use \mPDF;
 
 class BiometricosController extends Controller
 {
@@ -125,23 +126,32 @@ class BiometricosController extends Controller
     public function biometrico_pdf($qna_id, $dpto_id){
 
         $dpto = Deparment::find($dpto_id);
-
         $qna = Qna::where('id', $qna_id)->first();
+        $fecha_inicio = getFechaInicioPorQna($qna->id);
+        $fecha_final = getFechaFinalPorQna($fecha_inicio);
 
-        $checadas = Checada::get_Checadas($dpto->id, $qna->qna, $qna->year); 
+        $begin = new DateTime( $fecha_inicio );
+        $end = new DateTime( $fecha_final );
+        $end = $end->modify( '+1 day' ); 
 
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($begin, $interval ,$end);
+
+    	//$checadas = Checada::get_Checadas($dpto, $qna->qna, $qna->year);
+        $empleados = Employe::get_empleados($dpto_id);
+        //dd($empleados);
         $mpdf = new Mpdf('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
         $header = \View('reportes.header', compact('dpto', 'qna'))->render();
         $mpdf->SetFooter($dpto->description.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('biometrico.show_pdf', compact('checadas'))->render();
+        $html =  \View('biometrico.show_pdf', compact('empleados','daterange'))->render();
         $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
         $mpdf->setAutoTopMargin = 'stretch';
         $mpdf->setAutoBottomMargin = 'stretch';
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
-        $mpdf->Output($pdfFilePath, "D");
+        //$mpdf->Output($pdfFilePath, "D");
+        $mpdf->Output();
         
         
 
