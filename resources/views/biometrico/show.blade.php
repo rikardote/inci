@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <a href="{{route('biometrico.pdf', [$qna->id, $dpto->id])}}" class="icon-pdf btn btn-primary"><i class="fa fa-file-pdf-o fa-1x"> Generar Reporte</i></a>
+    <a href="{{route('biometrico.pdf', [$qna->id, $dpto->id])}}" class="icon-pdf btn btn-warning"><i class="fa fa-file-pdf-o fa-1x"> Generar Reporte</i></a>
 
 
 	@if(isset($empleados))
