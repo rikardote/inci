@@ -2,13 +2,14 @@
     table {
       font-family: arial, sans-serif;
       border-collapse: collapse;
+      table-layout: fixed;
       width: 100%;
     }
     
     td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
+      border: 0px solid #dddddd;
       padding: 8px;
+      width: 15%;
     }
 
 </style>
@@ -26,20 +27,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr style="border:1px solid #dddddd">
                 @foreach ( $daterange as $date)
                         {{--*/ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
                         {{--*/ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado) /*--}}
                         @if(!isweekend($date->format("Y-m-d")))
-                            <td> {{ $date->format("d/m/Y") }}
+                            <td  style="border:1px solid #dddddd" align="center"> {{ getDia($date->format("Y-m-d")) }}
                                     <h6> {{ $entrada }} -
-                                @if($entrada != $salida) 
-                                    {{ $salida }}
+                                        @if($entrada != $salida) 
+                                        {{ $salida }}
                                     </h6>
                                 @endif
                             </td>
                         @endif
-                        
                 @endforeach           
             </tr>    
         </tbody>
