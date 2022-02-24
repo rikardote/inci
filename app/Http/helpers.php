@@ -571,3 +571,25 @@ function isweekend($date){
             return "true";
         } 
 }
+
+function getDia($date) {
+    $dt = Carbon::parse($date);
+    $dia = $dt->day;
+    switch ($dt->dayOfWeek) {
+      case 1:
+        return 'Lun '.$dia;
+      case 2:
+        return 'Mar '.$dia;
+      case 3:
+        return 'Mie '.$dia;
+      case 4:
+        return 'Jue '.$dia;
+      case 5:
+        return 'Vie '.$dia;
+      case 6:
+        return 'SAB '.$dia;
+      case 7:
+        return 'DOM '.$dia;
+    }
+
+}
