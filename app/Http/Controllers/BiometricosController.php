@@ -75,7 +75,7 @@ class BiometricosController extends Controller
 
             }
             */
-            Artisan::call('biometrico:checadas');
+            \Artisan::call('biometrico:checadas');
             $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
             Flash::success($aviso);
 
