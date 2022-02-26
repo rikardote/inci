@@ -18,6 +18,7 @@ use Rats\Zkteco\Lib\ZKTeco;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+use Laracasts\Flash\Flash;
 use \mPDF;
 
 class BiometricosController extends Controller
@@ -72,9 +73,10 @@ class BiometricosController extends Controller
             }
 
         }
-
-
-	$aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
+        $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
+        Flash::success($aviso);
+        return redirect()->route('dashboard');
+	
  
         	return view('biometrico.index', compact('aviso'));
         }

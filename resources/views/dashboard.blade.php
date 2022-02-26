@@ -43,7 +43,7 @@
 	        </div>
 	    
 	        <div class="col-sm-4 col-xs-6 divpadding">
-	        	<a href="{{route('biometrico.index')}}"><i class="fa fa-cloud-download fa-4x"></i><br>Importar Biometrico</a>
+	        	<a href="{{route('biometrico.index')}}"><i class="fa fa-cloud-download fa-4x"></i><br>Actualizar Registros de Biometrico</a>
 	        </div>
 	        <div class="col-sm-4 col-xs-6 divpadding">
 	        	<a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-hand-o-up fa-4x"></i><br>Ver Checadas</a>
