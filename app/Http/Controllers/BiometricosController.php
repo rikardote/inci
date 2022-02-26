@@ -35,6 +35,7 @@ class BiometricosController extends Controller
             return view('home')->with('qna', $qna);
         }
         else {
+            /*
             $t = date("Y-m-d H:i:s");    
                 //BIOMETRICO 1 DELEGACION
             $zk = new ZKTeco("192.160.141.37");
@@ -73,6 +74,8 @@ class BiometricosController extends Controller
                 }
 
             }
+            */
+            Artisan::call('biometrico:checadas');
             $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
             Flash::success($aviso);
 
