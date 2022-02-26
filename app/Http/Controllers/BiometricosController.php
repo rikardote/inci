@@ -35,48 +35,47 @@ class BiometricosController extends Controller
             return view('home')->with('qna', $qna);
         }
         else {
-        $t = date("Y-m-d H:i:s");    
-             //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.160.141.37");
-        $zk->connect();
-        sleep(1);
-        $checadas_1 =  $zk->getAttendance();
-        sleep(1);
-        $zk->setTime($t);
-        sleep(1);
-        $zk->disconnect();
-        sleep(1);
+            $t = date("Y-m-d H:i:s");    
+                //BIOMETRICO 1 DELEGACION
+            $zk = new ZKTeco("192.160.141.37");
+            $zk->connect();
+            sleep(1);
+            $checadas_1 =  $zk->getAttendance();
+            sleep(1);
+            $zk->setTime($t);
+            sleep(1);
+            $zk->disconnect();
+            sleep(1);
 
-        //BIOMETRICO 2 DELEGACION (COMEDOR)
-        $zk2 = new ZKTeco("192.160.141.38");
-        $zk2->connect();
-        
-        sleep(1);
-        $checadas_2 =  $zk2->getAttendance();
-        sleep(1);
-        $zk2->setTime($t);
-        sleep(1);
-        $zk2->disconnect();
+            //BIOMETRICO 2 DELEGACION (COMEDOR)
+            $zk2 = new ZKTeco("192.160.141.38");
+            $zk2->connect();
+            
+            sleep(1);
+            $checadas_2 =  $zk2->getAttendance();
+            sleep(1);
+            $zk2->setTime($t);
+            sleep(1);
+            $zk2->disconnect();
 
-        $checadas = array_merge($checadas_1, $checadas_2);
+            $checadas = array_merge($checadas_1, $checadas_2);
 
-        foreach($checadas as $checada){
-            $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+            foreach($checadas as $checada){
+                $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
-            if(!Checada::where('identificador', $identificador)->exists()){
-                Checada::create([
-                    'num_empleado' => $checada['id'],
-                    'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                    //'time'    => date("H:i", strtotime($checada['timestamp'])),
-                    'identificador' => $identificador,
-                ]);
+                if(!Checada::where('identificador', $identificador)->exists()){
+                    Checada::create([
+                        'num_empleado' => $checada['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                        //'time'    => date("H:i", strtotime($checada['timestamp'])),
+                        'identificador' => $identificador,
+                    ]);
+                }
+
             }
+            $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
+            Flash::success($aviso);
 
-        }
-        $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
-        Flash::success($aviso);
-        return redirect()->route('dashboard');
-	
  
         	return view('biometrico.index', compact('aviso'));
         }
