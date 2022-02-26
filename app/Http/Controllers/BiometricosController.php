@@ -76,8 +76,7 @@ class BiometricosController extends Controller
             $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
             Flash::success($aviso);
 
- 
-        	return view('biometrico.index', compact('aviso'));
+            return redirect('/dashboard')->with($aviso);
         }
     	
     }
