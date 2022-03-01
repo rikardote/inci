@@ -12,20 +12,19 @@
 			    	<span class="fa fa-plus-circle fa-x" aria-hidden='true'> Nuevo Empleado</span>
 				</a> 
 		       @include('admin.employees.search')  
-               
-               <table  class="table table-striped">
-                        <thead>
-                            <th>Fecha</th>
-                            <th>Ultimas Checadas</th>
-                        </thead>
-                        <tbody>
-                            @foreach ($checadas as $checada)
-                                <tr>
-                                    <td>{{ fecha_dmy($checada->fecha) }}</td>
-                                    <td>{{ check_entrada($checada->fecha, $checada->num_empleado) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                <table  class="table table-striped">
+                    <thead>
+                      <th>Fecha</th>
+                      <th>Ultimas Checadas</th>
+                    </thead>
+                    <tbody>
+                       @foreach ($checadas as $checada)
+                         <tr>
+                             <td>{{ fecha_dmy($checada->fecha) }}</td>
+                             <td>{{ check_entrada($checada->fecha, $checada->num_empleado) }}</td>
+                         </tr>
+                       @endforeach
+                    </tbody>
                 </table>
 		  </div>
 
