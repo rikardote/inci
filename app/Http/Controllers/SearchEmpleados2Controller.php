@@ -8,9 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Employe;
 use App\Qna;
-
+use App\Checada;
 use App\Horario;
-
 use App\Jornada;
 
 
@@ -38,11 +37,15 @@ class SearchEmpleados2Controller extends Controller
 	        $horarios = Horario::all()->pluck('horario', 'id')->toArray();
 	        asort($horarios);
 	        asort($jornadas);
+
+            $checadas = Checada::where('num_empleado', $empleado->num_empleado)->limit(10)->orderBy('fecha','desc')->get();
+
 			return view('admin.employees.empleado_show')
 				->with('employe', $empleado)	
 				->with('title', $title)
 				->with('horarios', $horarios)
-				->with('jornadas', $jornadas);
+				->with('jornadas', $jornadas)
+                ->with('checadas', $checadas);
 			
 		}
 		

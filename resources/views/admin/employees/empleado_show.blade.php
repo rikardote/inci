@@ -11,7 +11,22 @@
 			  	<a data-url="{{ route('employees.create') }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
 			    	<span class="fa fa-plus-circle fa-x" aria-hidden='true'> Nuevo Empleado</span>
 				</a> 
-		       @include('admin.employees.search')                      
+		       @include('admin.employees.search')  
+               
+               <table  class="table table-striped">
+                        <thead>
+                            <th>Fecha</th>
+                            <th>Ultimas Checadas</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($checadas as $checada)
+                                <tr>
+                                    <td>{{ fecha_dmy($checada->fecha) }}</td>
+                                    <td>{{ check_entrada($checada->fecha, $checada->num_empleado) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                </table>
 		  </div>
 
 		  <div class="col-md-7"> 
@@ -29,9 +44,7 @@
 
               <div align="center" >{{$employe->horario}} | {{$employe->jornada}} </div> 
               <br>
-              <div align="center" >
-                {{$employe->lactancia ? 'LACTANCIA: '.fecha_dmy($employe->lactancia_inicio)." AL ".fecha_dmy($employe->lactancia_fin) :''}}
-              </div>
+
               
 
               <div align="center">
@@ -44,7 +57,10 @@
 				 	 <a href="#" onclick='deleteRow(this, <?=$employe->num_empleado?>)'> <span class="fa fa-trash fa-3x"></span></a>
 				 	@endif
 
-			  </div>
+			  
+
+                    
+              </div>
 		  </div>
 	</div>
 
