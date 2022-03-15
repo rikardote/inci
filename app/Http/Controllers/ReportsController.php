@@ -388,7 +388,7 @@ class ReportsController extends Controller
         $horario = Horario::find($empleado->horario_id);
         $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
         $header = \View('reportes.header_kardex', compact('empleado', 'fecha_inicio', 'fecha_final', 'dpto', 'jornada','horario'))->render();
-        //$mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
+        $mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
         $html =  \View('reportes.reportegenerado_kardex', compact('incidencias'))->render();
         $pdfFilePath = $empleado->num_empleado.'-'.$empleado->name.'-'.$empleado->father_lastname.'-'.$empleado->mother_lastname.'.pdf';
         $mpdf->setAutoTopMargin = 'stretch';
