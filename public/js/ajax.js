@@ -46,11 +46,12 @@
     var token = $("#token").val();
 
     var tablaDatos = $("#after_tr");
-
+    var url = document.location.origin;
+    console.log(url);
     //var route = "http://incidencias.test/incidencias";
     //var route = "http://localhost/incidencias";
     //var route = "http://incidencias.slyip.com/incidencias/";
-    var route = "http://incidencias.ddns.net/incidencias/";
+    var route = url+"/incidencias/";
 
     var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&saltar_validacion_txt='+frmsaltar_validacion_txt+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments; 
     $.ajax({
@@ -117,8 +118,10 @@ function zPad(n, l, r){
 function Eliminar(btn){
   //var route = "http://incidencias.test/incidencias/"+btn.value+"";
   //var route = "http://incidencias.slyip.com/incidencias/"+btn.value+"";
-  var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
+  //var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
   //var route = "http://localhost/incidencias/"+btn.value+"";
+  var url = document.location.origin;
+  var route = url+"/incidencias/"+btn.value+"";
 
   var token = $("#token").val();
   var tablaDatos = $("#after_tr");
