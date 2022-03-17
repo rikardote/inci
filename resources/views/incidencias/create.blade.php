@@ -243,15 +243,16 @@ $('#datepicker_expedida').flatpickr({
 
 <script>
   $(document).ready(function () {
+    var url = document.location.origin;
+    
     $('input:text').bind({
     });
 
     $("#auto_medicos").autocomplete({
       minLength:3,
      autoFocus: true,
-    //source: 'http://192.161.59.137/incidencias/getdoctors',
-    source: 'http://incidencias.slyip.com/getdoctors',
-     // source: 'http://incidencias.app/getdoctors',
+     source: url+"/getdoctors";
+    
 
 
     });
