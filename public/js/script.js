@@ -25,17 +25,19 @@ var Modal = {
 Modal.init();
 
 $(document).ready(function () {
+    var url = document.location.origin;
+    console.log(url);  
     $('input:text').bind({
     });
     $("#auto").autocomplete({
-    minLength:3,
-    source: 'http://incidencias.ddns.net/getdata',
-    select: function (event, item)
-    {
-        if (event.keyCode == 13){
-            $('#myForm').submit()
+        minLength:3,
+        source: url+'/getdata',
+        select: function (event, item)
+        {
+            if (event.keyCode == 13){
+                $('#myForm').submit()
+            }
         }
-    }
     });
 });
 
