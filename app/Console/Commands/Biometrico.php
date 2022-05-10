@@ -47,8 +47,8 @@ class Biometrico extends Command
         $t = date("Y-m-d H:i:s");
 
         //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.160.141.37");
-        $zk->connect();
+        /*$zk = new ZKTeco("192.160.141.37");
+        /$zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
         sleep(1);
@@ -56,7 +56,7 @@ class Biometrico extends Command
         sleep(1);
         $zk->disconnect();
         sleep(1);
-
+*/
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
