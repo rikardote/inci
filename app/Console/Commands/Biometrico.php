@@ -48,7 +48,7 @@ class Biometrico extends Command
 
         //BIOMETRICO 1 DELEGACION
         /*$zk = new ZKTeco("192.160.141.37");
-        /$zk->connect();
+        $zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
         sleep(1);
@@ -77,7 +77,8 @@ class Biometrico extends Command
         sleep(1);
         $zk3->disconnect();
     */  
-        $checadas = array_merge($checadas_1, $checadas_2);
+        //$checadas = array_merge($checadas_1, $checadas_2);
+        
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
