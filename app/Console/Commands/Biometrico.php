@@ -62,7 +62,7 @@ class Biometrico extends Command
         $zk2->connect();
         
         sleep(1);
-        $checadas_2 =  $zk2->getAttendance();
+        $checadas =  $zk2->getAttendance();
         sleep(1);
         $zk2->setTime($t);
         sleep(1);
