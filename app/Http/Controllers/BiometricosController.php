@@ -58,7 +58,7 @@ class BiometricosController extends Controller
             $qna-=1;
       }
 
-      $qnas = Qna::orderby('id', 'desc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
+      $qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
      // krsort($qnas);
        // $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
 
