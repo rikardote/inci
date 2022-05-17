@@ -211,4 +211,34 @@ class BiometricosController extends Controller
         return view('biometrico.show_checadas')->with('checadas', $checadas);
 
     }
+    public function asignar(){
+        
+        return view('biometrico.asignar_view');
+   
+    }
+
+    public function asignar_post(Request $request){
+
+        
+
+        $identificador = md5($request->num_empleado.date("Y-m-d", strtotime($request->fecha)).date("H:i", strtotime($request->fecha)));
+        //$identificador = "0a6e14e012faf4822491cb62548f9470";
+            if(!Checada::where('identificador', $identificador)->exists()){
+                Checada::create([
+                    'num_empleado' => $request->num_empleado,
+                    'fecha'    => date("Y-m-d H:i:s", strtotime($request->fecha)),
+                    'identificador' => $identificador,
+                ]);
+                $aviso = 'Capturado correctamente';
+                Flash::success($aviso);
+                
+            }
+            else {
+                $aviso = 'ERROR REGISTRO REPETIDO';
+                Flash::error($aviso);
+            }
+           
+            return redirect('/dashboard')->with($aviso);
+   
+    }
 }

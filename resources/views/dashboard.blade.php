@@ -48,6 +48,9 @@
 	        <div class="col-sm-4 col-xs-6 divpadding">
 	        	<a href="{{route('biometrico.get_checadas')}}"><i class="fa fa-hand-o-up fa-4x"></i><br>Ver Checadas</a>
 			</div>
+            <div class="col-sm-4 col-xs-6 divpadding">
+	        	<a href="{{route('biometrico.asignar')}}"><i class="fa fa-id-badge fa-4x"></i><br>.</a>
+			</div>
 			<div class="col-sm-4 col-xs-6 divpadding">
 	        	<a href="{{route('mantenimiento.show')}}"><i class="fa fa-cog fa-4x"></i><br>Mantenimiento</a>
 	        </div>
