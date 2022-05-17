@@ -472,6 +472,15 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'BiometricosController@show_checadas',
         'as' => 'biometrico.show_checadas'
     ]);
+    //asignar checadas
+    Route::get('biometrico/asignar_checadas', [
+        'uses' => 'BiometricosController@asignar',
+        'as' => 'biometrico.asignar'
+    ]);
+    Route::post('biometrico/asignar_view', [
+        'uses' => 'BiometricosController@asignar_post',
+        'as' => 'biometrico.asignar_post'
+    ]);
 
 
 });
