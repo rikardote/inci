@@ -59,14 +59,16 @@
 		
 	</div>
 	<div class="col-md-4">
-		<div class="form-group">
-			{!! Form::label('deparment_id', 'Departamento') !!}
-			{!! Form::select('deparment_id', $deparments, null, [
-				'class' => 'form-control',
-				'placeholder' => 'Seleccion un departamento', 
-				'required'
-			]) !!}
-		</div>
+        <div class="form-group">
+            {!! Form::label('deparment_id', 'Departamento') !!}
+            {!! Form::select('deparment_id', $deparments, null, [
+                'class' => 'form-control',
+                'placeholder' => 'Seleccion un departamento', 
+                \Auth::user()->admin() ? '' : 'disabled' => true,
+                'required'
+            ]) !!}
+        </div>
+
 		<div class="form-group">
 			{!! Form::label('jornada_id', 'Jornada') !!}
 			{!! Form::select('jornada_id', $jornadas, null, [
