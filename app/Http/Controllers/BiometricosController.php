@@ -219,10 +219,8 @@ class BiometricosController extends Controller
 
     public function asignar_post(Request $request){
 
-        
+            $identificador = md5($request->num_empleado.date("Y-m-d", strtotime($request->fecha)).date("H:i", strtotime($request->fecha)));
 
-        $identificador = md5($request->num_empleado.date("Y-m-d", strtotime($request->fecha)).date("H:i", strtotime($request->fecha)));
-        //$identificador = "0a6e14e012faf4822491cb62548f9470";
             if(!Checada::where('identificador', $identificador)->exists()){
                 Checada::create([
                     'num_empleado' => $request->num_empleado,
