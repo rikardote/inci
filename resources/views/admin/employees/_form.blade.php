@@ -64,7 +64,6 @@
             {!! Form::select('deparment_id', $deparments, null, [
                 'class' => 'form-control',
                 'placeholder' => 'Seleccion un departamento', 
-                \Auth::user()->admin() ? '' : 'disabled' => true,
                 'required'
             ]) !!}
         </div>

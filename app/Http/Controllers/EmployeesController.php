@@ -50,8 +50,8 @@ class EmployeesController extends Controller
     public function create(Employe $employe)
     {
         
-        $deparments = Deparment::all()->pluck('deparment', 'id')->toArray();
-        //$dptos = \Auth::user()->centros->pluck('id')->toArray();
+        //$deparments = Deparment::all()->pluck('deparment', 'id')->toArray();
+        $deparments = \Auth::user()->centros->pluck('deparment', 'id')->toArray();
         //$deparments = Deparment::whereIn('deparments.id', $dptos)->get();
         $puestos = Puesto::all()->pluck('puesto', 'id')->toArray();
         $jornadas = Jornada::all()->pluck('jornada', 'id')->toArray();
@@ -110,8 +110,8 @@ class EmployeesController extends Controller
     public function edit($num_empleado)
     {
         $employe = Employe::where('num_empleado', $num_empleado)->first();
-
-        $deparments = Deparment::all()->pluck('deparment', 'id')->toArray();
+        $deparments = \Auth::user()->centros->pluck('deparment', 'id')->toArray();
+        //$deparments = Deparment::all()->pluck('deparment', 'id')->toArray();
         $jornadas = Jornada::all()->pluck('jornada', 'id')->toArray();
         $puestos = Puesto::all()->pluck('puesto', 'id')->toArray();
         $horarios = Horario::all()->pluck('horario', 'id')->toArray();
