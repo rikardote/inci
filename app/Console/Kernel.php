@@ -27,6 +27,6 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('biometrico:checadas')
 		->weekdays()
-                ->twiceDaily(1,12);
+                ->twiceDaily(11,23);
     }
 }
