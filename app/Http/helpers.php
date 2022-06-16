@@ -378,56 +378,71 @@ function valida_entrada($num_empleado, $fecha, $entrada){
     $segundos_minutoAnadir=$minutoAnadir*60;
 
     $nuevaHora=date("H:i:sa",$segundos_horaInicial+$segundos_minutoAnadir);
+
+    $entrada_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
     
 
     //dd($nuevaHora);
 
     $incidencia = Incidencia::where('employee_id', '=', $empleado->emp_id)
             ->whereRaw('? between fecha_inicio and fecha_final', [$fecha])
-            ->whereNotIn('codigodeincidencia_id', [41,15])
+            ->whereNotIn('codigodeincidencia_id', [41,15,81])
             ->first();
-
-    if ($incidencia) {
-        $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
-        if (!$entrada) {
-            return $code->code;
+    
+        if($entrada >= $entrada_comp){
+            if ($incidencia) {
+                $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
+                    return "(".$code->code.")";
+            }
+            
         }
-    }
-    if ($entrada >= $nuevaHora && $incidencia) {
-         return "<b><font  color='red'>".$entrada."</font></b> (".$code->code.")";
+        if ($incidencia) {
+            $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
+            if (!$entrada) {
+                return $code->code;
+            }
+        }
+        if ($entrada >= $nuevaHora && $incidencia) {
+            return "<b><font  color='red'>".$entrada."</font></b> (".$code->code.")";
 
-    }
-     if ($entrada >= $nuevaHora && !$incidencia) {
-         return "<b><font  color='red'>".$entrada."</font></b>";
+        }
+        if ($entrada >= $nuevaHora && !$incidencia) {
+            return "<b><font  color='red'>".$entrada."</font></b>";
 
-    }
-    
-    
-    return $entrada;
-    
+        }
+   
+        return $entrada;
+
 }
-function valida_salida($num_empleado, $fecha, $salida){
+function valida_salida($num_empleado, $fecha, $salida, $entrada){
     $empleado = Employe::get_empleado($num_empleado);
     $empleado_entrada = substr($empleado->horario,0,5);
     $empleado_salida = substr($empleado->horario,8);
     $fecha = fecha_ymd($fecha);
 
+    $salida_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
+    
+
     $incidencia = Incidencia::where('employee_id', '=', $empleado->emp_id)
             ->whereRaw('? between fecha_inicio and fecha_final', [$fecha])
-            ->whereNotIn('codigodeincidencia_id', [1,10,30,43,7])
+            ->whereNotIn('codigodeincidencia_id', [1,10,30,43,7,81])
             ->first();
-
-    if ($incidencia) {
+    if($incidencia){
         $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
-        if (!$salida) {
-            return $code->code;    
-        }
-        else 
-            return $salida.' ('.$code->code.')';
     }
-
-    return $salida;
-    
+    if ($salida != $entrada){
+        if($incidencia && $salida){
+            return $salida."(".$code->code.")";
+        }   
+        if(!$incidencia && $salida){
+            return $salida;
+        }
+        return "";
+    }
+    if($incidencia){
+        return $code->code;
+    }
+   
 }
 
 function get_departamento($deparment_id)  {

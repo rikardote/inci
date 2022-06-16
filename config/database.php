@@ -63,6 +63,17 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
+        'mysql_external' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_EXT_HOST', 'localhost'),
+            'database'  => env('DB_EXT_DATABASE', 'forge'),
+            'username'  => env('DB_EXT_USERNAME', 'forge'),
+            'password'  => env('DB_EXT_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
         'mysql-biometrico' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
