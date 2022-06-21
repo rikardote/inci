@@ -358,6 +358,8 @@ function valida_entrada($num_empleado, $fecha, $entrada){
     $empleado_entrada = substr($empleado->horario,0,5);
     $empleado_salida = substr($empleado->horario,8);
     $fecha = fecha_ymd($fecha);
+
+
     //$entrada = "07:10";
     /*$horario_in=$empleado_entrada.":00";
     //$horario_out=$horariosalida_checadas.":00";
@@ -388,6 +390,7 @@ function valida_entrada($num_empleado, $fecha, $entrada){
             ->whereRaw('? between fecha_inicio and fecha_final', [$fecha])
             ->whereNotIn('codigodeincidencia_id', [41,15,81])
             ->first();
+        
     
         if($entrada >= $entrada_comp){
             if ($incidencia) {
@@ -420,7 +423,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
     $empleado_salida = substr($empleado->horario,8);
     $fecha = fecha_ymd($fecha);
 
-    $salida_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
+    //$salida_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
     
 
     $incidencia = Incidencia::where('employee_id', '=', $empleado->emp_id)
@@ -555,7 +558,8 @@ function check_entrada($fecha, $num_empleado){
             ->where('fecha','LIKE', '%'. $fecha .'%')
             ->orderBy('fecha','asc')
             ->first();
-        if($entrada){
+        if($entrada && strtotime($entrada->fecha) < strtotime('12:30')){
+        //if($entrada){
             return date("H:i", strtotime($entrada->fecha));
         }
         else {
