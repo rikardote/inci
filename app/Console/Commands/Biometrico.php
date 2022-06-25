@@ -58,8 +58,8 @@ class Biometrico extends Command
         sleep(1);
 
         //BIOMETRICO 2 DELEGACION (COMEDOR)
-        //$zk2 = new ZKTeco("192.160.141.38");
-        $zk2 = new ZKTeco("192.161.172.42");
+        $zk2 = new ZKTeco("192.160.141.38");
+        //$zk2 = new ZKTeco("192.161.172.42");
         $zk2->connect();
         
         sleep(1);
