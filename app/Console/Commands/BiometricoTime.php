@@ -51,8 +51,8 @@ class BiometricoTime extends Command
         sleep(1);
         $zk->disconnect();
 
+        
         $zk2 = new ZKTeco("192.160.141.38");
-
         $zk2->connect();
         sleep(1);
 
