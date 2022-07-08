@@ -19,12 +19,12 @@ use Laracasts\Flash\Flash;
 
 class ReportsController extends Controller
 {
-   
+
    public function general()
    {
    	$dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$dptos = Deparment::whereIn('deparments.id', $dptos)->get();
-		$qnas = Qna::orderby('id', 'desc')->limit(25)->get()->pluck('Qnaa', 'id')->toArray();
+		$qnas = Qna::orderby('id', 'desc')->limit(28)->get()->pluck('Qnaa', 'id')->toArray();
       krsort($qnas);
       $title = "Reporte General";
       return view('reportes.general')
@@ -47,11 +47,11 @@ class ReportsController extends Controller
          ->with('title', $title)
          ->with('qna',$qna)
          ->with('dpto',$dpto);
-   	
+
    }
    public function empleado()
    {
-    $title = "Reporte General por empleado";   
+    $title = "Reporte General por empleado";
    	return view('reportes.kardex.empleado')->with('title', $title);
    }
    public function empleado_show(Request $request, $num_empleado)
@@ -63,7 +63,7 @@ class ReportsController extends Controller
       $incidencias = Incidencia::getIncidenciasEmpleado($fecha_inicio, $fecha_final, $num_empleado);
       $empleado = Employe::where('num_empleado', $num_empleado)->first();
 
-  
+
       return view('reportes.kardex.empleado')
          ->with('incidencias', $incidencias)
          ->with('title', $title)
@@ -114,13 +114,13 @@ class ReportsController extends Controller
       $fecha = $request->fecha_inicio;
       if ($request->solo_medicos == true) {
         $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
-        $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));  
+        $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));
       }
       else {
-        $incidencias = Incidencia::GetIncidenciasPorDia($dptos, fecha_ymd($fecha));  
+        $incidencias = Incidencia::GetIncidenciasPorDia($dptos, fecha_ymd($fecha));
         //dd($incidencias);
       }
-      
+
       if ($incidencias == null) {
         Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
         return redirect()->route('reports.diario');
@@ -136,11 +136,11 @@ class ReportsController extends Controller
           $mpdf->setHTMLHeader($header);
           $mpdf->SetDisplayMode('fullpage');
           $mpdf->WriteHTML($html);
-     
+
           $mpdf->Output($pdfFilePath, "D");
       }
    }
-   public function sinDerecho() 
+   public function sinDerecho()
    {
       $dptos = \Auth::user()->centros->pluck('id')->toArray();
       $dptos = Deparment::whereIn('deparments.id', $dptos)->orderBy('code')->get();
@@ -155,24 +155,24 @@ class ReportsController extends Controller
       $title = "Reporte sin derecho a nota buena por desempeño";
       return view('reportes.sinderecho')->with('title', $title)->with('dptos', $dptos)->with('month', $month)->with('years', $years);
    }
-   public function getsinDerecho(Request $request, $dpto) 
+   public function getsinDerecho(Request $request, $dpto)
    {
 
       $dt = Carbon::create($request->year, $request->month, 1, 12, 0, 0);
-      $fecha_inicio = $dt->startOfMonth(); 
+      $fecha_inicio = $dt->startOfMonth();
 
       $dt2 = Carbon::create($request->year, $request->month, 1, 12, 0, 0);
-      $fecha_final = $dt2->endOfMonth();  
+      $fecha_final = $dt2->endOfMonth();
 
       $lic = ['40','41','46','47','53','54','55'];
       $inc = ['01','02','03','04','08','09','10','18','19','25','78','86','100','30','31'];
 
-      $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);    
-      $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);    
+      $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);
+      $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);
 
       $incidencias = array_merge($incidencias_inc, $incidencias_lic);
 
-      $incidencias =collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();  
+      $incidencias =collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();
 
       $title = "Reporte sin derecho a nota buena por desempeño: Del ".fecha_dmy($fecha_inicio)." Al ".fecha_dmy($fecha_final)." - ".$dpto;
 
@@ -187,16 +187,16 @@ class ReportsController extends Controller
     {
         $lic = ['40','41','46','47','53','54','55'];
         $inc = ['01','02','03','04','08','09','10','18','19','25','78','86','100','30','31'];
-        
-        $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);    
-        $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);    
+
+        $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);
+        $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);
 
         $incidencias = array_merge($incidencias_inc, $incidencias_lic);
 
-        $incidencias =collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();  
+        $incidencias =collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();
 
         $dpto = Deparment::where('code', '=', $dpto)->first();
-        
+
         $mpdf = new mPDF('', 'Letter-L');
         $mpdf->setAutoTopMargin = 'stretch';
         $mpdf->setAutoBottomMargin = 'stretch';
@@ -209,7 +209,7 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
     }
    public function reporte_pdf($qna_id, $dpto)
@@ -228,14 +228,14 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
     }
     public function reporte_pdf_diario($qna_id, $dpto)
     {
         $dpto = Deparment::where('code', '=', $dpto)->first();
         $incidencias = Incidencia::getIncidenciasCentroPDF_diario($qna_id, $dpto->id);
-        
+
 
         $qna = Qna::find($qna_id);
         $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
@@ -248,7 +248,7 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
     }
     public function show_incidenciasEmpleados($fecha_inicio,$fecha_final,$num_empleado)
@@ -291,7 +291,7 @@ class ReportsController extends Controller
         //$mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
     }
     public function ausentismo()
@@ -304,44 +304,44 @@ class ReportsController extends Controller
     {
       $fecha_inicial = fecha_ymd($request->fecha_inicio);
       $fecha_final = fecha_ymd($request->fecha_final);
-    
+
       $dpto_id = $request->deparment_id;
       $dpto = Deparment::where('id','=', $dpto_id)->first();
-    
+
       //$codigos = ['10','14', '17', '40','41','46','47','48','49','51','53','54','55','60','62','63','94','100'];
-      $codigo_01 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 1); 
-      $codigo_02 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 2); 
-      $codigo_03 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 3); 
-      $codigo_04 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 4); 
-      $codigo_08 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 8); 
-      $codigo_09 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 9); 
-      $codigo_10 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 10); 
+      $codigo_01 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 1);
+      $codigo_02 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 2);
+      $codigo_03 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 3);
+      $codigo_04 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 4);
+      $codigo_08 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 8);
+      $codigo_09 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 9);
+      $codigo_10 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 10);
       $codigo_14 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 14);
       $codigo_17 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 17);
-      $codigo_15 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 15);    
-      $codigo_30 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 30);    
-      $codigo_40 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 40); 
-      $codigo_41 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 41); 
-      $codigo_42 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 42); 
+      $codigo_15 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 15);
+      $codigo_30 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 30);
+      $codigo_40 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 40);
+      $codigo_41 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 41);
+      $codigo_42 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 42);
       $codigo_46 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 46);
-      $codigo_47 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 47); 
+      $codigo_47 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 47);
       $codigo_48 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 48);
       $codigo_49 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 49);
-      $codigo_51 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 51);     
+      $codigo_51 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 51);
       $codigo_53 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 53);
-      $codigo_54 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 54); 
+      $codigo_54 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 54);
       $codigo_55 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 55);
       $codigo_60 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 60);
-      $codigo_61 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 61); 
+      $codigo_61 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 61);
       $codigo_62 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 62);
-      $codigo_63 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 63);       
-      $codigo_94 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 94); 
-      $codigo_100 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 100); 
-    
+      $codigo_63 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 63);
+      $codigo_94 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 94);
+      $codigo_100 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 100);
+
       return view('reportes.ausentismo_centro')
         ->with('codigo_01', $codigo_01)
         ->with('codigo_02', $codigo_02)
-        ->with('codigo_03', $codigo_03)  
+        ->with('codigo_03', $codigo_03)
         ->with('codigo_04', $codigo_04)
         ->with('codigo_08', $codigo_08)
         ->with('codigo_09', $codigo_09)
@@ -371,7 +371,7 @@ class ReportsController extends Controller
       ->with('fecha_final', $fecha_final)
       ->with('dpto_id', $dpto_id)
       ->with('dpto', $dpto);
-      
+
   }
   public function ausentismo_incidencias($codigo, $fecha_inicial, $fecha_final, $dpto_id)
   {
@@ -396,7 +396,7 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
   }
   public function pendientes()
@@ -419,35 +419,35 @@ class ReportsController extends Controller
     $dpto = Deparment::where('code', '=', $dpto)->first();
 
     $pendientes = Incidencia::getPendientes($qna_id, $dpto->code, $pendiente_id);
-   
+
     return view('reportes.pendientes_show')->with('dpto', $dpto)->with('pendientes', $pendientes)->with('qna_id', $qna_id);
   }
 
   public function exceso_incapacidades()
   {
    $dptos = \Auth::user()->centros->pluck('id')->toArray();
-   
+
    $empleados = Employe::getEmpleado($dptos);
-   
+
    //$empleado = Employe::where('num_empleado','=','159145')->first();
    foreach ($empleados as $empleado) {
-     $fecha_inicio = getdateActual($empleado->fecha_ingreso); //"2018-12-01"; 
-     $fecha_final = getdatePosterior($fecha_inicio); //"2019-12-01"; 
+     $fecha_inicio = getdateActual($empleado->fecha_ingreso); //"2018-12-01";
+     $fecha_final = getdatePosterior($fecha_inicio); //"2019-12-01";
 
      $incapacidades[] = Incidencia::getIncapacidades($fecha_inicio, $fecha_final,$empleado->num_empleado);
-   }  
+   }
    $data = array_map('array_filter', $incapacidades);
    $data = array_filter($data);
-     
+
    $return = array();
    foreach ($data as $key => $value) {
        if (is_array($value)){ $return = array_merge($return, array_flatten($value));}
        else {$return[$key] = $value;}
-   }    
+   }
 
     return view('reportes.excesos_de_incacapacidades.index')->with('data', $return);
   }
- 
+
  public function estadistica()
   {
     //$dptos = \Auth::user()->centros->pluck('id')->toArray();
@@ -470,17 +470,17 @@ class ReportsController extends Controller
                                                      ->with('codigo', $code_des)
                                                      ->with('fecha_inicio', $request->fecha_inicio)
                                                      ->with('fecha_final', $request->fecha_final);
-    
+
   }
   public function estadistica_por_incidencia(Request $request){
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
     $dptos = Deparment::whereIn('deparments.id', $dptos)->get();
-    
+
     return view('reportes.reporte_por_incidencia')->with('deparments', $dptos);
   }
   public function estadistica_por_incidencia_show(Request $request){
-    
-    
+
+
     $dpto = Deparment::find($request->deparment_id);
 
     $fecha_inicial = fecha_ymd($request->fecha_inicio);
@@ -510,7 +510,7 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
   }
   public function inasistencias(){
@@ -527,7 +527,7 @@ class ReportsController extends Controller
     $fecha_final = fecha_ymd($request->fecha_final);
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
     $codes = ['10','100'];
-    
+
     $incidencias = Incidencia::getInasistencias($codes,$fecha_inicial, $fecha_final, $dptos);
 
     return view('reportes.inasistencias.show')->with('incidencias', $incidencias);
@@ -536,8 +536,8 @@ class ReportsController extends Controller
     $fecha_inicial = "2021-01-01";
     $fecha_final = "2021-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
- 
-    
+
+
     $incidencias = Incidencia::valAguinaldo($fecha_inicial, $fecha_final, $dptos);
 
     return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
@@ -557,20 +557,18 @@ class ReportsController extends Controller
         $mpdf->setHTMLHeader($header);
         $mpdf->SetDisplayMode('fullpage');
         $mpdf->WriteHTML($html);
-   
+
         $mpdf->Output($pdfFilePath, "D");
- 
-    
-    
+
+
+
 
     //return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
   }
   public function vacaciones()
    {
-    $title = "Reporte rapido de vacaciones";   
+    $title = "Reporte rapido de vacaciones";
    	return view('reportes.vacaciones.index')->with('title', $title);
    }
-  
-}
 
- 
+}

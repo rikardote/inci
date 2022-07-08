@@ -18,7 +18,7 @@ class CapturarController extends Controller
     public function index()
     {
     	$title = "Captura de Incidencias";
-    	
+
     	$qnas = Qna::where('active', '=', 1)->get();
     	return view('admin.capturar.index')
     		->with('title', $title)
@@ -39,8 +39,8 @@ class CapturarController extends Controller
     	$incidencias = Incidencia::getIncidenciasCentroCapturar($qna_id, $dpto->id);
 
     	$title = "Captura de Incidencias";
-    	
-    
+
+
     	return view('admin.capturar.all-centros')
     		->with('title', $title)
             ->with('qna_id', $qna_id)
@@ -66,14 +66,14 @@ class CapturarController extends Controller
 
             $incidencia = Incidencia::find($incidencia_id);
             $incidencia->capturada = ($incidencia->capturada) ? FALSE : TRUE;
-              
+
             $incidencia->save();
              $response = array(
                 'success' => 'true'
              );
             return Response::json($response); //redirect()->route('qnas.index');
-            
-        } 
+
+        }
     }
 
 }
