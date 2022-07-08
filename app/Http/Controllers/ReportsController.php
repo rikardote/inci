@@ -24,7 +24,7 @@ class ReportsController extends Controller
    {
    	$dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$dptos = Deparment::whereIn('deparments.id', $dptos)->get();
-		$qnas = Qna::orderby('id', 'desc')->limit(28)->get()->pluck('Qnaa', 'id')->toArray();
+		$qnas = Qna::orderby('id', 'desc')->limit(35)->get()->pluck('Qnaa', 'id')->toArray();
       krsort($qnas);
       $title = "Reporte General";
       return view('reportes.general')
