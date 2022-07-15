@@ -17,25 +17,30 @@
 
 				<td>{{$dpto->description}}</td>
 				<td>
-					<div class="col-md-5">
+					<div class="col-md-6">
 						{!! Form::open(['route' => ['reports.general.show', $dpto->code], 'method' => 'POST']) !!}
 						<div class="form-group">
 							{!! Form::select('qna', $qnas, null, [
 								'class' => 'form-control',
 								'placeholder' => 'Quincena',
+                                'required'
 							]) !!}
     					</div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <div class="form-group">
 							{!! Form::select('year', $años, null, [
 								'class' => 'form-control',
 								'placeholder' => 'Año',
-                                'onchange' => 'if(this.value != 0) { this.form.submit(); }'
+                                'required',
 							]) !!}
     					</div>
 					</div>
-
+                    <div class="form-group">
+                        {!!Form::submit('Buscar',
+                            ['class' => 'btn btn-primary']
+                        )!!}
+                    </div>
 					{!!Form::close()!!}
 				</td>
 			</tr>
