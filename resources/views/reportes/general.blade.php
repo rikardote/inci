@@ -29,9 +29,8 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-							{!! Form::select('year', $años, null, [
+							{!! Form::select('year', $years, $default_year, [
 								'class' => 'form-control',
-								'placeholder' => 'Año',
                                 'required',
 							]) !!}
     					</div>

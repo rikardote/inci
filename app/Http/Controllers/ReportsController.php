@@ -24,18 +24,19 @@ class ReportsController extends Controller
    {
    	$dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$dptos = Deparment::whereIn('deparments.id', $dptos)->get();
-		//$qnas = Qna::orderby('id', 'desc')->limit(35)->get()->pluck('Qnaa', 'id')->toArray();
+        $default_year = Carbon::now()->format('Y');
         $qnas = ['1' => '01 - 1RA ENERO','2' => '02 - 2DA ENERO','3' => '03 - 1RA FEBRERO','4' => '04 -	2DA FEBRERO','5' => '05 - 1RA MARZO','6' => '06 - 2DA MARZO','7' => '07 - 1RA ABRIL','8' => '08 - 2DA ABRIL','9' => '09 - 1RA MAYO','10' => '10 - 2DA MAYO','11' => '11 - 1RA JUNIO','12' => '12 - 2DA JUNIO','13' => '13 - 1RA JULIO','14' => '14 - 2DA JULIO'
             ,'15' => '15 - 1RA AGOSTO','16' => '16 - 2DA AGOSTO','17' => '17 - 1RA SEPTIEMBRE','18' => '18 - 2DA SEPTIEMBRE','19' => '19 - 1RA OCTUBRE','20' => '20 - 2DA OCTUBRE','21' => '21 - 1RA NOVIEMBRE','22' => '22 - 2DA NOVIEMBRE','23' => '23 - 1RA DICIEMBRE','24' => '24 - 2DA DICIEMBRE'
         ];
-        $años = ['2023' => '2023','2022' => '2022','2021' => '2021','2020' => '2020','2019' => '2019','2018' => '2018'];
+        $years = ['2023' => '2023','2022' => '2022','2021' => '2021','2020' => '2020','2019' => '2019','2018' => '2018'];
 
 
       $title = "Reporte General";
       return view('reportes.general')
          ->with('dptos', $dptos)
          ->with('qnas', $qnas)
-         ->with('años', $años)
+         ->with('years', $years)
+         ->with('default_year', $default_year)
          ->with('title', $title);
    }
    public function general_show(Request $request, $dpto)
