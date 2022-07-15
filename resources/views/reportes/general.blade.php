@@ -22,7 +22,7 @@
 						<div class="form-group">
 							{!! Form::select('qna', $qnas, null, [
 								'class' => 'form-control',
-								'placeholder' => 'Quincena',
+								'placeholder' => 'Selecciona la Quincena',
                                 'required'
 							]) !!}
     					</div>
@@ -36,10 +36,8 @@
 							]) !!}
     					</div>
 					</div>
-                    <div class="form-group">
-                        {!!Form::submit('Buscar',
-                            ['class' => 'btn btn-primary']
-                        )!!}
+                    <div class="input-group">
+                        {{ Form::button('<i class="fa fa-search" aria-hidden="true"></i>', ['class' => 'btn btn-primary btn-sm', 'type' => 'submit']) }}
                     </div>
 					{!!Form::close()!!}
 				</td>
