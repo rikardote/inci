@@ -9,18 +9,18 @@
 
 @section('content')
 <div class="form-group">
-   <div class="col-md-5">  
-       @include('incidencias.search')                      
-       @include('incidencias.captura_form')    
+   <div class="col-md-5">
+       @include('incidencias.search')
+       @include('incidencias.captura_form')
   </div>
 
-  <div class="col-md-7"> 
-       @include('incidencias.datos_empleado') 
-       @include('incidencias.side') 
+  <div class="col-md-7">
+       @include('incidencias.datos_empleado')
+       @include('incidencias.side')
   </div>
  </div>
-  
-@include('modals.form-modal', ['title'=>'Agregar/Modificar Comentario']) 
+
+@include('modals.form-modal', ['title'=>'Agregar/Modificar Comentario'])
 
 @endsection
 
@@ -93,6 +93,7 @@ $('#datepicker_expedida').flatpickr({
     $('#register').hide();
     $('#becas').hide();
     $('#qnas').hide();
+    $('#coberturaTXT').hide();
 
   });
 </script>
@@ -142,29 +143,44 @@ $('#datepicker_expedida').flatpickr({
   $('#codigo').on('change', function() {
       //alert( 'hola' ); // or $(this).val()
     if(this.value == 34) {
-      
+
       $('#otorgado').show();
       //
     } else {
       //
       $('#otorgado').hide();
       document.getElementById("otorgado_id").value = null;
-     
+
     }
   });
 </script>
 <script>
     $('#codigo').on('change', function() {
         //alert( 'hola' ); // or $(this).val()
+      if(this.value == 38) {
+
+        $('#coberturaTXT').show();
+        //
+      } else {
+        //
+        $('#coberturaTXT').hide();
+        document.getElementById("coberturaTXT").value = null;
+
+      }
+    });
+  </script>
+<script>
+    $('#codigo').on('change', function() {
+        //alert( 'hola' ); // or $(this).val()
       if(this.value == 24) {
-        
+
         $('#becas').show();
         //
       } else {
         //
         $('#becas').hide();
         document.getElementById("becas").value = null;
-       
+
       }
     });
   </script>
@@ -179,7 +195,7 @@ $('#datepicker_expedida').flatpickr({
       //
       $('#pendientes').hide();
       //document.getElementById("pendientes_com").value = "";
-     
+
     }
   });
 </script>
@@ -194,7 +210,7 @@ $('#datepicker_expedida').flatpickr({
       //
       $('#div_saltar_validacion_inca').hide();
       //document.getElementById("#div_saltar_validacion_inca").value = "";
-     
+
     }
     if(this.value == 3 || this.value == 22 || this.value == 4) {
       $('#div_saltar_validacion_lic').show();
@@ -203,7 +219,7 @@ $('#datepicker_expedida').flatpickr({
       //
       $('#div_saltar_validacion_lic').hide();
       //document.getElementById("#div_saltar_validacion_inca").value = "";
-     
+
     }
   });
 </script>
@@ -218,9 +234,9 @@ $('#datepicker_expedida').flatpickr({
       //
       $('#div_saltar_validacion_txt').hide();
       //document.getElementById("#div_saltar_validacion_inca").value = "";
-     
+
     }
-   
+
   });
 </script>
 
@@ -235,7 +251,7 @@ $('#datepicker_expedida').flatpickr({
     else {
       $('#qnas').hide();
       document.getElementById("qna_id").value = 0;
-    } 
+    }
 
   });
 </script>
@@ -244,7 +260,7 @@ $('#datepicker_expedida').flatpickr({
 <script>
   $(document).ready(function () {
     var url = document.location.origin;
-    
+
     $('input:text').bind({
     });
 
@@ -252,7 +268,7 @@ $('#datepicker_expedida').flatpickr({
       minLength:3,
      autoFocus: true,
      source: url+"/getdoctors";
-    
+
 
 
     });
@@ -280,7 +296,7 @@ $('#datepicker_expedida').flatpickr({
        document.getElementById('datepicker_expedida').disabled = false;
        document.getElementById('folio_inc').disabled = false;
     }
-  
+
   });
   */
 </script>

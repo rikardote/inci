@@ -7,10 +7,10 @@
   {!! Form::select('codigodeincidencia_id', $codigosdeincidencias, null, [
     'id' => 'codigo',
     'class' => 'form-control',
-    'placeholder' => 'Selecciona una incidencia', 
+    'placeholder' => 'Selecciona una incidencia',
     'required'
   ]) !!}
-  
+
 </div>
 
 <div id="periodo" class="form-group well well-sm">
@@ -20,17 +20,17 @@
     @foreach($periodos as $periodo)
       <option value="{{$periodo->id}}">{{$periodo->periodo}}/{{$periodo->year}}</option>
     @endforeach
-  </select>  
+  </select>
   {!! Form::label('saltar_validacion', 'Ignorar validación de dias vacacionales: ') !!}
     <input name="saltar_validacion" id="saltar_validacion" type="checkbox" />
-  
+
 </div>
 <div id="medicos" class="form-group well well-sm">
   {!! Form::label('medico_id', 'Medico') !!}
     <select id="medico_id" name="medico_id" class="form-control">
          <option value="">Selecciona un medico</option>
-            @foreach($medicos as $medico) 
-             <option value="{{ $medico->id }}" >{{ $medico->num_empleado }} - {{ $medico->father_lastname }} {{ $medico->mother_lastname }} {{ $medico->name }} </option> 
+            @foreach($medicos as $medico)
+             <option value="{{ $medico->id }}" >{{ $medico->num_empleado }} - {{ $medico->father_lastname }} {{ $medico->mother_lastname }} {{ $medico->name }} </option>
             @endforeach
     </select>
 
@@ -39,24 +39,24 @@
   {!! Form::text('diagnostico', null, [
 
     'class' => 'form-control',
-    'placeholder' => 'Diagnostico', 
+    'placeholder' => 'Diagnostico',
    ]) !!}
 
    {!! Form::label('fecha_expedida', 'Fecha Expedida') !!}
    {!! Form::text('fecha_expedida', null, [
     'class' => 'form-control',
-    'placeholder' => 'Fecha Expedida', 
+    'placeholder' => 'Fecha Expedida',
     'id' => 'datepicker_expedida'
     ]) !!}
     {!! Form::label('num_licencia', 'Folio') !!}
   {!! Form::text('num_licencia', null, [
     'class' => 'form-control',
-    'placeholder' => 'Folio', 
+    'placeholder' => 'Folio',
 
    ]) !!}
    <div id="div_saltar_validacion_inca">
       {!! Form::label('saltar_validacion_inca', 'Ignorar validación de Incapacidades: ') !!}
-      <input name="saltar_validacion_inca" id="saltar_validacion_inca" type="checkbox" />  
+      <input name="saltar_validacion_inca" id="saltar_validacion_inca" type="checkbox" />
    </div>
 
 </div>
@@ -64,7 +64,7 @@
   {!! Form::label('otorgado_id', 'Razón de otorgado') !!}
   {!! Form::text('otorgado_id', null, [
     'class' => 'form-control',
-    'placeholder' => 'Razón otorgado', 
+    'placeholder' => 'Razón otorgado',
    ]) !!}
 </div>
 
@@ -72,26 +72,34 @@
     {!! Form::label('becas_comments', 'Dictamen de beca') !!}
     {!! Form::text('becas_comments', null, [
       'class' => 'form-control',
-      'placeholder' => 'Dictamen de beca', 
+      'placeholder' => 'Dictamen de beca',
      ]) !!}
   </div>
 
 <div id="div_saltar_validacion_lic" class="well well-sm">
       {!! Form::label('saltar_validacion_lic', 'Ignorar validación de Licencias Economicas: ') !!}
-      <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />  
+      <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />
 </div>
 <div id="div_saltar_validacion_txt" class="well well-sm">
       {!! Form::label('saltar_validacion_txt', 'Ignorar validación de TXT: ') !!}
-      <input name="saltar_validacion_txt" id="saltar_validacion_txt" type="checkbox" />  
+      <input name="saltar_validacion_txt" id="saltar_validacion_txt" type="checkbox" />
 </div>
 
 <div id="pendientes" class="well well-sm">
   {!! Form::label('pendientes_com', 'Pendientes') !!}
   {!! Form::text('pendientes_com', null, [
     'class' => 'form-control',
-    'placeholder' => 'Pendientes', 
+    'placeholder' => 'Pendientes',
    ]) !!}
 </div>
+
+<div id="coberturaTXT" class="well well-sm">
+    {!! Form::label('cobertura_txt', 'Cobertura TXT') !!}
+    {!! Form::text('cobertura_txt', null, [
+      'class' => 'form-control',
+      'placeholder' => 'Quien hara la cobertura de TXT',
+     ]) !!}
+  </div>
 
 <div id="qnas" class="form-group well well-sm">
   {!! Form::label('qna_id', 'Selecciona la Quincena.') !!}
@@ -100,7 +108,7 @@
     @foreach($qnas as $qna)
       <option value="{{$qna->id}}">{{$qna->qna}}/{{$qna->year}} - {{ $qna->description }}</option>
     @endforeach
-  </select>  
+  </select>
 </div>
 
 <div id="ingresar_fechas" class="pull-left">Ingresar Fechas</div>
@@ -110,7 +118,7 @@
 
   {!! Form::text('fecha_inicio', null, [
     'class' => 'form-control',
-    'placeholder' => 'DD/MM/AAAA', 
+    'placeholder' => 'DD/MM/AAAA',
     'required',
     'autocomplete' => 'off',
     'id' => 'datepicker_inicial'
@@ -121,7 +129,7 @@
 
   {!! Form::text('fecha_final', null, [
     'class' => 'form-control',
-    'placeholder' => 'DD/MM/AAAA', 
+    'placeholder' => 'DD/MM/AAAA',
     'required',
     'autocomplete' => 'off',
     'id' => 'datepicker_final'
@@ -132,11 +140,6 @@
 
 
 <div class="form-group pull-right">
-  {!! link_to('#', $title='Registrar', $attributes= ['id' => 'register', 'class' => 'btn btn-primary'], $secure=null) !!} 
+  {!! link_to('#', $title='Registrar', $attributes= ['id' => 'register', 'class' => 'btn btn-primary'], $secure=null) !!}
 
 </div>
-
-
-
-
-
