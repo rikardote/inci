@@ -13,7 +13,7 @@ class Incidencia extends Model
     protected $dates = ['incidencias.deleted_at'];
     protected $table = 'incidencias';
 
-    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado'];
+    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado', 'cobertura_txt'];
 
     public function employee()
     {
@@ -43,6 +43,10 @@ class Incidencia extends Model
     {
         $this->attributes['diagnostico'] = strtoupper($value);
     }
+    public function setcoberturatxtAttribute($value)
+    {
+        $this->attributes['cobertura_txt'] = strtoupper($value);
+    }
     public function setotorgadoAttribute($value)
     {
         $this->attributes['otorgado'] = strtoupper($value);
@@ -67,7 +71,7 @@ class Incidencia extends Model
                  ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
-                 ->where('qnas.active', '=', 1)                 
+                 ->where('qnas.active', '=', 1)
                  ->where('employees.num_empleado', $num_empleado)
                  ->groupBy('token')
                  ->orderBy('qna_id', 'ASC')
@@ -93,7 +97,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereNotIn('codigos_de_incidencias.code', [900])
                  ->where('qna_id', $qna_id)
-                 ->where('deparments.id', '=', $dpto_id)                 
+                 ->where('deparments.id', '=', $dpto_id)
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -114,7 +118,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereNotIn('codigos_de_incidencias.code', [900, 902, 903, 904])
                  ->where('qna_id', $qna_id)
-                 ->where('deparments.id', '=', $dpto_id)                 
+                 ->where('deparments.id', '=', $dpto_id)
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -134,7 +138,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('qna_id', $qna_id)
-                 ->where('deparments.id', '=', $dpto_id)                 
+                 ->where('deparments.id', '=', $dpto_id)
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -176,7 +180,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereNotBetween('codigos_de_incidencias.code', [84, 905])
                  ->where('qna_id', $qna_id)
-                 ->where('deparments.id', '=', $dpto_id)                 
+                 ->where('deparments.id', '=', $dpto_id)
                 // ->where('capturada', '!=', 1)
                  ->groupBy('deparment_id')
                  ->orderBy('num_empleado', 'ASC')
@@ -199,7 +203,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('employees.num_empleado','=', $num_empleado)
-                 ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])                 
+                 ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -218,7 +222,7 @@ class Incidencia extends Model
                  ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
-                 ->where('employees.num_empleado','=', $num_empleado)                 
+                 ->where('employees.num_empleado','=', $num_empleado)
                  ->groupBy('token')
                  //->orderBy('num_empleado', 'ASC')
                  //->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -242,7 +246,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->where('deparments.code', '=', $dpto)
                  ->where('employees.condicion_id', '=', 1)
-                 ->whereIn('codigos_de_incidencias.code', $inc)                 
+                 ->whereIn('codigos_de_incidencias.code', $inc)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
                  ->get();
@@ -264,7 +268,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->where('deparments.code', '=', $dpto)
                  ->where('employees.condicion_id', '=', 1)
-                 ->whereIn('codigos_de_incidencias.code', $lic)                 
+                 ->whereIn('codigos_de_incidencias.code', $lic)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
                  ->having('count', '>', 3)
@@ -283,7 +287,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->where('qna_id', '=', $qna_id)
                  ->where('employees.condicion_id', '=', 1)
-                 ->where('employees.num_empleado', $num_empleado)                 
+                 ->where('employees.num_empleado', $num_empleado)
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -299,7 +303,7 @@ class Incidencia extends Model
       $incidencias = Incidencia::getQuery()
                  ->select(DB::raw($conteo_total))
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
-                 ->where('codigos_de_incidencias.code', '=', $code)                 
+                 ->where('codigos_de_incidencias.code', '=', $code)
                  ->whereNull('incidencias.deleted_at')
                  ->whereBetween('fecha_inicio',[$fecha_inicial,$fecha_final])
                  ->first();
@@ -316,7 +320,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('deparments.id', '=', $dpto_id)
-                 ->where('codigos_de_incidencias.code', '=', $code)                 
+                 ->where('codigos_de_incidencias.code', '=', $code)
                  ->whereBetween('fecha_inicio',[$fecha_inicial,$fecha_final])
                  ->first();
      return $incidencias;
@@ -331,7 +335,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('deparments.id', $dpto_id)
-                 ->where('codigos_de_incidencias.code', '=', $codigo)                 
+                 ->where('codigos_de_incidencias.code', '=', $codigo)
                  ->whereBetween('fecha_inicio',[$fecha_inicial,$fecha_final])
                  ->groupBy('employee_id')
                  ->get();
@@ -362,7 +366,7 @@ class Incidencia extends Model
                  ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
                  ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
                  ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
-                 ->whereNull('incidencias.deleted_at')                 
+                 ->whereNull('incidencias.deleted_at')
                  ->where('qna_id', $qna_id)
                  ->groupBy('deparments.id')
                  ->get();
@@ -382,7 +386,7 @@ class Incidencia extends Model
                  ->where('qna_id', $qna_id)
                  ->where('deparments.code', $dpto_code)
                  ->where('codigos_de_incidencias.grupo', $grupo)
-                 ->where('capturada','!=' ,1)                 
+                 ->where('capturada','!=' ,1)
                  ->whereNotIn('codigos_de_incidencias.code', [900,901, 902, 903, 904, 905])
                  ->groupBy('token')
                  ->orderBy('employees.num_empleado')
@@ -403,7 +407,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereIn('deparments.id', $dptos)
                  ->whereIn('codigos_de_incidencias.id', ['31','5','23'])
-                 ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])                 
+                 ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_licencia')
                  ->orderBy('employees.num_empleado')
                  ->orderBy('codigos_de_incidencias.code')
@@ -424,7 +428,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->where('qna_id', '=', $qna_id)
                  ->where('deparments.code', '=', $dpto)
-                 ->where('codigodeincidencia_id', '=', $pendiente_id)                 
+                 ->where('codigodeincidencia_id', '=', $pendiente_id)
                  //->where('codigos_de_incidencias.grupo', '=', '500')
                  ->groupBy('token')
                  ->get();
@@ -442,7 +446,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->where('employees.active','=', 1)
                  ->where('codigos_de_incidencias.id', '=', '31')
-                 ->where('num_empleado', '=', $empleado_id)                 
+                 ->where('num_empleado', '=', $empleado_id)
                  ->whereBetween('fecha_inicio',[$fecha_actual,$fecha_posterior])
                  ->groupBy('num_empleado')
                  ->get();
@@ -458,7 +462,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('codigos_de_incidencias.id', '=', '3')
-                 ->where('num_empleado', '=', $empleado_id)                 
+                 ->where('num_empleado', '=', $empleado_id)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
                  ->first();
@@ -471,7 +475,7 @@ class Incidencia extends Model
         }
 
     }
-    
+
     public static function getTotalVacaciones($employee_id, $periodo_id, $tipo_vaca)
     {
       $conteo_total = DB::raw('sum(total_dias) as total');
@@ -479,11 +483,11 @@ class Incidencia extends Model
                  ->select('*',DB::raw($conteo_total))
                  ->whereNull('incidencias.deleted_at')
                  ->where('employee_id', '=', $employee_id)
-                 ->where('codigodeincidencia_id', '=', $tipo_vaca)                 
+                 ->where('codigodeincidencia_id', '=', $tipo_vaca)
                  ->where('periodo_id', '=', $periodo_id)
                  ->groupBy('periodo_id')
                  ->first();
-       
+
         if ($incidencias) {
             return $incidencias->total;
             //dd($incidencias->total);
@@ -491,8 +495,8 @@ class Incidencia extends Model
         else{
             return 0;
         }
-      
-        
+
+
     }
     public static function getIncidenciasByCode($code, $fecha_inicio, $fecha_final, $dptos)
     {
@@ -505,7 +509,7 @@ class Incidencia extends Model
                  ->leftJoin('jornadas', 'jornadas.id', '=', 'employees.jornada_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('codigos_de_incidencias.code', $code)
-                 ->whereIn('deparments.id', $dptos)                 
+                 ->whereIn('deparments.id', $dptos)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('employees.jornada_id')
                  ->get();
@@ -522,7 +526,7 @@ class Incidencia extends Model
                  ->leftJoin('puestos', 'puestos.id', '=', 'employees.puesto_id')
                  ->leftJoin('jornadas', 'jornadas.id', '=', 'employees.jornada_id')
                  ->whereNull('incidencias.deleted_at')
-                 ->where('deparments.id', '=', $dpto)                 
+                 ->where('deparments.id', '=', $dpto)
                  ->where('codigos_de_incidencias.code', $code)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
@@ -538,7 +542,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('codigos_de_incidencias.code', '=', '900')
-                 ->where('num_empleado', '=', $num_empleado)                 
+                 ->where('num_empleado', '=', $num_empleado)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
                  ->first();
@@ -547,7 +551,7 @@ class Incidencia extends Model
                      return $incidencias->total;
                  }
                  else return 0;
-     
+
     }
     public static function GetIncidenciasPorDia($dptos, $fecha_inicio)
     {
@@ -563,7 +567,7 @@ class Incidencia extends Model
                      ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                      ->whereNull('incidencias.deleted_at')
                      ->whereIn('deparments.id', $dptos)
-                     ->where('fecha_capturado', '=', $fecha_inicio)                     
+                     ->where('fecha_capturado', '=', $fecha_inicio)
                      ->groupBy('token')
                      ->orderBy('deparments.code', 'ASC')
                      ->orderBy('num_empleado', 'ASC')
@@ -587,7 +591,7 @@ class Incidencia extends Model
                      ->whereNull('incidencias.deleted_at')
                      ->whereIn('deparments.id', $dptos)
                      ->whereIn('puestos.id', $medicosIds)
-                     ->where('fecha_capturado', '=', $fecha_inicio)                     
+                     ->where('fecha_capturado', '=', $fecha_inicio)
                      ->groupBy('token')
                      ->orderBy('num_empleado', 'ASC')
                      ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -610,7 +614,7 @@ class Incidencia extends Model
                  ->whereBetween('fecha_inicio',[$fecha_inicial,$fecha_final])
                  ->groupBy('employee_id')
                  ->get();
-                 
+
      return $incidencias;
     }
     public static function getInasistencias($codes, $fecha_inicio, $fecha_final, $dptos)
@@ -674,7 +678,7 @@ class Incidencia extends Model
     }
 
     public static function getIncidenciasSingles($fecha, $primer_dia, $ultimo_dia, $emp_id){
-    
+
         $incidencias = Incidencia::getQuery()
                  ->select('*','employees.id as empleado_id','incidencias.id as inc_id','jornadas.id as jornada_id','puestos.puesto as puesto_p', DB::raw($conteo_total))
                  ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
@@ -699,7 +703,7 @@ class Incidencia extends Model
                  ->whereIn('codigos_de_incidencias.code', [908, 909, 912])
                  //->whereIn('codigos_de_incidencias.code', [907, 908, 909])
                  ->where('qna_id', $qna_id)
-                 ->where('deparments.id', '=', $dpto_id)                 
+                 ->where('deparments.id', '=', $dpto_id)
                  ->groupBy('token')
                  ->orderBy('num_empleado', 'ASC')
                  ->orderBy('codigos_de_incidencias.code', 'ASC')
@@ -737,7 +741,7 @@ class Incidencia extends Model
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
                  ->whereNull('incidencias.deleted_at')
                  ->where('codigos_de_incidencias.code', '=', '100')
-                 ->where('num_empleado', '=', $empleado_id)                 
+                 ->where('num_empleado', '=', $empleado_id)
                  //->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
                  ->groupBy('num_empleado')
                  ->get();
@@ -762,7 +766,7 @@ class Incidencia extends Model
                  ->whereNull('incidencias.deleted_at')
                  ->whereIn('deparments.id', $dptos)
                  ->whereIn('codigos_de_incidencias.code', ['60','62','63'])
-                 ->where('num_empleado', '=', $empleado_id)                 
+                 ->where('num_empleado', '=', $empleado_id)
                  ->groupBy('periodo_id')
                  ->orderBy('periodo_id', 'ASC')
                  ->get();
@@ -770,4 +774,3 @@ class Incidencia extends Model
         return $incidencias;
   }
 }
-
