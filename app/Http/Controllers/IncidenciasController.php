@@ -52,8 +52,8 @@ class IncidenciasController extends Controller
      */
     public function create()
     {
- 
-        
+
+
     }
 
     /**
@@ -67,7 +67,7 @@ class IncidenciasController extends Controller
     {
         // VALIDANDO MANTENIMIENTO EN TRUE
         if (check_manto() && !\Auth::user()->admin()) {
-            return response()->json('El sistema este en periodo de mantenimiento... intentar mas tarde',500); 
+            return response()->json('El sistema este en periodo de mantenimiento... intentar mas tarde',500);
         }
         date_default_timezone_set('UTC');
 
@@ -82,7 +82,7 @@ class IncidenciasController extends Controller
 
         $empleado = Employe::find($request->empleado_id);
 
-        
+
 
         $fecha_expedida = ($request->datepicker_expedida) ? fecha_ymd($request->datepicker_expedida) : NULL;
         $fecha1 = strtotime($fecha_inicio);
@@ -94,13 +94,13 @@ class IncidenciasController extends Controller
 
         $fechas = array();
 
-        for ($i=$fecha1; $i <= $fecha2; $i+=86400) { 
+        for ($i=$fecha1; $i <= $fecha2; $i+=86400) {
             $fecha = date("Y-m-d", $i);
             $qna = qna_year($fecha);
             $fechas[] =  ['fecha' => $fecha,'qna' => $qna];
         }
         $group = array_group_by($fechas,'qna');
-      
+
         foreach ($group as $key => $value) {
             $incidencia = new Incidencia($request->all());
             $incidencia->employee_id = $request->empleado_id;
@@ -122,15 +122,15 @@ class IncidenciasController extends Controller
             $incidencia->capturado_por = capturado_por(\Auth::user()->id);
 
             $incidencia->fecha_capturado =  Carbon::now();
-             
+
             $codigo = Codigo_De_Incidencia::where('id', $request->codigo)->first();
-             
+
             $qna = Qna::find($incidencia->qna_id);
-            
-            
-               
-            
-            /* Validando Qna Activa */ 
+
+
+
+
+            /* Validando Qna Activa */
                 if(!isset($qna->id))
                 return response()->json('Quincena no activada',500);
 
@@ -174,18 +174,18 @@ class IncidenciasController extends Controller
                        return response()->json(
                          'Fecha de incidencia Excede limite de 3 dias',500);
                 break;
-       
+
             }
-            
+
         */
             if ($codigo->code == 912) {
                 return response()->json('Codigo 912 ya no se encuentra activo, acude a Recursos Humanos',500);
             }
             /* Validando pases de salida */
             if ($codigo->code == 905 && $empleado->condicion_id != 1 ) {
-                return response()->json('Pases de salida solo validos para el personal de BASE',500); 
+                return response()->json('Pases de salida solo validos para el personal de BASE',500);
             }
-      
+
             if ($codigo->code == 905 && $this->valPaseDeSalida($qna, $incidencia->employee_id)) {
                 return response()->json('Pase de salida de QNA: '.$qna->qna.'-'.$qna->year.' ya gozado',500);
             }
@@ -199,18 +199,18 @@ class IncidenciasController extends Controller
             }
 
             /* Validando Licencias sin goce de sueldo*/
-           
+
             /*
              if(validar_licencia_sin_goce($incidencia->employee_id,$fecha_inicial['fecha'],$fecha_final['fecha'])) {
                 return response()->json(
                     'Existe licencia sin goce de sueldo',500);
-             }    
+             }
              */
 
             /* Se cierra licencia sin goce de sueldo */
-            
+
             /* Validacion que existq periodo de vacaciones 60-63 */
-            
+
             if ($codigo->code == 60 || $codigo->code==62 || $codigo->code==63) {
                 if (!$request->periodo_id) {
                     if ($request->ajax()) {
@@ -218,11 +218,11 @@ class IncidenciasController extends Controller
                             'Ingrese Periodo Vacacional',500);
                     }
                 }
-             // Validacion de vacaciones saltando validacion 
+             // Validacion de vacaciones saltando validacion
 
                 if ($request->saltar_validacion != 'true') {
-                   
-                        //if ($this->valVacaciones($incidencia, $total_dias)) 
+
+                        //if ($this->valVacaciones($incidencia, $total_dias))
                     $vacaciones = Incidencia::getTotalVacaciones($incidencia->employee_id, $incidencia->periodo_id, $incidencia->codigodeincidencia_id);
 
                     $vacacion = Periodo::find($incidencia->periodo_id);
@@ -231,7 +231,7 @@ class IncidenciasController extends Controller
                     $de6 = [4,7,8,9,10,11,19,31];
                     $demas = [14,17];
                     //dd($vacaciones+$total_dias);
-                    
+
                     if (($vacaciones+$total_dias) > 2 && in_array($empleado->jornada_id, $de2)) {
                         return response()->json(
                             'Error '.$vacaciones.' de 2 dias vacacionales periodo '.$vacacion->periodo.'-'.$vacacion->year, 500);
@@ -254,33 +254,33 @@ class IncidenciasController extends Controller
             if ($request->saltar_validacion_lic != 'true') {
 
                     ///// Validacion faltas por jornadas
-                      if ($codigo->code == 10) { 
-                          if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;    
-                              
-                          if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;    
+                      if ($codigo->code == 10) {
+                          if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;
+
+                          if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;
 
                       }
                     ///// Validacion Dias de incapacidades
                   if ($request->saltar_validacion_inca != 'true') {
-                      if ($codigo->code == 55) { 
+                      if ($codigo->code == 55) {
 
-                        if (in_array($empleado->jornada_id, $guardias))  $incidencia->total_dias = 2;    
-                        
-                        if (in_array($empleado->jornada_id, $syf_dyf)) $incidencia->total_dias = 4;    
-                                                    
+                        if (in_array($empleado->jornada_id, $guardias))  $incidencia->total_dias = 2;
+
+                        if (in_array($empleado->jornada_id, $syf_dyf)) $incidencia->total_dias = 4;
+
                       }
-                  }  
+                  }
             }  //if ($request->saltar_validacion_lic != 'true') {
-            
+
 
               ///// Validacion Dias de licencia con goce
             if ($request->saltar_validacion_lic != 'true') {
-                if ($codigo->code == 40 || $codigo->code == 41 || $codigo->code == 47 || $codigo->code == 48 || $codigo->code == 49 || $codigo->code == 29 || $codigo->code == 92) { 
+                if ($codigo->code == 40 || $codigo->code == 41 || $codigo->code == 47 || $codigo->code == 48 || $codigo->code == 49 || $codigo->code == 29 || $codigo->code == 92) {
 
-                        if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;    
+                        if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;
 
-                        if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;    
-      
+                        if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;
+
                         if ($codigo->code == 41) {
                         //if ($codigo->code == 40 || $codigo->code == 41) {
                             $antiguedad = getAntiguedad($empleado->fecha_ingreso);
@@ -292,12 +292,15 @@ class IncidenciasController extends Controller
                                 }
                             }
                         }
-                }           
+                }
             }   // termina if ($request->saltar_validacion_lic != 'true') {
                  //VALIDACION DE TXT
-            if ($request->saltar_validacion_txt != 'true') {  
-                if ($codigo->code == 900) { 
-                    
+            if ($request->saltar_validacion_txt != 'true') {
+                if ($codigo->code == 900) {
+                    if($incidencia->cobertura_txt == NULL){
+                        return response()->json('Debe especificar quien hara la cobertura del TXT',500);
+                    }
+
                     $a = getTxtPorMes($empleado->num_empleado, $incidencia->fecha_inicio);
                     $dias = $a + $incidencia->total_dias;
 
@@ -319,7 +322,7 @@ class IncidenciasController extends Controller
                     }
 
                 }
-            }   //termina if ($request->saltar_validacion_txt != 'true') {   
+            }   //termina if ($request->saltar_validacion_txt != 'true') {
 
           $incidencia->save();
         }
@@ -330,17 +333,17 @@ class IncidenciasController extends Controller
                 return response()->json(
                         $incidencias,200);
         }
-   
+
 }
 
     public function show($num_empleado)
     {
 
-      
+
       $incidencias = Incidencia::getIncidencias($num_empleado);
 
       $employee = Employe::where('num_empleado', '=', $num_empleado)->first();
-     
+
       return view('incidencias.side')
         ->with('incidencias',$incidencias)
         ->with('employee', $employee);
@@ -362,7 +365,7 @@ class IncidenciasController extends Controller
         $periodos = Periodo::all()->pluck('periodoo', 'id')->toArray();
         $codigosdeincidencias = Codigo_De_Incidencia::all()->pluck('codigo', 'id')->toArray();
 
-        
+
         return view('incidencias.edit')
             ->with('incidencia', $incidencia)
             ->with('qnas', $qnas)
@@ -381,14 +384,14 @@ class IncidenciasController extends Controller
     public function update(Request $request, $id)
     {
         $incidencia = Incidencia::find($id);
-        
+
         $incidencia->fill($request->all());
-        
+
         $incidencia->fecha_inicio = fecha_ymd($request->fecha_inicio);
         $incidencia->fecha_final = fecha_ymd($request->fecha_final);
 
         $incidencia->token = genToken();
-       
+
         $incidencia->save();
         Flash::success('Incidencia editada con exito!');
         return redirect()->route('incidencias.index');
@@ -406,7 +409,7 @@ class IncidenciasController extends Controller
         $incidencias = Incidencia::where('token', $token)->get();
         //dd($incidencia);
         foreach ($incidencias as $incidencia) {
-            $incidencia->delete();    
+            $incidencia->delete();
         }
         $incidencias = Incidencia::getIncidencias($num_empleado);
         return response()->json(
@@ -422,26 +425,26 @@ class IncidenciasController extends Controller
        $incidencias = Incidencia::where('token', $token)->get();
         //dd($incidencia);
         foreach ($incidencias as $incidencia) {
-            $incidencia->delete();    
+            $incidencia->delete();
         }
-        
-      
+
+
         return response()->json([
                     'mensaje' => 'success'
                     ],200);
-      
+
     }
     public function comentario_create($empleado_id)
-    {   
+    {
         $comentario = Comentario::where('employee_id', '=', $empleado_id)->get()->first();
 
         return view('incidencias.comment')
         ->with('empleado_id', $empleado_id)
         ->with('comentario', $comentario);
-       
+
     }
     public function comentario_update(Request $request, $empleado_id)
-    {   
+    {
         $comentario = Comentario::where('employee_id', '=', $empleado_id)->first();
 
         $comentario->comment = $request->comment;
@@ -462,8 +465,8 @@ class IncidenciasController extends Controller
         $comentario = Comentario::where('employee_id', '=', $empleado->emp_id)->get()->first();
 
         return view('incidencias.create')
-            ->with('incidencias', $incidencias) 
-            ->with('employee', $empleado)   
+            ->with('incidencias', $incidencias)
+            ->with('employee', $empleado)
             ->with('qnas', $qnas)
             ->with('periodos', $periodos)
             ->with('codigosdeincidencias', $codigosdeincidencias)
@@ -472,13 +475,13 @@ class IncidenciasController extends Controller
 
     }
     public function comentario_store(Request $request, $empleado_id)
-    {   
+    {
         //$comentario = Comentario::where('employee_id', '=', $empleado_id)->get()->first();
         $comentario = new Comentario;
         $comentario->comment = $request->comment;
         $comentario->employee_id = $empleado_id;
         $comentario->save();
-      
+
         $empleado = Employe::find($empleado_id);
         $qnas = Qna::where('active', '=', 1)->get();
         $dptos = \Auth::user()->centros->pluck('id')->toArray();
@@ -493,8 +496,8 @@ class IncidenciasController extends Controller
         $comentario = Comentario::where('employee_id', '=', $empleado->emp_id)->get()->first();
 
         return view('incidencias.create')
-            ->with('incidencias', $incidencias) 
-            ->with('employee', $empleado)   
+            ->with('incidencias', $incidencias)
+            ->with('employee', $empleado)
             ->with('qnas', $qnas)
             ->with('periodos', $periodos)
             ->with('codigosdeincidencias', $codigosdeincidencias)
@@ -531,17 +534,17 @@ class IncidenciasController extends Controller
         $ya_existe = Incidencia::where('employee_id',$employee_id)
             ->whereBetween('fecha_inicio',[$fecha_inicial,$fecha_final])
             ->count();
-        
-        if ($ya_capturado || $ya_existe )  return true;  
-                
+
+        if ($ya_capturado || $ya_existe )  return true;
+
 
 
     }
- 
+
     /*
     use DateTime;
     use DateInterval;
-    use DatePeriod; 
+    use DatePeriod;
     function createDateRange($startDate, $endDate, $format = "Y-m-d") {
         $begin = new DateTime($startDate);
         $end = new DateTime($endDate);
@@ -557,6 +560,6 @@ class IncidenciasController extends Controller
         return $range;
     }
     */
-    
-    
+
+
 }
