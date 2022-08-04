@@ -86,7 +86,7 @@
         {!! Form::label('cobertura_txt', 'Sustituto') !!}
         {!! Form::text('cobertura_txt', null, [
           'class' => 'form-control',
-          'placeholder' => 'Ingresar al sustituto',
+          'placeholder' => 'Ingresar nombre completo del sustituto',
          ]) !!}
 
       <br>
