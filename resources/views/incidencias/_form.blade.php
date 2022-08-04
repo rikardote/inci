@@ -80,9 +80,20 @@
       {!! Form::label('saltar_validacion_lic', 'Ignorar validación de Licencias Economicas: ') !!}
       <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />
 </div>
-<div id="div_saltar_validacion_txt" class="well well-sm">
-      {!! Form::label('saltar_validacion_txt', 'Ignorar validación de TXT: ') !!}
-      <input name="saltar_validacion_txt" id="saltar_validacion_txt" type="checkbox" />
+<div id="coberturaTXT" class="well well-sm">
+
+
+        {!! Form::label('cobertura_txt', 'Sustituto') !!}
+        {!! Form::text('cobertura_txt', null, [
+          'class' => 'form-control',
+          'placeholder' => 'Ingresar al sustituto',
+         ]) !!}
+
+      <br>
+      <div>
+        {!! Form::label('saltar_validacion_txt', 'Ignorar validación de TXT: ') !!}
+        <input name="saltar_validacion_txt" id="saltar_validacion_txt" type="checkbox" />
+    </div>
 </div>
 
 <div id="pendientes" class="well well-sm">
@@ -93,13 +104,7 @@
    ]) !!}
 </div>
 
-<div id="coberturaTXT" class="well well-sm">
-    {!! Form::label('cobertura_txt', 'Cobertura TXT') !!}
-    {!! Form::text('cobertura_txt', null, [
-      'class' => 'form-control',
-      'placeholder' => 'Quien hara la cobertura de TXT',
-     ]) !!}
-  </div>
+
 
 <div id="qnas" class="form-group well well-sm">
   {!! Form::label('qna_id', 'Selecciona la Quincena.') !!}
