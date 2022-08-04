@@ -160,10 +160,12 @@ $('#datepicker_expedida').flatpickr({
       if(this.value == 38) {
 
         $('#coberturaTXT').show();
+        $('#div_saltar_validacion_txt').show();
         //
       } else {
         //
         $('#coberturaTXT').hide();
+        $('#div_saltar_validacion_txt').hide();
         document.getElementById("coberturaTXT").value = null;
 
       }
@@ -224,21 +226,6 @@ $('#datepicker_expedida').flatpickr({
   });
 </script>
 
-<script>
-  $('#codigo').on('change', function() {
-      //alert( this.value ); // or $(this).val()
-    if(this.value == 38) {
-      $('#div_saltar_validacion_txt').show();
-      //
-    } else {
-      //
-      $('#div_saltar_validacion_txt').hide();
-      //document.getElementById("#div_saltar_validacion_inca").value = "";
-
-    }
-
-  });
-</script>
 
 <script>
   $('#codigo').on('change', function() {
