@@ -298,7 +298,7 @@ class IncidenciasController extends Controller
             if ($request->saltar_validacion_txt != 'true') {
                 if ($codigo->code == 900) {
                     if($incidencia->cobertura_txt == NULL){
-                        return response()->json('Debe especificar quien hara la cobertura del TXT',500);
+                        return response()->json('Debe especificar el sustituto',500);
                     }
 
                     $a = getTxtPorMes($empleado->num_empleado, $incidencia->fecha_inicio);
