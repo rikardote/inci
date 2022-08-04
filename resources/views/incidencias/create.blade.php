@@ -160,12 +160,10 @@ $('#datepicker_expedida').flatpickr({
       if(this.value == 38) {
 
         $('#coberturaTXT').show();
-        $('#div_saltar_validacion_txt').show();
         //
       } else {
         //
         $('#coberturaTXT').hide();
-        $('#div_saltar_validacion_txt').hide();
         document.getElementById("coberturaTXT").value = null;
 
       }
