@@ -33,13 +33,13 @@ function capturado_por($id){
         else $iniciales .= substr($trozos[$i],0,1).". ";
       }
       return $iniciales;
-      //return $user->name;  
+      //return $user->name;
     }
     else {
         return "";
     }
-   
-    
+
+
   }
 
 function fecha_ymd($date){
@@ -70,26 +70,26 @@ function qna_year($fecha){
     $month =  $date->month;
     $day =  $date->day;
     $year = $date->year;
-    
+
     $qna = $month * 2;
     if ($day < 16) {
         $qna-=1;
     }
-   
+
     $qna = Qna::where('qna', '=', $qna)->where('year', '=', $year)->where('active', '=', 1)->first();
-    //if(isset($qna)) //? return $qna->id : return false; 
-    if(isset($qna)) { 
+    //if(isset($qna)) //? return $qna->id : return false;
+    if(isset($qna)) {
         return $qna->id;
     }
     else {
         return false;
     }
-    
+
 
 }
 function getFechaInicioPorQna($qna_id){
     $qna = Qna::where('id', '=', $qna_id)->first();
-    
+
     $mes = ($qna->qna / 2);
     $mes_redondeado = ceil($mes);
     $mes_int = intval($mes_redondeado);
@@ -99,7 +99,7 @@ function getFechaInicioPorQna($qna_id){
     }else{
         $f_inicio = Carbon::create($qna->year, $mes_int, '01',0,0,0);
     }
-    
+
     return $f_inicio->toDateString();
 
 }
@@ -110,10 +110,10 @@ function getFechaFinalPorQna($f_inicio){
     $year = $date->year;
 
     if($day < 16) {
-        $f_final = Carbon::create($year, $month, '15',0,0,0); 
+        $f_final = Carbon::create($year, $month, '15',0,0,0);
     }
     else {
-        $f_final = $date->endOfMonth(); 
+        $f_final = $date->endOfMonth();
     }
     return $f_final->toDateString();
 
@@ -123,12 +123,12 @@ function getDoctor($medico_id)
     $doctor = Employe::where('id', '=', $medico_id)->first();
     //if($doctor) ? $doctor->father_lastname .' '. $doctor->mother_lastname .' '. $doctor->name : return null;
     if($doctor){
-        return $doctor->father_lastname .' '. $doctor->mother_lastname .' '. $doctor->name;    
+        return $doctor->father_lastname .' '. $doctor->mother_lastname .' '. $doctor->name;
     }else
     {
-        return null;    
+        return null;
     }
-    
+
 }
 
 function getdateActual($fecha_ingreso)
@@ -191,7 +191,7 @@ function getExcesodeIncapacidad($dias_lic, $antiguedad)
             break;
     }
 
-} 
+}
 function getExcesodeLicenciasConGoce($fecha_inicial, $antiguedad, $num_empleado, $total_dias)
 {
     //$dt = Carbon::now();
@@ -222,7 +222,7 @@ function getExcesodeLicenciasConGoce($fecha_inicial, $antiguedad, $num_empleado,
 
 function getTxtPorMes($num_empleado, $date)
 {
-    
+
     $primer_dia = Carbon::parse($date)->startOfMonth();
     $ultimo_dia = Carbon::parse($date)->lastOfMonth();
     $total_txt = Incidencia::Gettxtpormes($primer_dia, $ultimo_dia,$num_empleado);
@@ -232,7 +232,7 @@ function getTxtPorMes($num_empleado, $date)
 
 function getMonth($date)
 {
-    
+
     $dt = Carbon::parse($date);
     $mes = $dt->month;
     $mes = date("F", mktime(0, 0, 0, $mes, 10));
@@ -326,7 +326,7 @@ function getFechaCierre(){
     if ($qna->cierre) {
         return fecha_dmy($qna->cierre);
     }
-    
+
 }
 
 function checkWeekdays($fecha_inicio, $fecha_final){
@@ -346,11 +346,11 @@ function checkWeekdays($fecha_inicio, $fecha_final){
         return false;
       }
     }
-    
+
 }
 function getDeparment($depa_id){
     $departamento = Deparment::where('id',$depa_id)->first();
-    return $departamento->code;   
+    return $departamento->code;
 }
 
 function valida_entrada($num_empleado, $fecha, $entrada){
@@ -365,14 +365,14 @@ function valida_entrada($num_empleado, $fecha, $entrada){
     //$horario_out=$horariosalida_checadas.":00";
 
 
-                                                
+
     $st_time =   strtotime($empleado_entrada);
     //$end_time   =   strtotime($empleado_salida);
-                        
+
 
     $checkin =   strtotime($entrada);
     //$checkout =   strtotime($checkout_checadas);
-      */                  
+      */
     $minutoAnadir=10;
 
     $segundos_horaInicial=strtotime($empleado_entrada);
@@ -382,7 +382,7 @@ function valida_entrada($num_empleado, $fecha, $entrada){
     $nuevaHora=date("H:i:sa",$segundos_horaInicial+$segundos_minutoAnadir);
 
     $entrada_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
-    
+
 
     //dd($nuevaHora);
 
@@ -390,14 +390,14 @@ function valida_entrada($num_empleado, $fecha, $entrada){
             ->whereRaw('? between fecha_inicio and fecha_final', [$fecha])
             ->whereNotIn('codigodeincidencia_id', [41,15,81])
             ->first();
-        
-    
+
+
         if($entrada >= $entrada_comp){
             if ($incidencia) {
                 $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
                     return "(".$code->code.")";
             }
-            
+
         }
         if ($incidencia) {
             $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
@@ -413,7 +413,7 @@ function valida_entrada($num_empleado, $fecha, $entrada){
             return "<b><font  color='red'>".$entrada."</font></b>";
 
         }
-   
+
         return $entrada;
 
 }
@@ -424,7 +424,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
     $fecha = fecha_ymd($fecha);
 
     //$salida_comp = date('h:i:s A', strtotime($empleado_entrada. " +4 hours"));
-    
+
 
     $incidencia = Incidencia::where('employee_id', '=', $empleado->emp_id)
             ->whereRaw('? between fecha_inicio and fecha_final', [$fecha])
@@ -436,7 +436,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
     if ($salida != $entrada){
         if($incidencia && $salida){
             return $salida."(".$code->code.")";
-        }   
+        }
         if(!$incidencia && $salida){
             return $salida;
         }
@@ -445,7 +445,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
     if($incidencia){
         return $code->code;
     }
-   
+
 }
 
 function get_departamento($deparment_id)  {
@@ -455,7 +455,7 @@ function get_departamento($deparment_id)  {
         return "00105";
     else
         return  $dpto->code;
-    
+
 }
 function validar_entrada($num_empleado, $checada){
             $empleado = Employe::get_empleado($num_empleado);
@@ -464,13 +464,13 @@ function validar_entrada($num_empleado, $checada){
 
 
             $es_entrada = FALSE;
-            $es_salida = FALSE;   
+            $es_salida = FALSE;
 
             //$checadas1 = $checadas->min('hora');
             //$checadas2 = $checadas->max('hora');
 
             $entrada_comp = date('h:i:s A', strtotime($hora_de_entrada. " +4 hours"));
-            
+
             if($checada < $entrada_comp){
                 $es_entrada = TRUE;
                 return $checada;
@@ -480,7 +480,7 @@ function validar_entrada($num_empleado, $checada){
             if ($checadas2 > $entrada_comp) {
                 $es_salida = TRUE;
             }
-               
+
             if ($es_entrada && $es_salida) {
                 $a = $checadas1.' - '.$checadas2;
             }
@@ -491,9 +491,9 @@ function validar_entrada($num_empleado, $checada){
                 $a = "".' - '.$checadas2;
             }
             */
-            
 
-} 
+
+}
 function validar_salida($num_empleado, $checada){
     $empleado = Employe::get_empleado($num_empleado);
     $hora_de_entrada = substr($empleado->horario,0,5);
@@ -501,13 +501,13 @@ function validar_salida($num_empleado, $checada){
 
 
     $es_entrada = FALSE;
-    $es_salida = FALSE;   
+    $es_salida = FALSE;
 
     //$checadas1 = $checadas->min('hora');
     //$checadas2 = $checadas->max('hora');
 
     $entrada_comp = date('h:i:s A', strtotime($hora_de_entrada. " +4 hours"));
-    
+
     if($checada > $entrada_comp){
         $es_salida = TRUE;
         return $checada;
@@ -517,7 +517,7 @@ function validar_salida($num_empleado, $checada){
     if ($checadas2 > $entrada_comp) {
         $es_salida = TRUE;
     }
-       
+
     if ($es_entrada && $es_salida) {
         $a = $checadas1.' - '.$checadas2;
     }
@@ -528,9 +528,9 @@ function validar_salida($num_empleado, $checada){
         $a = "".' - '.$checadas2;
     }
     */
-    
 
-} 
+
+}
 function validar_licencia_sin_goce($empleado_id,$fecha_inicial,$fecha_final){
 
     //$lic = Incidencia::getTotalLicenciasSinGoce($empleado_id,$fecha_inicial,$fecha_final);
@@ -549,7 +549,7 @@ function validar_licencia_sin_goce($empleado_id,$fecha_inicial,$fecha_final){
 function check_manto(){
     $mantenimiento = Configuration::where('name', "mantenimiento")->first();
     if ($mantenimiento->state) {
-      return true; 
+      return true;
     }
 
 }
@@ -566,20 +566,24 @@ function check_entrada($fecha, $num_empleado){
             return "";
         }
 
-        
-        
+
+
 }
-function check_salida($fecha, $num_empleado){
+function check_salida($fecha, $num_empleado,$entrada){
 
     $salida = Checada::where('num_empleado', $num_empleado)
         ->where('fecha','LIKE', '%'. $fecha .'%')
         ->orderBy('fecha','desc')
         ->first();
+
         if($salida){
-            return date("H:i", strtotime($salida->fecha));
-        }
-        else {
-            return "";
+            if($entrada == date("H:i", strtotime($salida->fecha))){
+                return "";
+            }
+            else{
+                return date("H:i", strtotime($salida->fecha));
+            }
+
         }
 }
 
@@ -588,7 +592,7 @@ function isweekend($date){
 
         if($date->isWeekend()) {
             return "true";
-        } 
+        }
 }
 
 function getDia($date) {
