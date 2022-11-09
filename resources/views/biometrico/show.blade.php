@@ -35,13 +35,14 @@
                                 {{-- */ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado, $entrada) /* --}}
                                 @if (!isweekend($date->format('Y-m-d')))
                                     <td> {{ $date->format('d/m/Y') }}</td>
-                                    <!--
-                                        <td> {!! valida_entrada($empleado->num_empleado, $date->format('Y-m-d'), $entrada) !!}</td>
-                                        <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
-                                            -->
 
-                                    <td>{{ $entrada }}</td>
-                                    <td>{{ $salida }} </td>
+                                    <td> {!! valida_entrada($empleado->num_empleado, $date->format('Y-m-d'), $entrada) !!}</td>
+                                    <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
+
+                                    <!--
+                                            <td>{{ $entrada }}</td>
+                                            <td>{{ $salida }} </td>
+                                         -->
                                 @endif
                             </tr>
                         @endforeach
