@@ -40,9 +40,9 @@
                                     <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
 
                                     <!--
-                                            <td>{{ $entrada }}</td>
-                                            <td>{{ $salida }} </td>
-                                         -->
+                                                <td>{{ $entrada }}</td>
+                                                <td>{{ $salida }} </td>
+                                             -->
                                 @endif
                             </tr>
                         @endforeach
