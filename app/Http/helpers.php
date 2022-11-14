@@ -433,7 +433,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
     if($incidencia){
         $code = Codigo_De_Incidencia::find($incidencia->codigodeincidencia_id);
     }
-    if ($salida != $entrada){
+
         if($incidencia && $salida){
             return $salida."(".$code->code.")";
         }
@@ -441,7 +441,7 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
             return $salida;
         }
         return "";
-    }
+
     if($incidencia){
         return $code->code;
     }
@@ -575,16 +575,14 @@ function check_salida($fecha, $num_empleado,$entrada){
         ->where('fecha','LIKE', '%'. $fecha .'%')
         ->orderBy('fecha','desc')
         ->first();
-
-        if($salida){
-            if($entrada == date("H:i", strtotime($salida->fecha))){
-                return "";
-            }
-            else{
-                return date("H:i", strtotime($salida->fecha));
-            }
-
+    if($salida){
+        //if($entrada){
+            return date("H:i", strtotime($salida->fecha));
         }
+        else {
+            return "";
+        }
+
 }
 
 function isweekend($date){
