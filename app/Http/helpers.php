@@ -437,10 +437,14 @@ function valida_salida($num_empleado, $fecha, $salida, $entrada){
         if($incidencia && $salida){
             return $salida."(".$code->code.")";
         }
+         if(!$incidencia && $entrada == $salida){
+          return "";
+        }
         if(!$incidencia && $salida){
             return $salida;
         }
-        return "";
+
+
 
     if($incidencia){
         return $code->code;
