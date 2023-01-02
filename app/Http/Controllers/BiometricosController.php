@@ -38,12 +38,12 @@ class BiometricosController extends Controller
             \Artisan::call('biometrico:checadas');
 
             $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
-            
+
             Flash::success($aviso);
 
             return redirect('/dashboard')->with($aviso);
         }
-    	
+
     }
     public function get_checadas(){
       $dptos = \Auth::user()->centros->pluck('id')->toArray();
@@ -51,8 +51,9 @@ class BiometricosController extends Controller
       $date = Carbon::today();
       $month =  $date->month;
       $day =  $date->day;
-      $year = $date->year;
-    
+      //$year = $date->year;
+      $year = "2022";
+
       $qna = $month * 2;
       if ($day < 16) {
             $qna-=1;
@@ -63,10 +64,10 @@ class BiometricosController extends Controller
        // $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
 
       return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
-   		
+
     }
 
-    /* REPORTE DE CHECADAS DEL BIOMETRICO  */ 
+    /* REPORTE DE CHECADAS DEL BIOMETRICO  */
     public function buscar(Request $request){
     	$dpto = $request->deparment_id;
         $dpto_des = Deparment::find($dpto);
@@ -77,7 +78,7 @@ class BiometricosController extends Controller
 
         $begin = new DateTime( $fecha_inicio );
         $end = new DateTime( $fecha_final );
-        $end = $end->modify( '+1 day' ); 
+        $end = $end->modify( '+1 day' );
 
         $interval = new DateInterval('P1D');
         $daterange = new DatePeriod($begin, $interval ,$end);
@@ -97,7 +98,7 @@ class BiometricosController extends Controller
 
         $begin = new DateTime( $fecha_inicio );
         $end = new DateTime( $fecha_final );
-        $end = $end->modify( '+1 day' ); 
+        $end = $end->modify( '+1 day' );
 
         $interval = new DateInterval('P1D');
         $daterange = new DatePeriod($begin, $interval ,$end);
@@ -117,8 +118,8 @@ class BiometricosController extends Controller
         $mpdf->WriteHTML($html);
         //$mpdf->Output($pdfFilePath, "D");
         $mpdf->Output();
-        
-        
+
+
 
     }
 
@@ -126,7 +127,7 @@ class BiometricosController extends Controller
 
 
         //$checadas = Attendance::whereBetween('fecha',[$fecha_inicio,$fecha_final])->orderby('fecha', 'ASC')->orderby('num_empleado', 'ASC')->orderby('hora', 'ASC')->get();
-        
+
             $checadas = Attendance::where('qna','5')->orderby('num_empleado','ASC')->groupBy('num_empleado','fecha')->get();
 
             //dd($checadas);
@@ -138,20 +139,20 @@ class BiometricosController extends Controller
 
     public function conectar()
     {
-       
+
         //BIOMETRICO 1 DELEGACION
-        
+
         $zk = new ZKTeco("192.160.141.37");
-        
+
         $zk->connect();
         sleep(1);
         //$checadas =  $zk->getAttendance();
         sleep(1);
-        $time = $zk->getTime(); 
+        $time = $zk->getTime();
         //$zk->setTime(Carbon::now()->toDateTimeString());
-        //$time_now = $zk->getTime(); 
+        //$time_now = $zk->getTime();
         $zk->disconnect();
-        
+
         sleep(1);
 
         //BIOMETRICO 2 DELEGACION (COMEDOR)
@@ -184,10 +185,10 @@ class BiometricosController extends Controller
                     'identificador' => $identificador,
                 ]);
             }
-            
+
         }
      */
-        
+
         //return view('biometrico.ver_todo')->with('checadas', $checadas);
 
     }
@@ -195,7 +196,7 @@ class BiometricosController extends Controller
     {
         //$checadas = Checada::all()->unique();
         //$checadas = collect( $checadas );
-        
+
         $entrada = Checada::where('num_empleado', '332618')
         ->where('fecha','2020-03-12')
         //->oldest()
@@ -207,14 +208,14 @@ class BiometricosController extends Controller
         ->first();*/
 
         dd( $entrada );
-        
+
         return view('biometrico.show_checadas')->with('checadas', $checadas);
 
     }
     public function asignar(){
-        
+
         return view('biometrico.asignar_view');
-   
+
     }
 
     public function asignar_post(Request $request){
@@ -229,14 +230,14 @@ class BiometricosController extends Controller
                 ]);
                 $aviso = 'Capturado correctamente';
                 Flash::success($aviso);
-                
+
             }
             else {
                 $aviso = 'ERROR REGISTRO REPETIDO';
                 Flash::error($aviso);
             }
-           
+
             return redirect('/dashboard')->with($aviso);
-   
+
     }
 }
