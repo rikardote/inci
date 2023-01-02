@@ -51,17 +51,17 @@ class BiometricosController extends Controller
       $date = Carbon::today();
       $month =  $date->month;
       $day =  $date->day;
-      //$year = $date->year;
-      $year = "2022";
+      $year = $date->year;
+      //$year = "2022";
 
       $qna = $month * 2;
       if ($day < 16) {
             $qna-=1;
       }
 
-      $qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
-     // krsort($qnas);
-       // $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
+      //$qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
+      //krsort($qnas);
+        $qnas = Qna::orderby('id', 'asc')->get()->pluck('Qnaa', 'id')->toArray();
 
       return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
 
