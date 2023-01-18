@@ -26,7 +26,7 @@
                 <th>Puesto</th>
                 <th>Jornada</th>
                 <th>Codigo</th>
-                <th>Trabajador Cubierto</th>
+                <th>Trabajador Sustituto</th>
                 <th>Total dias</th>
             </thead>
             <tbody>
