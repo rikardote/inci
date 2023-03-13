@@ -115,19 +115,23 @@ class Biometrico extends Command
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
+        Checada::chunk(100, function ($checadas) {
+            foreach($checadas as $checada){
+                $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
-        foreach($checadas as $checada){
-            $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+                if(!Checada::where('identificador', $identificador)->exists()){
+                    DB::table('checadas')->insert([
+                        'num_empleado' => $checada['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                        'identificador' => $identificador,
+                    ]);
+                }
 
-            if(!Checada::where('identificador', $identificador)->exists()){
-                DB::table('checadas')->insert([
-                    'num_empleado' => $checada['id'],
-                    'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                    'identificador' => $identificador,
-                ]);
             }
-	    $progressBar->advance();
-        }
+
+        });
+        $progressBar->advance();
+
 	$progressBar->finish();
 
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
