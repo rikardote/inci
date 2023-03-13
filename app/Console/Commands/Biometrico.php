@@ -135,7 +135,8 @@ class Biometrico extends Command
         $collection = collect($data);   //turn data into collection
         $chunks = $collection->chunk(100); //chunk into smaller pieces
         $chunks->toArray(); //convert chunk to array
-        
+        var_dump($chunks);
+
         foreach($chunks as $chunk)
         {
             Checada::insert($chunk); //insert chunked data
