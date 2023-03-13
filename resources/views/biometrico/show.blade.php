@@ -29,7 +29,7 @@
                             <th>Entrada</th>
                             <th>Salida</th>
                         </thead>
-                        @foreach ($daterange->chunk(10) as $date)
+                        @foreach ($daterange as $date)
                             <tr>
                                 {{-- */ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /* --}}
                                 {{-- */ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado, $entrada) /* --}}
@@ -40,9 +40,9 @@
                                     <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
 
                                     <!--
-                                                    <td>{{ $entrada }}</td>
-                                                    <td>{{ $salida }} </td>
-                                                 -->
+                                                        <td>{{ $entrada }}</td>
+                                                        <td>{{ $salida }} </td>
+                                                     -->
                                 @endif
                             </tr>
                         @endforeach
