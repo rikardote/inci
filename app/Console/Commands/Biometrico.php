@@ -45,38 +45,38 @@ class Biometrico extends Command
     public function handle()
     {
 	$this->info('Iniciando descarga de checadas espere un momento:' ."\n");
-        $t = date("Y-m-d H:i:s");
+
 
         //BIOMETRICO 1 DELEGACION
-        /*
+
         $zk = new ZKTeco("192.160.141.37");
         $zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
         sleep(1);
-        $zk->setTime($t);
+        $zk->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk->disconnect();
         sleep(1);
 
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
-        //$zk2 = new ZKTeco("192.161.172.42");
         $zk2->connect();
-
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
-        $zk2->setTime($t);
+        $zk->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk2->disconnect();
-*/
+
         //BIOMETRICO 3 ALGODONES
 
         $zk3 = new ZKTeco("192.165.232.253");
         $zk3->connect();
         sleep(1);
         $checadas_3 =  $zk3->getAttendance();
+        sleep(1);
+        $zk3->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk3->disconnect();
 
@@ -86,6 +86,8 @@ class Biometrico extends Command
         sleep(1);
         $checadas_4 =  $zk4->getAttendance();
         sleep(1);
+        $zk4->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
         $zk4->disconnect();
 
         //BIOMETRICO 5 TECATE
@@ -94,16 +96,20 @@ class Biometrico extends Command
         sleep(1);
         $checadas_5 =  $zk5->getAttendance();
         sleep(1);
+        $zk5->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
         $zk5->disconnect();
 
         //BIOMETRICO 6 OTAY
-        /*$zk6 = new ZKTeco("192.168.201.7");
+        $zk6 = new ZKTeco("192.168.201.7");
         $zk6->connect();
         sleep(1);
         $checadas_6 =  $zk6->getAttendance();
         sleep(1);
+        $zk6->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
         $zk6->disconnect();
-*/
+
         //$checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5);
         $checadas = array_merge($checadas_3, $checadas_4, $checadas_5);
         $progressBar = $this->output->createProgressBar(count($checadas));
