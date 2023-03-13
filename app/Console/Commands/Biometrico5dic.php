@@ -11,14 +11,14 @@ use Rats\Zkteco\Lib\ZKTeco;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class Biometrico extends Command
+class Biometrico5dic extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'biometrico:checadas';
+    protected $signature = 'biometrico5dic:checadas';
 
     /**
      * The console command description.
@@ -49,7 +49,7 @@ class Biometrico extends Command
 
         //BIOMETRICO 1 DELEGACION
 
-        $zk = new ZKTeco("192.160.141.37");
+        $zk = new ZKTeco("192.161.59.46");
         $zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
@@ -59,8 +59,7 @@ class Biometrico extends Command
         $zk->disconnect();
         sleep(1);
 
-        //BIOMETRICO 2 DELEGACION (COMEDOR)
-        $zk2 = new ZKTeco("192.160.141.38");
+        $zk2 = new ZKTeco("192.161.59.43");
         $zk2->connect();
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
@@ -68,50 +67,9 @@ class Biometrico extends Command
         $zk2->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk2->disconnect();
+        sleep(1);
 
-        //BIOMETRICO 3 ALGODONES
-
-        $zk3 = new ZKTeco("192.165.232.253");
-        $zk3->connect();
-        sleep(1);
-        $checadas_3 =  $zk3->getAttendance();
-        sleep(1);
-        $zk3->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk3->disconnect();
-
-        //BIOMETRICO 4 SAN FELIPE
-        $zk4 = new ZKTeco("192.165.240.253");
-        $zk4->connect();
-        sleep(1);
-        $checadas_4 =  $zk4->getAttendance();
-        sleep(1);
-        $zk4->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk4->disconnect();
-
-        //BIOMETRICO 5 TECATE
-        $zk5 = new ZKTeco("192.165.171.253");
-        $zk5->connect();
-        sleep(1);
-        $checadas_5 =  $zk5->getAttendance();
-        sleep(1);
-        $zk5->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk5->disconnect();
-
-        //BIOMETRICO 6 OTAY
-        $zk6 = new ZKTeco("192.168.201.7");
-        $zk6->connect();
-        sleep(1);
-        $checadas_6 =  $zk6->getAttendance();
-        sleep(1);
-        $zk6->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk6->disconnect();
-
-        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5, $checadas_6);
-        //$checadas = array_merge($checadas_3, $checadas_4, $checadas_5);
+        $checadas = array_merge($checadas_1, $checadas_2);
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
