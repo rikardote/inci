@@ -103,8 +103,8 @@ class Biometrico extends Command
         sleep(1);
         $zk6->disconnect();
 */
-        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5);
-
+        //$checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5);
+        $checadas = array_merge($checadas_3, $checadas_4, $checadas_5);
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
