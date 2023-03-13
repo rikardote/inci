@@ -87,7 +87,7 @@ class Biometrico extends Command
         $zk4->disconnect();
 
         //BIOMETRICO 5 TECATE
-        $zk5 = new ZKTeco("192.165.240.253");
+        $zk5 = new ZKTeco("192.165.171.253");
         $zk5->connect();
         sleep(1);
         $checadas_5 =  $zk5->getAttendance();
