@@ -65,7 +65,7 @@ class Biometrico extends Command
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
-        $zk->setTime(date("Y-m-d H:i:s"));
+        $zk2->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk2->disconnect();
 
