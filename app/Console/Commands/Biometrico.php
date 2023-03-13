@@ -95,14 +95,14 @@ class Biometrico extends Command
         $zk5->disconnect();
 
         //BIOMETRICO 6 OTAY
-        $zk6 = new ZKTeco("192.168.201.7");
+        /*$zk6 = new ZKTeco("192.168.201.7");
         $zk6->connect();
         sleep(1);
         $checadas_6 =  $zk6->getAttendance();
         sleep(1);
         $zk6->disconnect();
-
-        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5, $checadas_6);
+*/
+        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5);
 
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
