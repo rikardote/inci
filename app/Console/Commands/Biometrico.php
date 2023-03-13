@@ -109,21 +109,17 @@ class Biometrico extends Command
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
-
+        $data = [];
         foreach($checadas as $checada){
             $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
-            $data = [];
+
             if(!Checada::where('identificador', $identificador)->exists()){
-                foreach($checadas as $key => $checada)
-                {
+
                    $data[] = array(
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador
                     );
-                }
-                var_dump($data);
-
                 /*DB::table('checadas')->insert([
                     'num_empleado' => $checada['id'],
                     'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
@@ -131,15 +127,19 @@ class Biometrico extends Command
                 ]);
                 */
             }
-             $collection = collect($data);   //turn data into collection
-             $chunks = $collection->chunk(100); //chunk into smaller pieces
-             $chunks->toArray(); //convert chunk to array
 
-             foreach($chunks as $chunk)
-             {
-                 Checada::insert($chunk); //insert chunked data
-             }
-	    $progressBar->advance();
+
+
+
+        }
+        $collection = collect($data);   //turn data into collection
+        $chunks = $collection->chunk(100); //chunk into smaller pieces
+        $chunks->toArray(); //convert chunk to array
+        
+        foreach($chunks as $chunk)
+        {
+            Checada::insert($chunk); //insert chunked data
+            $progressBar->advance();
         }
 	$progressBar->finish();
 
