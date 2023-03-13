@@ -112,13 +112,17 @@ class Biometrico extends Command
 
         foreach($checadas as $checada){
             $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
-
+            $data = [];
             if(!Checada::where('identificador', $identificador)->exists()){
-                $data = array(
-                    'num_empleado' => $checada['id'],
-                    'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                    'identificador' => $identificador
-                );
+                foreach($checadas as $key => $checada)
+                {
+                   $data[] = array(
+                        'num_empleado' => $checada['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                        'identificador' => $identificador
+                    );
+                }
+
                 /*DB::table('checadas')->insert([
                     'num_empleado' => $checada['id'],
                     'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
