@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Checada;
-use Carbon\Carbon;
-use Rats\Zkteco\Lib\ZKTeco;
 use DateTime;
 use DatePeriod;
+use App\Checada;
 use DateInterval;
+use Carbon\Carbon;
+use Rats\Zkteco\Lib\ZKTeco;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class Biometrico extends Command
 {
@@ -114,10 +115,10 @@ class Biometrico extends Command
             $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
             if(!Checada::where('identificador', $identificador)->exists()){
-                Checada::create([
+                DB::table('checadas')->insert([
+                //Checada::create([
                     'num_empleado' => $checada['id'],
                     'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                    //'time'    => date("H:i", strtotime($checada['timestamp'])),
                     'identificador' => $identificador,
                 ]);
             }
