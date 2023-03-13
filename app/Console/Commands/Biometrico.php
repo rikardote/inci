@@ -61,7 +61,7 @@ class Biometrico extends Command
         $zk2 = new ZKTeco("192.160.141.38");
         //$zk2 = new ZKTeco("192.161.172.42");
         $zk2->connect();
-        
+
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
@@ -69,17 +69,41 @@ class Biometrico extends Command
         sleep(1);
         $zk2->disconnect();
 
-        //BIOMETRICO 3 EBDI34
-       
-    /* $zk3 = new ZKTeco("192.161.170.253");
+        //BIOMETRICO 3 ALGODONES
+
+        $zk3 = new ZKTeco("192.165.232.253");
         $zk3->connect();
         sleep(1);
         $checadas_3 =  $zk3->getAttendance();
         sleep(1);
         $zk3->disconnect();
-    */  
-        $checadas = array_merge($checadas_1, $checadas_2);
-        
+
+        //BIOMETRICO 4 SAN FELIPE
+        $zk4 = new ZKTeco("192.165.240.253");
+        $zk4->connect();
+        sleep(1);
+        $checadas_4 =  $zk4->getAttendance();
+        sleep(1);
+        $zk4->disconnect();
+
+        //BIOMETRICO 5 TECATE
+        $zk5 = new ZKTeco("192.165.240.253");
+        $zk5->connect();
+        sleep(1);
+        $checadas_5 =  $zk5->getAttendance();
+        sleep(1);
+        $zk5->disconnect();
+
+        //BIOMETRICO 6 OTAY
+        $zk6 = new ZKTeco("192.168.201.7");
+        $zk6->connect();
+        sleep(1);
+        $checadas_6 =  $zk6->getAttendance();
+        sleep(1);
+        $zk6->disconnect();
+
+        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5, $checadas_6);
+
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
