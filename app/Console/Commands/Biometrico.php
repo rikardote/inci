@@ -122,6 +122,7 @@ class Biometrico extends Command
                         'identificador' => $identificador
                     );
                 }
+                var_dump($data);
 
                 /*DB::table('checadas')->insert([
                     'num_empleado' => $checada['id'],
