@@ -125,7 +125,6 @@ class Biometrico extends Command
                     'identificador' => $identificador,
                 ]);
                 */
-
             }
              $collection = collect($data);   //turn data into collection
              $chunks = $collection->chunk(100); //chunk into smaller pieces
