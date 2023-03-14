@@ -30,5 +30,10 @@ class Kernel extends ConsoleKernel
          $schedule->command('biometrico:checadas')
 		->weekdays()
                 ->twiceDaily(11,23);
+
+        $schedule->command('biometrico5dic:checadas')
+		->weekdays()
+                ->dailyAt('23:00')
+                ->twiceDaily(9,15);
     }
 }
