@@ -84,7 +84,11 @@ class BiometricosController extends Controller
         $daterange = new DatePeriod($begin, $interval ,$end);
 
     	//$checadas = Checada::get_Checadas($dpto, $qna->qna, $qna->year);
-        $empleados = Employe::get_empleados($dpto);
+        $emp = Employe::get_empleados($dpto);
+        $employees = collect($emp);   //turn data into collection
+        $empleados = $employees->chunk(5); //chunk into smaller pieces
+        $empleados->toArray(); //convert chunk to array
+        //dd($empleados);
 
         return view('biometrico.show')->with('empleados', $empleados)->with('qna', $qna)->with('dpto', $dpto_des)->with('daterange', $daterange);
 
