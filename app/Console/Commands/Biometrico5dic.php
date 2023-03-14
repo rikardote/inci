@@ -77,7 +77,8 @@ class Biometrico5dic extends Command
                 $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador)->exists()){
-                    DB::table('checadas')->insert([
+                    //DB::table('checadas')->insert([
+                    Checada::create([
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
