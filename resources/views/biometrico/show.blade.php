@@ -12,43 +12,46 @@
         <div class="row">
 
             {{-- */ $tmp = "" /* --}}
-            @foreach ($empleados as $empleado)
-                <div class="table-responsive col-md-6">
-                    <table class="table table-condensed table-striped">
-                        <thead>
-                            <tr>
-                                <th align="center">{{ $empleado->num_empleado }} -
-                                    {{ $empleado->father_lastname }} {{ $empleado->mother_lastname }} {{ $empleado->name }}
-                                </th>
-                                <th></th>
-                                <th align="right">{{ $empleado->horario }}</th>
-                            </tr>
-                        </thead>
-                        <thead>
-                            <th>Fecha</th>
-                            <th>Entrada</th>
-                            <th>Salida</th>
-                        </thead>
-                        @foreach ($daterange as $date)
-                            <tr>
-                                {{-- */ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /* --}}
-                                {{-- */ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado, $entrada) /* --}}
-                                @if (!isweekend($date->format('Y-m-d')))
-                                    <td> {{ $date->format('d/m/Y') }}</td>
+            @foreach ($empleados as $chunk)
+                @foreach ($chunk as $empleado)
+                    <div class="table-responsive col-md-6">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th align="center">{{ $empleado->num_empleado }} -
+                                        {{ $empleado->father_lastname }} {{ $empleado->mother_lastname }}
+                                        {{ $empleado->name }}
+                                    </th>
+                                    <th></th>
+                                    <th align="right">{{ $empleado->horario }}</th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <th>Fecha</th>
+                                <th>Entrada</th>
+                                <th>Salida</th>
+                            </thead>
+                            @foreach ($daterange as $date)
+                                <tr>
+                                    {{-- */ $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado) /* --}}
+                                    {{-- */ $salida =  check_salida($date->format("Y-m-d"), $empleado->num_empleado, $entrada) /* --}}
+                                    @if (!isweekend($date->format('Y-m-d')))
+                                        <td> {{ $date->format('d/m/Y') }}</td>
 
-                                    <td> {!! valida_entrada($empleado->num_empleado, $date->format('Y-m-d'), $entrada) !!}</td>
-                                    <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
+                                        <td> {!! valida_entrada($empleado->num_empleado, $date->format('Y-m-d'), $entrada) !!}</td>
+                                        <td> {!! valida_salida($empleado->num_empleado, $date->format('Y-m-d'), $salida, $entrada) !!}</td>
 
-                                    <!--
-                                                        <td>{{ $entrada }}</td>
-                                                        <td>{{ $salida }} </td>
-                                                     -->
-                                @endif
-                            </tr>
-                        @endforeach
+                                        <!--
+                                                                                                                <td>{{ $entrada }}</td>
+                                                                                                                <td>{{ $salida }} </td>
+                                                                                                            -->
+                                    @endif
+                                </tr>
+                            @endforeach
 
-                    </table>
-                </div>
+                        </table>
+                    </div>
+                @endforeach
             @endforeach
 
             </table>

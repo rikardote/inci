@@ -11,9 +11,9 @@ class Employe extends Model
     protected $table = 'employees';
 
     protected $fillable = ['num_empleado', 'name', 'father_lastname', 'mother_lastname', 'deparment_id', 'condicion_id', 'puesto_id', 'horario_id', 'num_plaza', 'num_seguro','jornada_id', 'lactancia', 'lactancia_inicio', 'lactancia_fin', 'comisionado', 'estancia'];
-    
+
     protected $dates = ['deleted_at'];
-    
+
     public function deparment()
     {
     	return $this->belongsTo('App\Deparment');
@@ -40,11 +40,11 @@ class Employe extends Model
     }
     public function getfullnameAttribute($value)
     {
-        
+
        return $this->name . ' ' . $this->father_lastname. ' ' . $this->mother_lastname;
-        
+
     }
-    
+
     public function setnameAttribute($value)
     {
         $this->attributes['name'] = strtoupper($value);
@@ -63,7 +63,7 @@ class Employe extends Model
     }
     public static function getEmpleado($dptos)
     {
-      
+
         //$empleado = DB::table('employees')
         $empleado = Employe::getQuery()
                  ->select('*','employees.id as emp_id')
@@ -77,7 +77,7 @@ class Employe extends Model
     }
     public static function getEmpleadoSearch($query, $dptos)
     {
-      
+
         //$empleado = DB::table('employees')
         $empleado = Employe::getQuery()
                  ->select('*','employees.id as emp_id')
@@ -93,7 +93,7 @@ class Employe extends Model
     }
     public static function get_empleado($query)
     {
-      
+
         //$empleado = DB::table('employees')
         $empleado = Employe::getQuery()
                  ->select('*','employees.id as emp_id')
@@ -108,7 +108,7 @@ class Employe extends Model
     }
     public static function get_empleados($department_id)
     {
-      
+
         //$empleado = DB::table('employees')
         $empleados = Employe::getQuery()
                  ->select('*','employees.id as emp_id')
