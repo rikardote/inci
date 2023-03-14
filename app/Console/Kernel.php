@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
          'App\Console\Commands\Biometrico',
          'App\Console\Commands\Biometrico5dic',
-         'App\Console\Commands\Biometrico5dic',
          'App\Console\Commands\BiometricoTime'
     ];
 
