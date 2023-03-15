@@ -68,7 +68,7 @@ class Biometrico extends Command
         $zk2->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk2->disconnect();
-
+/*
         //BIOMETRICO 3 ALGODONES
 
         $zk3 = new ZKTeco("192.165.232.253");
@@ -109,9 +109,9 @@ class Biometrico extends Command
         $zk6->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk6->disconnect();
-
-        $checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5, $checadas_6);
-        //$checadas = array_merge($checadas_3, $checadas_4, $checadas_5);
+*/
+        //$checadas = array_merge($checadas_1, $checadas_2, $checadas_3, $checadas_4, $checadas_5, $checadas_6);
+        $checadas = array_merge($checadas_1, $checadas_2);
         $progressBar = $this->output->createProgressBar(count($checadas));
         $this->info('Iniciando Guardado en base de datos...'."\n");
         $progressBar->start();
