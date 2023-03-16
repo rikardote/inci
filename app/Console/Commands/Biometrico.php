@@ -70,6 +70,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -97,6 +98,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada2['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada2['timestamp'])),
                         'identificador' => $identificador2,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -125,6 +127,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada3['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada3['timestamp'])),
                         'identificador' => $identificador3,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -152,6 +155,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada4['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada4['timestamp'])),
                         'identificador' => $identificador4,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -179,6 +183,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada5['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada5['timestamp'])),
                         'identificador' => $identificador5,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -206,6 +211,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada6['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada6['timestamp'])),
                         'identificador' => $identificador6,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -235,6 +241,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada7['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada7['timestamp'])),
                         'identificador' => $identificador7,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
@@ -263,6 +270,7 @@ class Biometrico extends Command
                         'num_empleado' => $checada8['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada8['timestamp'])),
                         'identificador' => $identificador8,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
