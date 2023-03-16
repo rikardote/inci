@@ -46,7 +46,7 @@ class Biometrico extends Command
     {
 	$this->info('Iniciando descarga de checadas espere un momento:' ."\n");
 
-
+        date_default_timezone_set('America/Tijuana');
         //BIOMETRICO 1 DELEGACION
 
         $zk = new ZKTeco("192.160.141.37");
