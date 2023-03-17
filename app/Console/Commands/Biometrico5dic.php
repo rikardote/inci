@@ -25,7 +25,7 @@ class Biometrico5dic extends Command
      *
      * @var string
      */
-    protected $description = 'Comando para descargar checadas del biometrico diario';
+    protected $description = 'Comando para descargar checadas del 5 de diciembre biometrico diario';
 
     /**
      * Create a new command instance.
@@ -77,11 +77,12 @@ class Biometrico5dic extends Command
                 $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador)->exists()){
-                    //DB::table('checadas')->insert([
-                    Checada::create([
+                    DB::table('checadas')->insert([
+                    //Checada::create([
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
+                        'created_at' => date('Y-m-d H:i:s')
                     ]);
                 }
             $progressBar->advance();
