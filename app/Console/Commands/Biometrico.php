@@ -116,7 +116,7 @@ class Biometrico extends Command
         $zk9->disconnect();
 
         $progressBar = $this->output->createProgressBar(count($checadas_9));
-        $this->info("\n".'Iniciando Guardado en base de datos de checador principal comedor...'."\n");
+        $this->info("\n".'Iniciando Guardado en base de datos de checador Almacen...'."\n");
         $progressBar->start();
             foreach($checadas_9 as $checada9){
                 $identificador9 = md5($checada9['id'].date("Y-m-d", strtotime($checada9['timestamp'])).date("H:i", strtotime($checada9['timestamp'])));
