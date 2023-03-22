@@ -105,6 +105,33 @@ class Biometrico extends Command
             }
 	    $progressBar->finish();
 
+        //BIOMETRICO 9 ALMACEN
+        $zk9 = new ZKTeco("192.160.169.230");
+        $zk9->connect();
+        sleep(1);
+        $checadas_9 =  $zk9->getAttendance();
+        sleep(1);
+        $zk9->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
+        $zk9->disconnect();
+
+        $progressBar = $this->output->createProgressBar(count($checadas_9));
+        $this->info("\n".'Iniciando Guardado en base de datos de checador principal comedor...'."\n");
+        $progressBar->start();
+            foreach($checadas_9 as $checada9){
+                $identificador9 = md5($checada9['id'].date("Y-m-d", strtotime($checada9['timestamp'])).date("H:i", strtotime($checada9['timestamp'])));
+
+                if(!Checada::where('identificador', $identificador9)->exists()){
+                    DB::table('checadas')->insert([
+                        'num_empleado' => $checada9['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada9['timestamp'])),
+                        'identificador' => $identificador9,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            $progressBar->advance();
+            }
+	    $progressBar->finish();
         //BIOMETRICO 3 ALGODONES
 
         $zk3 = new ZKTeco("192.165.232.253");
