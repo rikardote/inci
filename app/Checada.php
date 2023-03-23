@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Yadakhov\InsertOnDuplicateKey;
+//use Yadakhov\InsertOnDuplicateKey;
+use App\Traits\InsertOnDuplicateKey;
 
 class Checada extends Model
 {
