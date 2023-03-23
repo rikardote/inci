@@ -17,15 +17,32 @@ class Checada extends Model
       return $this->belongsTo('App\employe');
     }
 
-    public static function insertIgnore($array){
-        $a = new static();
-        if($a->timestamps){
-            $now = \Carbon\Carbon::now();
-            $array['created_at'] = $now;
-            $array['updated_at'] = $now;
+    public static function insertIgnore(array $attributes = [])
+    {
+        $model = new static($attributes);
+
+        if ($model->usesTimestamps()) {
+            $model->updateTimestamps();
         }
-        DB::insert('INSERT IGNORE INTO '.$a->table.' ('.implode(',',array_keys($array)).
-            ') values (?'.str_repeat(',?',count($array) - 1).')',array_values($array));
+
+        $attributes = $model->getAttributes();
+
+        $query = $model->newBaseQueryBuilder();
+        $processor = $query->getProcessor();
+        $grammar = $query->getGrammar();
+
+        $table = $grammar->wrapTable($model->getTable());
+        $keyName = $model->getKeyName();
+        $columns = $grammar->columnize(array_keys($attributes));
+        $values = $grammar->parameterize($attributes);
+
+        $sql = "insert ignore into {$table} ({$columns}) values ({$values})";
+
+        $id = $processor->processInsertGetId($query, $sql, array_values($attributes));
+
+        $model->setAttribute($keyName, $id);
+
+        return $model;
     }
 
     public static function get_Checadas($dpto, $qna, $año)
