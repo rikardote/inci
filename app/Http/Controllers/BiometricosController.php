@@ -168,12 +168,13 @@ class BiometricosController extends Controller
 
         $data=[];
             foreach($checadas as $checada){
-                $identificador = $checada['id'].md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+
                     $data[] = [
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                        'identificador' => $identificador,
-                        //'created_at' => date('Y-m-d H:i:s')
+                        'identificador' => $checada['id'].md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp']))),
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
                     ];
             }
 
