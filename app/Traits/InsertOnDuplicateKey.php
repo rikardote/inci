@@ -1,6 +1,6 @@
 <?php
-
-namespace Yadakhov;
+namespace App\Traits;
+//namespace Yadakhov;
 
 trait InsertOnDuplicateKey
 {
