@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-
+use Yadakhov\InsertOnDuplicateKey;
 
 class Checada extends Model
 {
-
+    use InsertOnDuplicateKey;
     protected $fillable = ['num_empleado','fecha','identificador'];
 
     protected $connection = 'mysql-biometrico-pruebas';
