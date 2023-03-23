@@ -79,13 +79,14 @@ class Biometrico5dic extends Command
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
-                        'created_at' => date('Y-m-d H:i:s')
+                        //'created_at' => date('Y-m-d H:i:s')
                     ];
 
             $progressBar->advance();
             }
-            Checada::insert($data);
+            //Checada::insert($data);
 	$progressBar->finish();
+    Checada::insertIgnore($data);
 
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
     }
