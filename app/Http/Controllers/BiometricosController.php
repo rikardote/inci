@@ -176,9 +176,8 @@ class BiometricosController extends Controller
                         //'created_at' => date('Y-m-d H:i:s')
                     ];
             }
-            dd($data);
 
-
+        Checada::insertIgnore($data);
 
 
     }
