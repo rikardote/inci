@@ -143,57 +143,43 @@ class BiometricosController extends Controller
 
     public function conectar()
     {
-
-        //BIOMETRICO 1 DELEGACION
+         //BIOMETRICO 1 DELEGACION
 
         $zk = new ZKTeco("192.160.141.37");
-
         $zk->connect();
         sleep(1);
-        //$checadas =  $zk->getAttendance();
+        $checadas_1 =  $zk->getAttendance();
         sleep(1);
-        $time = $zk->getTime();
-        //$zk->setTime(Carbon::now()->toDateTimeString());
-        //$time_now = $zk->getTime();
+        $zk->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
         $zk->disconnect();
-
         sleep(1);
 
-        //BIOMETRICO 2 DELEGACION (COMEDOR)
-/*        $zk2 = new ZKTeco("192.160.141.38");
+        $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
         sleep(1);
+        $zk2->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
         $zk2->disconnect();
 
-        //BIOMETRICO 3 MESA DE OTAY
-        $zk3 = new ZKTeco("192.168.201.7");
-        $zk3->connect();
-        sleep(1);
-        $checadas =  $zk3->getAttendance();
-        sleep(1);
-        $zk3->disconnect();
-*/
-        //$checadas = array_merge($checadas_1,checadas_2);
+        $checadas = array_merge($checadas_1, $checadas_2);
 
-        /*
-        foreach($checadas as $checada){
-            $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
-
-            if(!Checada::where('identificador', $identificador)->exists()){
-                Checada::create([
-                    'num_empleado' => $checada['id'],
-                    'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                    //'time'    => date("H:i", strtotime($checada['timestamp'])),
-                    'identificador' => $identificador,
-                ]);
+        $data=[];
+            foreach($checadas as $checada){
+                $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+                    $data[] = [
+                        'num_empleado' => $checada['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                        'identificador' => $identificador,
+                        //'created_at' => date('Y-m-d H:i:s')
+                    ];
             }
+            dd($data);
 
-        }
-     */
 
-        //return view('biometrico.ver_todo')->with('checadas', $checadas);
+
 
     }
     public function show_checadas()
