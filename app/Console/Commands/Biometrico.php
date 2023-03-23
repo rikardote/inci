@@ -234,24 +234,17 @@ class Biometrico extends Command
                 $identificador6 = md5($checada6['id'].date("Y-m-d", strtotime($checada6['timestamp'])).date("H:i", strtotime($checada6['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador6)->exists()){
-                   /*
+
                     DB::table('checadas')->insert([
                         'num_empleado' => $checada6['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada6['timestamp'])),
                         'identificador' => $identificador6,
                         'created_at' => date('Y-m-d H:i:s')
                     ]);
-                    */
-                    $checada6->fill([
-                        'num_empleado' => $checada6['id'],
-                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada6['timestamp'])),
-                        'identificador' => $identificador6,
-                        'created_at' => date('Y-m-d H:i:s')
-                    ]);
+
                 }
             $progressBar->advance();
             }
-            $checada6->save();
 	    $progressBar->finish();
 
          //BIOMETRICO SOTANO 5 DICIEMBRE
