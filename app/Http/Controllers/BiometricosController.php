@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Yadakhov\InsertOnDuplicateKey;
 
 use App\Http\Requests;
 use App\Employe;
