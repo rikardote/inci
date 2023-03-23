@@ -179,7 +179,7 @@ class BiometricosController extends Controller
                     ];
             }
 
-        Checada::insertOnDuplicateKey($data, ['identificador']);
+        Checada::insertIgnore($data, ['identificador']);
 
 
     }
