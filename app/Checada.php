@@ -17,7 +17,16 @@ class Checada extends Model
       return $this->belongsTo('App\employe');
     }
 
-
+    public static function insertIgnore($array){
+        $a = new static();
+        if($a->timestamps){
+            $now = \Carbon\Carbon::now();
+            $array['created_at'] = $now;
+            $array['updated_at'] = $now;
+        }
+        DB::insert('INSERT IGNORE INTO '.$a->table.' ('.implode(',',array_keys($array)).
+            ') values (?'.str_repeat(',?',count($array) - 1).')',array_values($array));
+    }
 
     public static function get_Checadas($dpto, $qna, $año)
     {

@@ -177,7 +177,7 @@ class BiometricosController extends Controller
                     ];
             }
 
-        Checada::insert($data);
+        Checada::insertIgnore($data);
 
 
     }
