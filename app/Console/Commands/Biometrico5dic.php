@@ -49,7 +49,7 @@ class Biometrico5dic extends Command
 
         //BIOMETRICO 1 DELEGACION
 
-        $zk = new ZKTeco("192.161.59.46");
+        $zk = new ZKTeco("192.160.141.37");
         $zk->connect();
         sleep(1);
         $checadas_1 =  $zk->getAttendance();
@@ -59,7 +59,7 @@ class Biometrico5dic extends Command
         $zk->disconnect();
         sleep(1);
 
-        $zk2 = new ZKTeco("192.161.59.43");
+        $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
         sleep(1);
         $checadas_2 =  $zk2->getAttendance();
@@ -67,7 +67,6 @@ class Biometrico5dic extends Command
         $zk2->setTime(date("Y-m-d H:i:s"));
         sleep(1);
         $zk2->disconnect();
-        sleep(1);
 
         $checadas = array_merge($checadas_1, $checadas_2);
         $progressBar = $this->output->createProgressBar(count($checadas));
@@ -77,8 +76,7 @@ class Biometrico5dic extends Command
                 $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador)->exists()){
-                    DB::table('checadas')->insert([
-                    //Checada::create([
+                    $checada->fill([
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
@@ -87,6 +85,7 @@ class Biometrico5dic extends Command
                 }
             $progressBar->advance();
             }
+            $checada->save();
 	$progressBar->finish();
 
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
