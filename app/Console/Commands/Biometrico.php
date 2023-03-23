@@ -66,7 +66,7 @@ class Biometrico extends Command
                 $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
@@ -94,7 +94,7 @@ class Biometrico extends Command
                 $identificador2 = md5($checada2['id'].date("Y-m-d", strtotime($checada2['timestamp'])).date("H:i", strtotime($checada2['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador2)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada2['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada2['timestamp'])),
                         'identificador' => $identificador2,
@@ -122,7 +122,7 @@ class Biometrico extends Command
                 $identificador9 = md5($checada9['id'].date("Y-m-d", strtotime($checada9['timestamp'])).date("H:i", strtotime($checada9['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador9)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada9['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada9['timestamp'])),
                         'identificador' => $identificador9,
@@ -150,7 +150,7 @@ class Biometrico extends Command
                 $identificador3 = md5($checada3['id'].date("Y-m-d", strtotime($checada3['timestamp'])).date("H:i", strtotime($checada3['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador3)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada3['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada3['timestamp'])),
                         'identificador' => $identificador3,
@@ -178,7 +178,7 @@ class Biometrico extends Command
                 $identificador4 = md5($checada4['id'].date("Y-m-d", strtotime($checada4['timestamp'])).date("H:i", strtotime($checada4['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador4)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada4['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada4['timestamp'])),
                         'identificador' => $identificador4,
@@ -206,7 +206,7 @@ class Biometrico extends Command
                 $identificador5 = md5($checada5['id'].date("Y-m-d", strtotime($checada5['timestamp'])).date("H:i", strtotime($checada5['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador5)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada5['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada5['timestamp'])),
                         'identificador' => $identificador5,
@@ -235,7 +235,7 @@ class Biometrico extends Command
 
                 if(!Checada::where('identificador', $identificador6)->exists()){
 
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada6['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada6['timestamp'])),
                         'identificador' => $identificador6,
@@ -266,7 +266,7 @@ class Biometrico extends Command
                 $identificador7 = md5($checada7['id'].date("Y-m-d", strtotime($checada7['timestamp'])).date("H:i", strtotime($checada7['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador7)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada7['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada7['timestamp'])),
                         'identificador' => $identificador7,
@@ -295,7 +295,7 @@ class Biometrico extends Command
                 $identificador8 = md5($checada8['id'].date("Y-m-d", strtotime($checada8['timestamp'])).date("H:i", strtotime($checada8['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador8)->exists()){
-                    DB::table('checadas')->insert([
+                    Checada::insert([
                         'num_empleado' => $checada8['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada8['timestamp'])),
                         'identificador' => $identificador8,
