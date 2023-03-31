@@ -249,7 +249,7 @@ class Biometrico extends Command
 */
          //BIOMETRICO SOTANO 5 DICIEMBRE
 
-        $zk7 = new ZKTeco("192.161.59.46");
+        $zk7 = new ZKTeco("192.161.59.43");
         $zk7->connect();
         sleep(1);
         $checadas_7 =  $zk7->getAttendance();
@@ -278,7 +278,7 @@ class Biometrico extends Command
 	    $progressBar->finish();
 
         //BIOMETRICO BUNKER 5 DICIEMBRE
-        $zk8 = new ZKTeco("192.161.59.43");
+        $zk8 = new ZKTeco("192.161.59.46");
         $zk8->connect();
         sleep(1);
         $checadas_8 =  $zk8->getAttendance();
