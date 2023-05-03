@@ -161,7 +161,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-*/
+
         //BIOMETRICO 4 SAN FELIPE
         $zk4 = new ZKTeco("192.165.240.253");
         $zk4->connect();
@@ -217,7 +217,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+*/
         //BIOMETRICO 6 OTAY
         $zk6 = new ZKTeco("192.168.201.7");
         $zk6->connect();
