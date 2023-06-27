@@ -48,7 +48,7 @@ class Biometrico extends Command
 
         date_default_timezone_set('America/Tijuana');
         //BIOMETRICO 1 DELEGACION
-
+/*
         $zk = new ZKTeco("192.160.141.37");
         $zk->connect();
         sleep(1);
@@ -190,7 +190,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+*/
         //BIOMETRICO 6 OTAY
         $zk6 = new ZKTeco("192.168.201.7");
         $zk6->connect();
