@@ -20,11 +20,11 @@
 					<td>
 						@if(isset($incidencia->otorgado))
                             <br>
-                            <small>{{ $incidencia->otorgado }} </small>
+                            <small><strong>{{ $incidencia->otorgado }}</strong><strong> </small>
                          @endif
                          @if(isset($incidencia->becas_comments))
                             <br>
-                            <small>{{ $incidencia->becas_comments }} </small>
+                            <small><strong>{{ $incidencia->becas_comments }}</strong> </small>
                          @endif
                          @if(isset($incidencia->horas_otorgadas))
                             <br>
@@ -67,15 +67,15 @@
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
 						 	@if(isset($incidencia->otorgado))
                                 <br>
-                                <small>{{ $incidencia->otorgado }} </small>
+                                <small><strong>{{ $incidencia->otorgado }}</strong> </small>
                          	@endif
                             @if(isset($incidencia->becas_comments))
                                 <br>
-                                <small>{{ $incidencia->becas_comments }} </small>
+                                <small><strong>{{ $incidencia->becas_comments }}</strong> </small>
                          	@endif
                             @if(isset($incidencia->horas_otorgadas))
                                 <br>
-                                <small>{{ $incidencia->horas_otorgadas }} </small>
+                                <small><strong>{{ $incidencia->horas_otorgadas }}</strong> </small>
                             @endif
 
 						 </td>
