@@ -13,7 +13,7 @@ class Incidencia extends Model
     protected $dates = ['incidencias.deleted_at'];
     protected $table = 'incidencias';
 
-    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado', 'cobertura_txt'];
+    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado', 'cobertura_txt', 'horas_otorgadas'];
 
     public function employee()
     {
