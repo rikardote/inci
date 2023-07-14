@@ -17,7 +17,7 @@
     var frmsaltar_validacion_inca = '';
     var frmsaltar_validacion_lic = '';
     var frmsaltar_validacion_txt = '';
-    var frmhoras_otorgadas = '';
+    var frmhoras_otorgadas = $("#horas_otorgadas").val();;
     var frmcobertura_txt = $("#cobertura_txt").val();;
     var c=document.getElementById("saltar_validacion");
     var c2=document.getElementById("saltar_validacion_inca");
