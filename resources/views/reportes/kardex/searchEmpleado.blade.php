@@ -77,7 +77,14 @@
 	                                <td></td>
 	                     @endif
 	                     <td>{{ $incidencia->total_dias }}</td>
-	                     <td>{{ $incidencia->otorgado }},{{ $incidencia->horas_otorgadas }}</td>
+
+	                     <td>
+                            @if(isset($incidencia->otorgado $incidencia->horas_otorgadas))
+                                {{ $incidencia->otorgado }} </td>
+                            @endif
+                            @if(isset($incidencia->horas_otorgadas))
+                                {{ $incidencia->horas_otorgadas }}</td>
+                            @endif
                          <td align=center>{{$incidencia->capturado_por }}</td>
 
 	            </tr>
