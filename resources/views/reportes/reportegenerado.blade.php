@@ -15,7 +15,7 @@
 		@foreach($incidencias as $incidencia)
 			<tr rowspan="2">
 				@if($incidencia->num_empleado == $tmp)
-				
+
 					<td></td>
 					<td>
 						@if(isset($incidencia->otorgado))
@@ -26,7 +26,12 @@
 						 		<br>
                                 <small>{{ $incidencia->becas_comments }} </small>
                          @endif
-                        
+                         @if(isset($incidencia->horas_otorgadas))
+						 		<br>
+                                <small>{{ $incidencia->horas_otorgadas }} </small>
+                         @endif
+
+
 					</td>
 					@if($incidencia->code == 901)
 					 	<td align=center>OT</td>
@@ -37,26 +42,26 @@
 					@endif
 					 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
 					 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-					 
+
 					 @if(isset($incidencia->periodo))
 							 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
 					 @else
 					 			<td></td>
 					 @endif
 					 <td align=center>{{ $incidencia->total }}</td>
-					 
+
 				</tr>
-				
-					
+
+
 				@else
 				<tr style="background:#000 padding-bottom:3mm;">
-					@if (empty($incidencia)) 
-			 			@for ($i=0; $i < 8; $i++) 
+					@if (empty($incidencia))
+			 			@for ($i=0; $i < 8; $i++)
 							<td></td>
 						@endfor
 					@endif
-		</tr>	
-			
+		</tr>
+
 					<tr>
 						<td align=center>{{ $incidencia->num_empleado }}</td>
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
@@ -70,10 +75,10 @@
                          	@endif
 
 						 </td>
-						 
+
 						 @if($incidencia->code == 901)
 						 	<td align=center>OT</td>
-						 
+
 						 @elseif($incidencia->code == 905)
 					 		<td align=center>PS</td>
 						 @else
@@ -82,19 +87,18 @@
 
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
 						 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-						 
+
 						 @if(isset($incidencia->periodo))
 								 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
 						 @else
 						 			<td></td>
 						 @endif
 						 <td align=center>{{ $incidencia->total }}</td>
-						 
+
 					</tr>
 					{{--*/ $tmp = $incidencia->num_empleado /*--}}
 				@endif
 		@endforeach
-	</tbody>		
-		
-</table>
+	</tbody>
 
+</table>
