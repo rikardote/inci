@@ -159,14 +159,14 @@ $('#datepicker_expedida').flatpickr({
 <script>
     $('#codigo').on('change', function() {
        // alert( this.value ); // or $(this).val()
-      if(this.value == 96) {
+      if(this.value == 97) {
 
         $('#horas_otorgadas').show();
         //
       } else {
         //
         $('#horas_otorgadas').hide();
-        document.getElementById("horas_otorgadas_id").value = null;
+        document.getElementById("horas_otorgadas").value = null;
 
       }
     });
