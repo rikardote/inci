@@ -11,7 +11,7 @@
 					</div>
 		{!! Form::close() !!}
 
-		@if(isset($empleado)) 	
+		@if(isset($empleado))
 
 		  Ingresar por rango de fechas
 
@@ -20,7 +20,7 @@
 							  {!! Form::text('fecha_inicio', null, [
 							    'id' => 'fecha_inicio',
 							    'class' => 'form-control',
-							    'placeholder' => 'Fecha Inicial', 
+							    'placeholder' => 'Fecha Inicial',
 							    'required',
 							    'id' => 'datepicker_inicial',
 							    'autocomplete' => 'off'
@@ -30,7 +30,7 @@
 					  	{!! Form::text('fecha_final', null, [
 						   'id' => 'fecha_final',
 						   'class' => 'form-control',
-						   'placeholder' => 'Fecha Final', 
+						   'placeholder' => 'Fecha Final',
 						   'required',
 						   'id' => 'datepicker_final',
 						   'autocomplete' => 'off'
@@ -48,12 +48,12 @@
 </div>
 
 <div class="col-md-7">
-		@if(isset($empleado)) 	
+		@if(isset($empleado))
 				 <div class="notice notice-info notice-sm">
-				     <h4 align="center"><strong>{{$empleado->num_empleado}} - {{$empleado->name}} {{$empleado->father_lastname}} {{$empleado->mother_lastname}}</strong></h4>  
+				     <h4 align="center"><strong>{{$empleado->num_empleado}} - {{$empleado->name}} {{$empleado->father_lastname}} {{$empleado->mother_lastname}}</strong></h4>
 				 </div>
 		@endif
-		@if(isset($incidencias)) 	
+		@if(isset($incidencias))
 		<table class="table table-hover table-condensed">
         <thead>
             <th>Codigo</th>
@@ -77,15 +77,15 @@
 	                                <td></td>
 	                     @endif
 	                     <td>{{ $incidencia->total_dias }}</td>
-	                     <td>{{ $incidencia->otorgado }}</td>
+	                     <td>{{ $incidencia->otorgado }},{{ $incidencia->horas_otorgadas }}</td>
                          <td align=center>{{$incidencia->capturado_por }}</td>
-	                     
+
 	            </tr>
 	        @endforeach
         </tbody>
     </table>
        @endif
-</div>	
+</div>
 
 <br><br>
 
@@ -94,5 +94,3 @@
 			<h4>{!! $noencontrado !!}</h4>
 		</div>
 @endif
-
-
