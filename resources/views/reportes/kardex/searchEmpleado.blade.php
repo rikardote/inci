@@ -80,11 +80,12 @@
 
 	                     <td>
                             @if(isset($incidencia->otorgado))
-                                {{ $incidencia->otorgado }} </td>
+                                {{ $incidencia->otorgado }}
                             @endif
                             @if(isset($incidencia->horas_otorgadas))
-                                {{ $incidencia->horas_otorgadas }}</td>
+                                {{ $incidencia->horas_otorgadas }}
                             @endif
+                         </td>
                          <td align=center>{{$incidencia->capturado_por }}</td>
 
 	            </tr>
