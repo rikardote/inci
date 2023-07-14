@@ -79,7 +79,7 @@
 	                     <td>{{ $incidencia->total_dias }}</td>
 
 	                     <td>
-                            @if(isset($incidencia->otorgado $incidencia->horas_otorgadas))
+                            @if(isset($incidencia->otorgado))
                                 {{ $incidencia->otorgado }} </td>
                             @endif
                             @if(isset($incidencia->horas_otorgadas))
