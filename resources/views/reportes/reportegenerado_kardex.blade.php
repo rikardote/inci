@@ -6,6 +6,7 @@
 		<td align=center>Fecha Final</td>
 		<td align=center>Periodo</td>
 		<td align=center>Total</td>
+        <td align=center>Comentario</td>
 	</tr>
 	</thead>
 	<tbody>
@@ -15,16 +16,24 @@
 					 <td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
 					 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
 					 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-					 
+
 					 @if(isset($incidencia->periodo))
 							 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
 					 @else
 					 			<td></td>
 					 @endif
 					 <td align=center>{{ $incidencia->total }}</td>
-					 
+                     <td>
+                        @if(isset($incidencia->otorgado))
+                            {{ $incidencia->otorgado }}
+                        @endif
+                        @if(isset($incidencia->horas_otorgadas))
+                            {{ $incidencia->horas_otorgadas }}
+                        @endif
+                     </td>
+
+
 				</tr>
 		@endforeach
 	</tbody>
 </table>
-
