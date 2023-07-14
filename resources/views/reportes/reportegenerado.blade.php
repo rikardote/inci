@@ -19,16 +19,16 @@
 					<td></td>
 					<td>
 						@if(isset($incidencia->otorgado))
-
-                                <small>{{ $incidencia->otorgado }} </small>
+                            <br>
+                            <small>{{ $incidencia->otorgado }} </small>
                          @endif
                          @if(isset($incidencia->becas_comments))
-
-                                <small>{{ $incidencia->becas_comments }} </small>
+                            <br>
+                            <small>{{ $incidencia->becas_comments }} </small>
                          @endif
                          @if(isset($incidencia->horas_otorgadas))
-
-                                <small>{{ $incidencia->horas_otorgadas }} </small>
+                            <br>
+                            <small>{{ $incidencia->horas_otorgadas }} </small>
                          @endif
 
 
@@ -66,16 +66,16 @@
 						<td align=center>{{ $incidencia->num_empleado }}</td>
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
 						 	@if(isset($incidencia->otorgado))
-
+                                <br>
                                 <small>{{ $incidencia->otorgado }} </small>
                          	@endif
                              @if(isset($incidencia->becas_comments))
-
+                                <br>
                                 <small>{{ $incidencia->becas_comments }} </small>
                          	@endif
                              @if(isset($incidencia->horas_otorgadas))
-
-                            <small>{{ $incidencia->horas_otorgadas }} </small>
+                                <br>
+                                <small>{{ $incidencia->horas_otorgadas }} </small>
                          @endif
 
 						 </td>
