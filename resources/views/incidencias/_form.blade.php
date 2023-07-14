@@ -76,6 +76,14 @@
      ]) !!}
   </div>
 
+  <div id="horas_otorgadas" class="well well-sm">
+    {!! Form::label('horas_otorgadas', 'Oficio') !!}
+    {!! Form::text('horas_otorgadas', null, [
+      'class' => 'form-control',
+      'placeholder' => 'Ingresa el acta u oficio.',
+     ]) !!}
+  </div>
+
 <div id="div_saltar_validacion_lic" class="well well-sm">
       {!! Form::label('saltar_validacion_lic', 'Ignorar validación de Licencias Economicas: ') !!}
       <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />

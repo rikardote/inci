@@ -94,6 +94,7 @@ $('#datepicker_expedida').flatpickr({
     $('#becas').hide();
     $('#qnas').hide();
     $('#coberturaTXT').hide();
+    $('#horas_otorgadas').hide();
 
   });
 </script>
@@ -154,6 +155,23 @@ $('#datepicker_expedida').flatpickr({
     }
   });
 </script>
+
+<script>
+    $('#codigo').on('change', function() {
+       // alert( this.value ); // or $(this).val()
+      if(this.value == 96) {
+
+        $('#horas_otorgadas').show();
+        //
+      } else {
+        //
+        $('#horas_otorgadas').hide();
+        document.getElementById("horas_otorgadas_id").value = null;
+
+      }
+    });
+  </script>
+
 <script>
     $('#codigo').on('change', function() {
         //alert( 'hola' ); // or $(this).val()
