@@ -76,7 +76,7 @@
      ]) !!}
   </div>
 
-  <div id="horas_otorgadas" class="well well-sm">
+  <div id="horas_otorgadas_div" class="well well-sm">
     {!! Form::label('horas_otorgadas', 'Oficio') !!}
     {!! Form::text('horas_otorgadas', null, [
       'class' => 'form-control',
