@@ -28,7 +28,7 @@
                          @endif
                          @if(isset($incidencia->horas_otorgadas))
                             <br>
-                            <small>{{ $incidencia->horas_otorgadas }} </small>
+                            <small><strong>{{ $incidencia->horas_otorgadas }}</strong> </small>
                          @endif
 
 
