@@ -59,6 +59,10 @@ class Incidencia extends Model
     {
         $this->attributes['num_licencia'] = strtoupper($value);
     }
+    public function sethorasotorgadasAttribute($value)
+    {
+        $this->attributes['horas_otorgadas'] = strtoupper($value);
+    }
 
 
     public static function getIncidencias($num_empleado)
