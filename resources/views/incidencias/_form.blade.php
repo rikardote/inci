@@ -77,10 +77,10 @@
   </div>
 
   <div id="horas_otorgadas_div" class="well well-sm">
-    {!! Form::label('horas_otorgadas', 'Oficio') !!}
+    {!! Form::label('horas_otorgadas', 'Motivo') !!}
     {!! Form::text('horas_otorgadas', null, [
       'class' => 'form-control',
-      'placeholder' => 'Ingresa el acta u oficio.',
+      'placeholder' => 'Ingresar el motivo y fundamento.',
      ]) !!}
   </div>
 
