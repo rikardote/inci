@@ -191,7 +191,7 @@ class IncidenciasController extends Controller
             }
 
             /* Validando ya capturado y excepciones*/
-            $incidencias_duplicados = [01,18,19,02,03,04,07,92,905,60];
+            $incidencias_duplicados = [01,18,19,02,03,04,07,92,905,30];
             //if ($this->yaCapturado($incidencia->employee_id, $fecha_inicial['fecha'],$fecha_final['fecha']) && $codigo->code != 01 && $codigo->code != 905  && $codigo->code != 18 && $codigo->code != 19 && $codigo->code != 02  && $codigo->code != 03 && $codigo->code != 04 && $codigo->code != 07 && $codigo->code != 92) {
                 if ($this->yaCapturado($incidencia->employee_id, $fecha_inicial['fecha'],$fecha_final['fecha']) && !in_array($codigo->code,$incidencias_duplicados)) {
                 return response()->json(
