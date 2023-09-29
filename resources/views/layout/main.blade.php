@@ -19,11 +19,11 @@
 
 	<link rel="stylesheet" href="{{ asset('css/card.css') }}">
 	<link rel="stylesheet" href="{{ asset('plugins/toastr/css/toastr.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('plugins/jquery/css/themes/smothness/jquery-ui.css') }}"> 
+	<link rel="stylesheet" href="{{ asset('plugins/jquery/css/themes/smothness/jquery-ui.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/application.css') }}">
 
 	@yield('css')
-	
+
 </head>
 <body>
 
@@ -55,11 +55,11 @@
 	  			</div>
 			</div>
 
-			
+
 		</div>
-	
+
 <script src="{{ asset('plugins/jquery/js/jquery.js') }}"></script>
-<script src="{{ asset('plugins/datepicker/js/jquery-ui.min.js') }}"></script> 
+<script src="{{ asset('plugins/datepicker/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('plugins/datepicker/js/ui.datepicker-es-MX.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>
 <script src="{{ asset('plugins/chosen/chosen.jquery.js') }}"></script>
@@ -67,7 +67,8 @@
 <script src="{{ asset('plugins/sweetalert/dist/sweetalert.min.js') }}"></script>
 <script src="{{ asset('plugins/toastr/js/toastr.min.js') }}"></script>
 <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+<script src="{{ asset('plugins/flatpickr/dist_l10n_es.js') }}"></script>
+
 <script src="{{ asset('js/script.js') }}"></script>
 
 
