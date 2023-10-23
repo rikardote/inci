@@ -538,8 +538,8 @@ class ReportsController extends Controller
     return view('reportes.inasistencias.show')->with('incidencias', $incidencias);
   }
   public function val_aguinaldo(Request $request){
-    $fecha_inicial = "2022-01-01";
-    $fecha_final = "2022-12-31";
+    $fecha_inicial = "2023-01-01";
+    $fecha_final = "2023-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
 
 
