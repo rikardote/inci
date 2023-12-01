@@ -295,7 +295,7 @@ class IncidenciasController extends Controller
                 }
             }   // termina if ($request->saltar_validacion_lic != 'true') {
                  //VALIDACION DE TXT
-            if ($request->saltar_validacion_txt != 'true') {
+           // if ($request->saltar_validacion_txt != 'true') {
                 if ($codigo->code == 900) {
                     if($incidencia->cobertura_txt == NULL){
                         return response()->json('Debe especificar el sustituto',500);
@@ -305,9 +305,9 @@ class IncidenciasController extends Controller
                     $dias = $a + $incidencia->total_dias;
 
                     //VALIDACION DE MAS DE LOS DIAS QUE TIENE PERMITIDO
-                    if ($dias > 3 && in_array($empleado->jornada_id, $mat_desp)) {
+                    if ($dias > 5 && in_array($empleado->jornada_id, $mat_desp)) {
                         if ($request->ajax()) {
-                                return response()->json('Trabajador no puede gozar mas de 3 dias de T.X.T',500);
+                                return response()->json('Trabajador no puede gozar mas de 5 dias de T.X.T',500);
                             }
                     }
                     if ($dias > 1 && in_array($empleado->jornada_id, $syf_dyf)) {
@@ -321,7 +321,7 @@ class IncidenciasController extends Controller
                             }
                     }
 
-                }
+            //    }
             }   //termina if ($request->saltar_validacion_txt != 'true') {
 
           $incidencia->save();

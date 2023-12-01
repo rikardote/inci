@@ -97,11 +97,6 @@
           'placeholder' => 'Ingresar nombre completo del sustituto',
          ]) !!}
 
-      <br>
-      <div>
-        {!! Form::label('saltar_validacion_txt', 'Ignorar validación de TXT: ') !!}
-        <input name="saltar_validacion_txt" id="saltar_validacion_txt" type="checkbox" />
-    </div>
 </div>
 
 <div id="pendientes" class="well well-sm">
