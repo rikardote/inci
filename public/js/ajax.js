@@ -22,7 +22,7 @@
     var c=document.getElementById("saltar_validacion");
     var c2=document.getElementById("saltar_validacion_inca");
     var c3=document.getElementById("saltar_validacion_lic");
-    var c4=document.getElementById("saltar_validacion_txt");
+    //var c4=document.getElementById("saltar_validacion_txt");
     if (c.checked) {
       frmsaltavalidacion = true;
     }else {
@@ -38,11 +38,11 @@
     }else {
       frmsaltar_validacion_lic = false;
     }
-    if (c4.checked) {
+    /*if (c4.checked) {
       frmsaltar_validacion_txt = true;
     }else {
       frmsaltar_validacion_txt = false;
-    }
+    }*/
 
     document.getElementById('register').style.visibility='hidden';
     var token = $("#token").val();
@@ -55,7 +55,7 @@
     //var route = "http://incidencias.slyip.com/incidencias/";
     var route = url+"/incidencias/";
 
-    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&saltar_validacion_txt='+frmsaltar_validacion_txt+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments+'&cobertura_txt='+frmcobertura_txt+'&horas_otorgadas='+frmhoras_otorgadas;
+    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments+'&cobertura_txt='+frmcobertura_txt+'&horas_otorgadas='+frmhoras_otorgadas;
     $.ajax({
       url: route,
       headers: {'X-CSRF-TOKEN': token},
