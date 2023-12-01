@@ -270,10 +270,7 @@ $('#datepicker_expedida').flatpickr({
     $("#auto_medicos").autocomplete({
       minLength:3,
      autoFocus: true,
-     source: url+"/getdoctors";
-
-
-
+     source: url+"/getdoctors"
     });
 });
 </script>
