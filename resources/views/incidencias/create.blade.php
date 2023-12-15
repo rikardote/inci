@@ -187,6 +187,21 @@ $('#datepicker_expedida').flatpickr({
       }
     });
   </script>
+  <script>
+    $('#codigo').on('change', function() {
+        //alert( 'hola' ); // or $(this).val()
+      if(this.value == 98) {
+
+        $('#coberturaTXT').show();
+        //
+      } else {
+        //
+        $('#coberturaTXT').hide();
+        document.getElementById("coberturaTXT").value = null;
+
+      }
+    });
+  </script>
 <script>
     $('#codigo').on('change', function() {
         //alert( 'hola' ); // or $(this).val()

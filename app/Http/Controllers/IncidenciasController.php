@@ -322,7 +322,12 @@ class IncidenciasController extends Controller
                     }
 
             //    }
-            }   //termina if ($request->saltar_validacion_txt != 'true') {
+                }   //termina if ($request->saltar_validacion_txt != 'true') {
+                if ($codigo->code == 902) {
+                    if($incidencia->cobertura_txt == NULL){
+                        return response()->json('Debe especificar el sustituto',500);
+                    }
+                }
 
           $incidencia->save();
         }
