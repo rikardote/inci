@@ -315,19 +315,15 @@ class IncidenciasController extends Controller
                                 return response()->json('Trabajador no puede gozar mas de 1 dias de T.X.T',500);
                             }
                     }
+                    /*
                     if ($dias > 2 && in_array($empleado->jornada_id, $guardias)) {
                         if ($request->ajax()) {
                                 return response()->json('Trabajador no puede gozar mas de 2 dias de T.X.T',500);
                             }
-                    }
+                    }*/
 
             //    }
                 }   //termina if ($request->saltar_validacion_txt != 'true') {
-                if ($codigo->code == 902) {
-                    if($incidencia->cobertura_txt == NULL){
-                        return response()->json('Debe especificar el sustituto',500);
-                    }
-                }
 
           $incidencia->save();
         }
