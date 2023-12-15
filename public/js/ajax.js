@@ -91,9 +91,6 @@
                toastr.success('Incidencia Registrada Correctamente');
 
                document.getElementById('register').style.visibility='visible';
-
-
-
            },
 
              error: function (res) {

@@ -23,7 +23,6 @@
                 <td>{{ $incidencia->description }}</td>
 
 			 <td>
-                {{ $incidencia->id }}
 				<a data-url="{{ route('codigosdeincidencias.edit', $incidencia->code) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
 			 		<span class="fa fa-pencil-square-o fa-2x" aria-hidden='true'></span>
   				</a>
