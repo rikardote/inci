@@ -52,8 +52,8 @@ class BiometricosController extends Controller
       $date = Carbon::today();
       $month =  $date->month;
       $day =  $date->day;
-      $year = $date->year;
-      //$year = "2022";
+      //$year = $date->year;
+      $year = "2023";
 
       $qna = $month * 2;
       if ($day < 16) {
