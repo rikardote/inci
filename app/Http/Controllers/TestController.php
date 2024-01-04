@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Employe; 
+use App\Employe;
 use Carbon\Carbon;
 use DateTime;
 
@@ -20,7 +20,7 @@ class TestController extends Controller
     public function index()
     {
   /* $dt = Carbon::create(2015, 12, 1, 0);
-   $dt->addWeekdays(10); 
+   $dt->addWeekdays(10);
 
    echo $dt->subDay(1);*/
 
@@ -96,12 +96,22 @@ if (Carbon::yesterday()->isWeekend()) {
     }
     public function test()
     {
+        /*
         //$empleado = Employe::where('num_empleado', '=', '350552')->restore();
         $empleado = Employe::where('num_empleado', '=', '350552')->first();
         $empleado->delete();
         //$empleado->restore();
 
         dd($empleado);
+        */
+        //$year = range( date("Y") , 2018 );
+        $years = array();
+        for($i = 2018; $i<= date("Y"); $i++) {
+            $years["$i"] = $i;
+        }
+        dd($years);
+
+
 
     }
 
