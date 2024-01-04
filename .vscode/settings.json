@@ -38,7 +38,7 @@
     "editor.selectionHighlight": false,
     "editor.overviewRulerBorder": false,
     "editor.renderLineHighlight": "none",
-    "editor.occurrencesHighlight": false,
+    "editor.occurrencesHighlight": "off",
     "problems.decorations.enabled": false,
     "editor.renderControlCharacters": false,
     "editor.hideCursorInOverviewRuler": true,
