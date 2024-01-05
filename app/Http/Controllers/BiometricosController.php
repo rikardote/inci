@@ -62,12 +62,8 @@ class BiometricosController extends Controller
 
       $qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
 
-      if (\Auth::user()->admin()) {
-        $qnas = Qna::orderby('id', 'desc')->get()->pluck('Qnaa', 'id')->toArray();
-        }
-
       //krsort($qnas);
-      //
+      //$qnas = Qna::orderby('id', 'desc')->get()->pluck('Qnaa', 'id')->toArray();
 
       return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
 
