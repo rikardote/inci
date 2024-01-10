@@ -112,9 +112,9 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'admin.incidencias.show'
     ]);
 
-    
+
     Route::get('/', 'HomeController@index');
-    
+
     Route::get('/home', [
         'uses' => 'HomeController@index',
         'as' => 'home.index'
@@ -244,7 +244,7 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'reporte.kardex.todo'
     ]);
 
-    
+
     Route::get('/reporte/sinderecho/pdf/{dpto}/{fecha_inicio}/{fecha_final}', [
         'uses' => 'ReportsController@getsinDerechoPDF',
         'as' => 'reporte.sinderecho.pdf'
@@ -282,7 +282,7 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'reportes.vacaciones.search'
     ]);
         ///END-REPORTES
-    
+
         ///INICIO-CAPTURA
     Route::get('/capturar', [
         'uses' => 'CapturarController@index',
@@ -397,7 +397,7 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'BiometricosController@get_checadas',
         'as' => 'biometrico.get_checadas'
     ]);
-    Route::post('biometrico_buscar', [
+    Route::post('biometrico_buscar/', [
         'uses' => 'BiometricosController@buscar',
         'as' => 'biometrico.buscar'
     ]);
@@ -484,4 +484,3 @@ Route::group(['middleware' => 'web'], function () {
 
 
 });
-
