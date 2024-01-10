@@ -47,7 +47,25 @@ class BiometricosController extends Controller
 
     }
     public function get_checadas(){
-      $dptos = \Auth::user()->centros->pluck('id')->toArray();
+        $dptos = \Auth::user()->centros->pluck('id')->toArray();
+        $dptos = Deparment::whereIn('deparments.id', $dptos)->get();
+        $default_year = Carbon::now()->format('Y');
+        $qnas = ['1' => '01 - 1RA ENERO','2' => '02 - 2DA ENERO','3' => '03 - 1RA FEBRERO','4' => '04 -	2DA FEBRERO','5' => '05 - 1RA MARZO','6' => '06 - 2DA MARZO','7' => '07 - 1RA ABRIL','8' => '08 - 2DA ABRIL','9' => '09 - 1RA MAYO','10' => '10 - 2DA MAYO','11' => '11 - 1RA JUNIO','12' => '12 - 2DA JUNIO','13' => '13 - 1RA JULIO','14' => '14 - 2DA JULIO'
+            ,'15' => '15 - 1RA AGOSTO','16' => '16 - 2DA AGOSTO','17' => '17 - 1RA SEPTIEMBRE','18' => '18 - 2DA SEPTIEMBRE','19' => '19 - 1RA OCTUBRE','20' => '20 - 2DA OCTUBRE','21' => '21 - 1RA NOVIEMBRE','22' => '22 - 2DA NOVIEMBRE','23' => '23 - 1RA DICIEMBRE','24' => '24 - 2DA DICIEMBRE'
+        ];
+        //$years = ['2024' => '2024','2023' => '2023','2022' => '2022','2021' => '2021','2020' => '2020','2019' => '2019','2018' => '2018'];
+        $years = array();
+        for($i = 2018; $i<= date("Y"); $i++) {
+            $years["$i"] = $i;
+        }
+        $title = "Reporte Biometrico";
+        return view('biometrico.get_checadas')
+            ->with('dptos', $dptos)
+            ->with('qnas', $qnas)
+            ->with('years', $years)
+            ->with('default_year', $default_year)
+            ->with('title', $title);
+      /*$dptos = \Auth::user()->centros->pluck('id')->toArray();
       $dptos = Deparment::whereIn('deparments.id', $dptos)->get();
       $date = Carbon::today();
       $month =  $date->month;
@@ -66,15 +84,16 @@ class BiometricosController extends Controller
       $qnas = Qna::orderby('id', 'desc')->get()->pluck('Qnaa', 'id')->toArray();
 
       return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
-
+*/
     }
 
     /* REPORTE DE CHECADAS DEL BIOMETRICO  */
     public function buscar(Request $request){
-    	$dpto = $request->deparment_id;
-        $dpto_des = Deparment::find($dpto);
 
-        $qna = Qna::where('id', $request->qna_id)->first();
+
+        $dpto_des = Deparment::where('code', $request->dpto)->first();
+        $qna = Qna::where('qna', $request->qna)->where('year',$request->year)->first();
+
         $fecha_inicio = getFechaInicioPorQna($qna->id);
         $fecha_final = getFechaFinalPorQna($fecha_inicio);
 
@@ -86,7 +105,7 @@ class BiometricosController extends Controller
         $daterange = new DatePeriod($begin, $interval ,$end);
 
     	//$checadas = Checada::get_Checadas($dpto, $qna->qna, $qna->year);
-        $emp = Employe::get_empleados($dpto);
+        $emp = Employe::get_empleados($dpto_des->id);
         $employees = collect($emp);   //turn data into collection
         $empleados = $employees->chunk(5); //chunk into smaller pieces
         $empleados->toArray(); //convert chunk to array
