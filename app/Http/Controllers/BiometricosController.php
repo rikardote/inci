@@ -65,26 +65,6 @@ class BiometricosController extends Controller
             ->with('years', $years)
             ->with('default_year', $default_year)
             ->with('title', $title);
-      /*$dptos = \Auth::user()->centros->pluck('id')->toArray();
-      $dptos = Deparment::whereIn('deparments.id', $dptos)->get();
-      $date = Carbon::today();
-      $month =  $date->month;
-      $day =  $date->day;
-      $year = $date->year;
-      //$year = "2023";
-
-      $qna = $month * 2;
-      if ($day < 16) {
-            $qna-=1;
-      }
-
-      //$qnas = Qna::orderby('id', 'asc')->where('year','=',$year)->limit($qna)->get()->pluck('Qnaa', 'id')->toArray();
-
-      //krsort($qnas);
-      $qnas = Qna::orderby('id', 'desc')->get()->pluck('Qnaa', 'id')->toArray();
-
-      return view('biometrico.get_checadas')->with('dptos', $dptos)->with('qnas', $qnas);
-*/
     }
 
     /* REPORTE DE CHECADAS DEL BIOMETRICO  */
