@@ -121,6 +121,7 @@ class ReportsController extends Controller
    {
       $dptos = \Auth::user()->centros->pluck('id')->toArray();
       $fecha = $request->fecha_inicio;
+      $consulta_captura = "CONSULTA";
       if ($request->solo_medicos == true) {
         $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
         $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));
@@ -136,7 +137,7 @@ class ReportsController extends Controller
       }
       else {
         $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-          $header = \View('reportes.header_diario', compact('fecha'))->render();
+          $header = \View('reportes.header_diario', compact('fecha, consulta_captura'))->render();
           $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
           $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
           $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now().'.pdf';
@@ -592,6 +593,7 @@ class ReportsController extends Controller
       $dt1 = Carbon::parse(fecha_ymd($request->fecha_inicio));
       $fecha = $request->fecha_inicio;
       $fecha_inicial = fecha_ymd($request->fecha_inicio);
+      $consulta_captura = "CONSULTA";
 
       $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos,$fecha_inicial);
 
@@ -602,7 +604,7 @@ class ReportsController extends Controller
 
       else {
         $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-          $header = \View('reportes.header_diario', compact('fecha'))->render();
+          $header = \View('reportes.header_diario', compact('fecha, consulta_captura'))->render();
           $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
           $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
           $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now().'.pdf';
