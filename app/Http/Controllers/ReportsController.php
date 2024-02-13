@@ -121,7 +121,7 @@ class ReportsController extends Controller
    {
       $dptos = \Auth::user()->centros->pluck('id')->toArray();
       $fecha = $request->fecha_inicio;
-      $consulta_captura = "CONSULTA";
+      $consulta_captura = "CAPTURA";
       if ($request->solo_medicos == true) {
         $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
         $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));
