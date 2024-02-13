@@ -28,7 +28,7 @@
 
 		<tr>
 
-			<p><td><span style="font-size:16px;">FECHA DE CAPTURA: <strong>{{$fecha}}</strong></span></td></p>
+			<p><td><span style="font-size:16px;">FECHA DE CONSULTA: <strong>{{$fecha}}</strong></span></td></p>
 
 		</tr>
 
