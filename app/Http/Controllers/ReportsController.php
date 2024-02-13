@@ -603,7 +603,7 @@ class ReportsController extends Controller
 
       else {
         $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-          $header = \View('reportes.header_diario', compact('fecha'))->render();
+          $header = \View('reportes.header_diario2', compact('fecha'))->render();
           $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
           $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
           $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now().'.pdf';
