@@ -140,7 +140,7 @@ class ReportsController extends Controller
           $header = \View('reportes.header_diario', compact('fecha'))->render();
           $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
           $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
-          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now().'.pdf';
+          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now()->format('d-m-Y').'.pdf';
           $mpdf->setAutoTopMargin = 'stretch';
           $mpdf->setAutoBottomMargin = 'stretch';
           $mpdf->setHTMLHeader($header);
@@ -606,7 +606,7 @@ class ReportsController extends Controller
           $header = \View('reportes.header_diario2', compact('fecha'))->render();
           $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
           $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
-          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DEL_DIA_'.Carbon::now().'.pdf';
+          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DEL_DIA_'.Carbon::now()->format('d-m-Y').'.pdf';
           $mpdf->setAutoTopMargin = 'stretch';
           $mpdf->setAutoBottomMargin = 'stretch';
           $mpdf->setHTMLHeader($header);
