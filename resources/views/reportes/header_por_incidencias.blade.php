@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	
+
 </head>
 <body>
 <table border="0" cellpadding="12" cellspacing="0" style="width:850px;">
@@ -9,12 +9,12 @@
 		<tr>
 			<td><img alt="" src="images/60issste.png" style="width: 400px; height: 108px;" /></td>
 			<td align='right'>
-			<p><h2><strong>DELEGACION ESTATAL BAJA CALIFORNIA</strong></h2></p>
+			<p><h2><strong>REPRESENTACION ESTATAL BAJA CALIFORNIA</strong></h2></p>
 
 			<p><h3><strong>SUBDELEGACION DE ADMINISTRACION</strong></h3></p>
 
 			<p><h4><strong>DEPARTAMENTO DE RECURSOS HUMANOS</strong></h4></p>
-		
+
 			</td>
 		</tr>
 
@@ -27,11 +27,11 @@
 				</tr>
 			</tbody>
 		</table>
-		
-		
-		
+
+
+
 	</tbody>
-	
+
 </table>
 <span style="font-size:12px;">PERIODO DE FECHAS DEL: <strong>{{$fecha_inicio}} AL {{$fecha_final}}</strong></span>
 <hr>
