@@ -7,7 +7,7 @@
 		<tr>
 			<td><img alt="" src="images/60issste.png" style="width: 400px; height: 100px;" /></td>
 			<td align='right'>
-			<p><h2><strong>REPRESENTACION ESTATAL BAJA CALIFORNIA</strong></h2></p>
+			<p><h3><strong>REPRESENTACION ESTATAL BAJA CALIFORNIA</strong></h3></p>
 
 			<p><h3><strong>SUBDELEGACION DE ADMINISTRACION</strong></h3></p>
 
