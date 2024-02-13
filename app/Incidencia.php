@@ -580,6 +580,29 @@ class Incidencia extends Model
                      ->get();
          return $incidencias;
     }
+    public static function GetIncidenciasCapturaPorDia($dptos,$fecha_inicial)
+    {
+
+        $conteo_total = DB::raw('SUM(total_dias) as total');
+          $incidencias = Incidencia::getQuery()
+                     ->select('*','employees.id as empleado_id','incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p','puestos.puesto as puesto_p', DB::raw($conteo_total))
+                     ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
+                     ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
+                     ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
+                     ->leftJoin('puestos', 'puestos.id', '=', 'employees.puesto_id')
+                     ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
+                     ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+                     ->whereNull('incidencias.deleted_at')
+                     ->whereIn('deparments.id', $dptos)
+                     ->whereRaw('? between fecha_inicio and fecha_final', [$fecha_inicial])
+                     ->groupBy('token')
+                     ->orderBy('deparments.code', 'ASC')
+                     ->orderBy('num_empleado', 'ASC')
+                     ->orderBy('codigos_de_incidencias.code', 'ASC')
+                     ->orderBy('fecha_inicio', 'ASC')
+                     ->get();
+         return $incidencias;
+    }
     public static function GetIncidenciasPorDia_Solo_Medicos($dptos,$medicosIds,$fecha_inicio)
     {
 

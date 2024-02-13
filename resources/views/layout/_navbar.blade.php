@@ -12,14 +12,14 @@
                 </button>
 
                 <!-- Branding Image -->
-                
-                 <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/logo_trans2.png') }}"style="width: 60px; height: 60px;"></a>  
+
+                 <a class="brand" style="margin: 0; float: none; text-align:center" href="/incidencias"><img src="{{ asset('images/logo_trans2.png') }}"style="width: 60px; height: 60px;"></a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
-                    @if (\Auth::user()->admin() || \Auth::user()->member()) 
+                    @if (\Auth::user()->admin() || \Auth::user()->member())
                         <li><a href="">Fecha de Cierre: {{ getFechaCierre() }}</a></li>
                         <li class="{{ Request::segment(1) === 'employees' ? 'active' : null  }}"><a href="{{route('employees.index')}}"><i class="fa fa-users fa-3x"></i>EMPLEADOS</a></li>
                         <li class="{{ Request::segment(1) === 'incidencias' ? 'active' : null  }}"><a href="{{route('incidencias.index')}}"><i class="fa fa-pencil-square-o fa-3x"></i>CAPTURA DE INCIDENCIAS</a></li>
@@ -35,9 +35,9 @@
                                  <li><a href="{{ route('reports.diario') }}"></i> MOSTRAR CAPTURA DE INCIDENCIAS DIARIA</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ route('reports.general.empleado') }}"></i> REPORTE POR EMPLEADO (KARDEX)</a></li>
-                                <!-- 
+                                <!--
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="{{ route('reports.prima_dominical') }}"></i> REPORTE PRIMA DOMINICAL</a></li> 
+                                    <li><a href="{{ route('reports.prima_dominical') }}"></i> REPORTE PRIMA DOMINICAL</a></li>
                                 -->
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ route('reports.vacaciones') }}"></i> VACACIONES (REVISION RAPIDA)</a></li>
@@ -56,6 +56,7 @@
                                     <li><a href="{{ route('reports.pendientes') }}"></i> Pendientes</a></li>
                                     <li role="separator" class="divider"></li>
                                 -->
+                                <li><a href="{{ route('reports.captura_por_dia') }}"></i> REPORTE CAPTURA DE INCIDENCIAS POR DIA</a></li>
                                 <li><a href="{{ route('reports.estadistica') }}"></i> REPORTES ESTADISTICO</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ route('reports.por_incidencia') }}"></i> REPORTE POR INCIDENCIA</a></li>
@@ -63,10 +64,10 @@
                                 <li><a href="{{ route('biometrico_getchecadas') }}"></i> REPORTE BIOMETRICO</a></li>
                             </ul>
                         </li>
-                    
+
 
                 <!-- Right Side Of Navbar -->
-               
+
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">LOGIN</a></li>
@@ -76,11 +77,11 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <i class=""></i> {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
-                            
+
                             <ul class="dropdown-menu" role="menu">
-                                @if (\Auth::user()->admin()) 
+                                @if (\Auth::user()->admin())
                                     <li><a href="{{ url('/dashboard') }}"><i class="fa fa-cog fa-spin"></i> DASHBOARD</a></li>
-                       
+
                                 @endif
 
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i> SALIR</a></li>
@@ -92,6 +93,3 @@
         </div>
         </div><!-- /.container-fluid -->
     </nav>
-        
-        
-     

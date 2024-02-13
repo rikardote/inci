@@ -34,7 +34,7 @@
     "editor.colorDecorators": false,
     "git.decorations.enabled": false,
     "workbench.startupEditor": "none",
-    "editor.lightbulb.enabled": false,
+    "editor.lightbulb.enabled": "off",
     "editor.selectionHighlight": false,
     "editor.overviewRulerBorder": false,
     "editor.renderLineHighlight": "none",

@@ -48,7 +48,7 @@ class UsersController extends Controller
         asort($deparments);
 
     	$departments_select = $user->centros->lists('id')->toArray();
-    	
+
         return view('admin.users.edit')
         	->with('user', $user)
         	->with('departments', $deparments)
@@ -59,14 +59,14 @@ class UsersController extends Controller
     {
         $user = new User($request->all());
         $user->password = bcrypt($request->password);
-                
+
         $user->save();
 
         $user->centros()->sync($request->departments);
 
         Flash::success('Usuario creado con exito!');
         return redirect()->route('users.index');
-       
+
     }
 
     public function update(Request $request, $id)
@@ -74,7 +74,7 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->fill($request->all());
         //$user->password = bcrypt($request->password);
-        
+
         $user->save();
 
         $user->centros()->sync($request->departments);
