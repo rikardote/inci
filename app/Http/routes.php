@@ -94,6 +94,11 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'user.change.store'
     ]);
 
+    Route::get('users/{id}/condicion', [
+        'uses' => 'UsersController@condicion',
+        'as' => 'users.condicion'
+    ]);
+
     Route::post('incidencias/search', [
         'uses' => 'SearchEmpleadosController@index',
         'as' => 'empleados.search'
@@ -281,6 +286,17 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'SearchReporteEmpleadosController@vacaciones',
         'as' => 'reportes.vacaciones.search'
     ]);
+    Route::get('/reporte/captura_diaria/', [
+        'uses' => 'ReportsController@captura_diaria',
+        'as' => 'reports.captura_por_dia'
+    ]);
+    Route::post('/reporte/diario/post', [
+        'uses' => 'ReportsController@captura_diaria_post',
+        'as' => 'reports.captura_diaria.post'
+    ]);
+
+
+
         ///END-REPORTES
 
         ///INICIO-CAPTURA

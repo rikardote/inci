@@ -30,7 +30,7 @@ class PuestosController extends Controller
             return redirect()->route('home.index');
         }
         $puestos = Puesto::orderBy('puesto', 'ASC')->paginate(10);
-       
+
         return view('admin.puestos.index')->with('puestos', $puestos);
     }
 
@@ -41,7 +41,7 @@ class PuestosController extends Controller
      */
     public function create(Puesto $puesto)
     {
-       
+
         return view('admin.puestos.create', compact('puesto'));
     }
 
@@ -96,7 +96,7 @@ class PuestosController extends Controller
     {
         $puesto = Puesto::find($id);
         $puesto->fill($request->all());
-        //$this->fill($request->all());  
+        //$this->fill($request->all());
         $puesto->save();
         Flash::success('Puesto editado con exito!');
         return redirect()->route('puestos.index');

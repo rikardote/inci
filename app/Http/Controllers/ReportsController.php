@@ -580,4 +580,43 @@ class ReportsController extends Controller
    	return view('reportes.vacaciones.index')->with('title', $title);
    }
 
+   public function captura_diaria()
+   {
+      $title = "Reporte de captura por dia";
+      return view('reportes.captura_diaria')->with('title', $title);
+   }
+
+   public function captura_diaria_post(Request $request)
+   {
+      $dptos = \Auth::user()->centros->pluck('id')->toArray();
+      $dt1 = Carbon::parse(fecha_ymd($request->fecha_inicio));
+      $fecha = $request->fecha_inicio;
+      $fecha_inicial = fecha_ymd($request->fecha_inicio);
+
+      $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos,$fecha_inicial);
+
+      if (!$incidencias) {
+        Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
+        return redirect()->route('reports.captura_por_dia');
+      }
+
+      else {
+        $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
+          $header = \View('reportes.header_diario', compact('fecha'))->render();
+          $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
+          $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
+          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now().'.pdf';
+          $mpdf->setAutoTopMargin = 'stretch';
+          $mpdf->setAutoBottomMargin = 'stretch';
+          $mpdf->setHTMLHeader($header);
+          $mpdf->SetDisplayMode('fullpage');
+          $mpdf->WriteHTML($html);
+
+          $mpdf->Output($pdfFilePath, "D");
+      }
+   }
+
+
+
+
 }
