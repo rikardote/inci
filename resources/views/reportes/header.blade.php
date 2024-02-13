@@ -7,13 +7,13 @@
 		<tr>
 			<td><img alt="" src="images/60issste.png" style="width: 400px; height: 100px;" /></td>
 			<td align='right'>
-			<p><h2><strong>DELEGACION ESTATAL BAJA CALIFORNIA</strong></h2></p>
+			<p><h2><strong>REPRESENTACION ESTATAL BAJA CALIFORNIA</strong></h2></p>
 
 			<p><h3><strong>SUBDELEGACION DE ADMINISTRACION</strong></h3></p>
 
 			<p><h4><strong>DEPARTAMENTO DE RECURSOS HUMANOS</strong></h4></p>
-			
-			
+
+
 			</td>
 		</tr>
 		<table border="0" cellpadding="1" cellspacing="1" style="width:500px;">
@@ -34,7 +34,7 @@
 			<p><td align='right'><span style="font-size:16px;">A&Ntilde;O: <strong>{{$qna->year}}</strong></span></td></p>
 		</tr>
 	</tbody>
-	
+
 </table>
 
 <hr>
