@@ -594,7 +594,15 @@ class ReportsController extends Controller
       $fecha = $request->fecha_inicio;
       $fecha_inicial = fecha_ymd($request->fecha_inicio);
 
-      $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos,$fecha_inicial);
+      if ($request->solo_medicos == true) {
+        $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
+        $incidencias = Incidencia::GetIncidenciasPorDia_Solo_MedicosPorDia($dptos, $medicosIds, $fecha_inicial);
+      }
+      else {
+        $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos,$fecha_inicial);
+        //dd($incidencias);
+      }
+
 
       if (!$incidencias) {
         Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
