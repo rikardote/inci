@@ -645,6 +645,7 @@ class Incidencia extends Model
                      ->whereIn('puestos.id', $medicosIds)
                      ->whereRaw('? between fecha_inicio and fecha_final', [$fecha_inicio])
                      ->groupBy('token')
+                     ->orderBy('deparments.code', 'ASC')
                      ->orderBy('num_empleado', 'ASC')
                      ->orderBy('codigos_de_incidencias.code', 'ASC')
                      ->orderBy('fecha_inicio', 'ASC')
