@@ -16,6 +16,12 @@
 					  ]) !!}
 				</div>
 
+                <div class="form-group col-md-12">
+					{!! Form::label('solo_medicos', 'Seleccionar solo medicos: ') !!}
+					{!! Form::checkbox('solo_medicos') !!}
+
+		        </div>
+
 
 				{!! Form::submit('OK', ['class' => 'fa fa-search btn btn-success pull pull-right']) !!}
 

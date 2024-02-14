@@ -625,7 +625,33 @@ class Incidencia extends Model
                      ->orderBy('fecha_inicio', 'ASC')
                      ->get();
          return $incidencias;
+
     }
+    public static function GetIncidenciasPorDia_Solo_MedicosPorDia($dptos,$medicosIds,$fecha_inicio)
+    {
+
+        $conteo_total = DB::raw('SUM(total_dias) as total');
+          $incidencias = Incidencia::getQuery()
+                     ->select('*','employees.id as empleado_id','incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p','puestos.puesto as puesto_p', DB::raw($conteo_total))
+                     ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
+                     ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
+                     ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
+                     ->leftJoin('puestos', 'puestos.id', '=', 'employees.puesto_id')
+                     ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
+                     ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+                     ->whereNull('incidencias.deleted_at')
+                     ->whereIn('deparments.id', $dptos)
+                     ->whereIn('puestos.id', $medicosIds)
+                     ->whereRaw('? between fecha_inicio and fecha_final', [$fecha_inicio])
+                     ->groupBy('token')
+                     ->orderBy('num_empleado', 'ASC')
+                     ->orderBy('codigos_de_incidencias.code', 'ASC')
+                     ->orderBy('fecha_inicio', 'ASC')
+                     ->get();
+         return $incidencias;
+
+    }
+
     public static function getTotalIncidenciasPorEmpleadoValida($fecha_inicial, $fecha_final, $id_empleado)
     {
       $conteo_total = DB::raw('SUM(total_dias) as total');
