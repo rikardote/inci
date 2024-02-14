@@ -620,6 +620,7 @@ class Incidencia extends Model
                      ->whereIn('puestos.id', $medicosIds)
                      ->where('fecha_capturado', '=', $fecha_inicio)
                      ->groupBy('token')
+                     ->orderBy('deparments.code', 'ASC')
                      ->orderBy('num_empleado', 'ASC')
                      ->orderBy('codigos_de_incidencias.code', 'ASC')
                      ->orderBy('fecha_inicio', 'ASC')
