@@ -35,7 +35,7 @@ class Checada extends Model
      return $checadas;
     }
     public static function insertOrUpdate(array $rows){
-        //$table = DB::getTablePrefix().with(new self)->getTable();
+        $table = DB::getTablePrefix().with(new self)->getTable();
 
 
         $first = reset($rows);
@@ -55,8 +55,8 @@ class Checada extends Model
             array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) )
         );
 
-        $sql = "INSERT INTO checadas ({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
-        dd($sql);
+        $sql = "INSERT INTO ({$table}) ({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+        //dd($sql);
         DB::statement( $sql );
     }
 }
