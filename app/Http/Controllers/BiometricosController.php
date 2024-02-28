@@ -61,7 +61,7 @@ class BiometricosController extends Controller
                 //$progressBar->start();
                 $data=[];
                 foreach($checadas_1 as $checada){
-                        $identificador = date("H:i:s").md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+                        $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                         if(!Checada::where('identificador', $identificador)->exists()){
                             $data[] = [
