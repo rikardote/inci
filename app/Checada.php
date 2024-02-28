@@ -10,7 +10,7 @@ class Checada extends Model
 
     protected $fillable = ['num_empleado','fecha','identificador'];
 
-    protected $connection = 'mysql-biometrico';
+    protected $connection = 'mysql-biometrico-pruebas';
     protected $table = 'checadas';
 
     public function employee()
