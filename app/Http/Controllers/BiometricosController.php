@@ -81,8 +81,9 @@ class BiometricosController extends Controller
                             $a = array_values($temp_array);
 
                 }
-                Checada::insertOrUpdate($a);
-                //Checada::insert($a);
+
+                //Checada::insertOrUpdate($a);
+                Checada::unique('identificador')->insert($a);
                     //$progressBar->advance();
             //    }
             //});
