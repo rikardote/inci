@@ -50,30 +50,33 @@ class BiometricosController extends Controller
         sleep(1);
         $zk->disconnect();
         sleep(1);
-        $checadas_1 = array_chunk($checadas_1, 50);
+        //$checadas_1 = array_chunk($checadas_1, 50);
         //dd($checadas_1);
         //$progressBar = $this->output->createProgressBar(count($checadas_1));
         //$this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
 
-        foreach ($checadas_1 as $batch) {
+        //foreach ($checadas_1 as $batch) {
 
-            DB::transaction(function () use ($batch) {
+          //  DB::transaction(function () use ($batch) {
                 //$progressBar->start();
-                foreach($batch as $checada){
+                $data=[];
+                foreach($checadas_1 as $checada){
                         $identificador = date("H:i:s").md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
-                        if(!Checada::where('identificador', $identificador)->exists()){
-                            Checada::insert([
+                        //if(!Checada::where('identificador', $identificador)->exists()){
+                            $data[] = [
                                 'num_empleado' => $checada['id'],
                                 'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                                 'identificador' => $identificador,
                                 'created_at' => date('Y-m-d H:i:s')
-                            ]);
-                        }
-                    //$progressBar->advance();
+                            ];
+
                 }
-            });
-        }
+                Checada::insert($data);
+                    //$progressBar->advance();
+            //    }
+            //});
+        //}
 	    //$progressBar->finish();
 
         $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
