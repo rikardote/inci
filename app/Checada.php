@@ -56,7 +56,7 @@ class Checada extends Model
         );
 
         $sql = "INSERT INTO checadas ({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
-
+        dd($sql);
         DB::statement( $sql );
     }
 }
