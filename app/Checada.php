@@ -55,7 +55,7 @@ class Checada extends Model
             array_map( function( $value ) { return "$value = VALUES($value)"; } , array_keys($first) )
         );
 
-        $sql = "INSERT INTO {$this->table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
+        $sql = "INSERT INTO {this->table}({$columns}) VALUES {$values} ON DUPLICATE KEY UPDATE {$updates}";
 
         DB::statement( $sql );
     }
