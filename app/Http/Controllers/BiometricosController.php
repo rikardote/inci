@@ -71,8 +71,15 @@ class BiometricosController extends Controller
                                 'created_at' => date('Y-m-d H:i:s')
                             ];
 
+                            $temp_array = [];
+                            foreach ($data as &$v) {
+                                if (!isset($temp_array[$v['identificador']]))
+                                $temp_array[$v['identificador']] =& $v;
+                            }
+                            $a = array_values($temp_array);
+
                 }
-                $a = array_unique($data, SORT_REGULAR);
+                //$a = array_unique($data, SORT_REGULAR);
                 Checada::insert($a);
                     //$progressBar->advance();
             //    }
