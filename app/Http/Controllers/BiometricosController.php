@@ -21,6 +21,8 @@ use DatePeriod;
 use DateInterval;
 use Laracasts\Flash\Flash;
 use \mPDF;
+//use DB;
+use Illuminate\Support\Facades\DB;
 
 class BiometricosController extends Controller
 {
@@ -36,9 +38,45 @@ class BiometricosController extends Controller
             return view('home')->with('qna', $qna);
         }
         else {
-            \Artisan::call('biometrico:checadas');
+            //\Artisan::call('biometrico:checadas');
+        date_default_timezone_set('America/Tijuana');
+        //BIOMETRICO 1 DELEGACION
+        $zk = new ZKTeco("192.160.141.37");
+        $zk->connect();
+        sleep(1);
+        $checadas_1 =  $zk->getAttendance();
+        sleep(1);
+        $zk->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
+        $zk->disconnect();
+        sleep(1);
+        $checadas_1 = array_chunk($checadas_1, 50);
+        dd($checadas_1);
+        //$progressBar = $this->output->createProgressBar(count($checadas_1));
+        //$this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
 
-            $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
+        foreach ($checadas_1 as $batch) {
+
+            DB::transaction(function () use ($batch) {
+                //$progressBar->start();
+                foreach($batch as $checada){
+                        $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+
+                        if(!Checada::where('identificador', $identificador)->exists()){
+                            Checada::insert([
+                                'num_empleado' => $checada['id'],
+                                'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                                'identificador' => $identificador,
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                        }
+                    //$progressBar->advance();
+                }
+            });
+        }
+	    //$progressBar->finish();
+
+        $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
 
             Flash::success($aviso);
 
