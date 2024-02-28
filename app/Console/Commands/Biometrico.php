@@ -62,21 +62,28 @@ class Biometrico extends Command
         $progressBar = $this->output->createProgressBar(count($checadas_1));
         $this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
         $progressBar->start();
+        $data=[];
             foreach($checadas_1 as $checada){
                 $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                 if(!Checada::where('identificador', $identificador)->exists()){
-                    Checada::insert([
+                   $data[] = [
                         'num_empleado' => $checada['id'],
                         'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
                         'identificador' => $identificador,
                         'created_at' => date('Y-m-d H:i:s')
-                    ]);
+                    ];
                 }
+                $temp_array = [];
+                    foreach ($data as &$v) {
+                        if (!isset($temp_array[$v['identificador']]))
+                        $temp_array[$v['identificador']] =& $v;
+                    }
+                $a = array_values($temp_array);
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+/*
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
@@ -279,7 +286,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-*/
+
      //BIOMETRICO 3 ALGODONES
 
         $zk3 = new ZKTeco("192.165.232.253");
@@ -308,7 +315,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+*/
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
     }
 }

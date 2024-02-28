@@ -81,7 +81,6 @@ class BiometricosController extends Controller
                             $a = array_values($temp_array);
 
                 }
-                //$a = array_unique($data, SORT_REGULAR);
                 Checada::insert($a);
                     //$progressBar->advance();
             //    }
