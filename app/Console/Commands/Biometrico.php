@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Rats\Zkteco\Lib\ZKTeco;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-//use DB;
 
 class Biometrico extends Command
 {
@@ -59,32 +58,25 @@ class Biometrico extends Command
         sleep(1);
         $zk->disconnect();
         sleep(1);
-        $checadas_1 = array_chunk($checadas_1, 50);
-        //dd($records);
+
         $progressBar = $this->output->createProgressBar(count($checadas_1));
         $this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
+        $progressBar->start();
+            foreach($checadas_1 as $checada){
+                $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
-        foreach ($checadas_1 as $batch) {
-
-            DB::transaction(function () use ($batch) {
-                //$progressBar->start();
-                foreach($batch as $checada){
-                        $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
-
-                        if(!Checada::where('identificador', $identificador)->exists()){
-                            Checada::insert([
-                                'num_empleado' => $checada['id'],
-                                'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                                'identificador' => $identificador,
-                                'created_at' => date('Y-m-d H:i:s')
-                            ]);
-                        }
-                    //$progressBar->advance();
+                if(!Checada::where('identificador', $identificador)->exists()){
+                    Checada::insert([
+                        'num_empleado' => $checada['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
+                        'identificador' => $identificador,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
                 }
-            });
-        }
+            $progressBar->advance();
+            }
 	    $progressBar->finish();
-/*
+
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
@@ -287,7 +279,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+*/
      //BIOMETRICO 3 ALGODONES
 
         $zk3 = new ZKTeco("192.165.232.253");
@@ -318,7 +310,5 @@ class Biometrico extends Command
 	    $progressBar->finish();
 
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
-*/
     }
-
 }
