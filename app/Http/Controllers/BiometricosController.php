@@ -51,7 +51,7 @@ class BiometricosController extends Controller
         $zk->disconnect();
         sleep(1);
         $checadas_1 = array_chunk($checadas_1, 50);
-        dd($checadas_1);
+        //dd($checadas_1);
         //$progressBar = $this->output->createProgressBar(count($checadas_1));
         //$this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
 
