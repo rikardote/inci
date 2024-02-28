@@ -60,7 +60,7 @@ class BiometricosController extends Controller
             DB::transaction(function () use ($batch) {
                 //$progressBar->start();
                 foreach($batch as $checada){
-                        $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
+                        $identificador = date("H:i:s").md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
 
                         if(!Checada::where('identificador', $identificador)->exists()){
                             Checada::insert([
