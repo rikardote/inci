@@ -74,14 +74,16 @@ class Biometrico extends Command
                         'created_at' => date('Y-m-d H:i:s')
                     ];
                 }
+
+                $progressBar->advance();
+            }
                 $temp_array = [];
                     foreach ($data as &$v) {
                         if (!isset($temp_array[$v['identificador']]))
                         $temp_array[$v['identificador']] =& $v;
                     }
                 $a = array_values($temp_array);
-            $progressBar->advance();
-            }
+            Checada::insert($a);
 	    $progressBar->finish();
 
         //BIOMETRICO 2 DELEGACION (COMEDOR)
