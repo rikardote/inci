@@ -27,7 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('biometrico:checadas')
-		    ->weekdays()->twiceDaily(10,23);
+		    //->weekdays()->twiceDaily(10,23);
+            ->twiceDaily(10,23);
 
     }
 }
