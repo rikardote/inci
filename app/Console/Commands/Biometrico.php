@@ -76,7 +76,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-/*
+
         //BIOMETRICO 2 DELEGACION (COMEDOR)
         $zk2 = new ZKTeco("192.160.141.38");
         $zk2->connect();
@@ -133,7 +133,7 @@ class Biometrico extends Command
             }
 	    $progressBar->finish();
 
-
+*/
 
 
         //BIOMETRICO 4 SAN FELIPE
@@ -193,7 +193,7 @@ class Biometrico extends Command
 	    $progressBar->finish();
 
          //BIOMETRICO 3 ALGODONES
-*/
+
         $zk3 = new ZKTeco("192.165.232.253");
         $zk3->connect();
         sleep(1);
