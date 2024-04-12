@@ -191,8 +191,37 @@ class Biometrico extends Command
             }
 	    $progressBar->finish();
 
+         //BIOMETRICO 3 ALGODONES
+
+        $zk3 = new ZKTeco("192.165.232.253");
+        $zk3->connect();
+        sleep(1);
+        $checadas_3 =  $zk3->getAttendance();
+        sleep(1);
+        $zk3->setTime(date("Y-m-d H:i:s"));
+        sleep(1);
+        $zk3->disconnect();
+
+        $progressBar = $this->output->createProgressBar(count($checadas_3));
+        $this->info("\n".'Iniciando Guardado en base de datos de checador los algodones...'."\n");
+        $progressBar->start();
+            foreach($checadas_3 as $checada3){
+                $identificador3 = md5($checada3['id'].date("Y-m-d", strtotime($checada3['timestamp'])).date("H:i", strtotime($checada3['timestamp'])));
+
+                if(!Checada::where('identificador', $identificador3)->exists()){
+                    Checada::insert([
+                        'num_empleado' => $checada3['id'],
+                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada3['timestamp'])),
+                        'identificador' => $identificador3,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+            $progressBar->advance();
+            }
+	    $progressBar->finish();
+
         //BIOMETRICO 6 OTAY
-        $zk6 = new ZKTeco("192.168.201.7");
+       /* $zk6 = new ZKTeco("192.168.201.7");
         $zk6->connect();
         sleep(1);
         $checadas_6 =  $zk6->getAttendance();
@@ -220,6 +249,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
+*/
 /*
          //BIOMETRICO SOTANO 5 DICIEMBRE
 
@@ -280,34 +310,7 @@ class Biometrico extends Command
             }
 	    $progressBar->finish();
 
-     //BIOMETRICO 3 ALGODONES
 
-        $zk3 = new ZKTeco("192.165.232.253");
-        $zk3->connect();
-        sleep(1);
-        $checadas_3 =  $zk3->getAttendance();
-        sleep(1);
-        $zk3->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk3->disconnect();
-
-        $progressBar = $this->output->createProgressBar(count($checadas_3));
-        $this->info("\n".'Iniciando Guardado en base de datos de checador los algodones...'."\n");
-        $progressBar->start();
-            foreach($checadas_3 as $checada3){
-                $identificador3 = md5($checada3['id'].date("Y-m-d", strtotime($checada3['timestamp'])).date("H:i", strtotime($checada3['timestamp'])));
-
-                if(!Checada::where('identificador', $identificador3)->exists()){
-                    Checada::insert([
-                        'num_empleado' => $checada3['id'],
-                        'fecha'    => date("Y-m-d H:i:s", strtotime($checada3['timestamp'])),
-                        'identificador' => $identificador3,
-                        'created_at' => date('Y-m-d H:i:s')
-                    ]);
-                }
-            $progressBar->advance();
-            }
-	    $progressBar->finish();
 */
 	$this->info("\n".'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha');
     }
