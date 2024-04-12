@@ -135,6 +135,7 @@ class Biometrico extends Command
 
 
 */
+/*
         //BIOMETRICO 4 SAN FELIPE
         $zk4 = new ZKTeco("192.165.240.253");
         $zk4->connect();
@@ -162,7 +163,7 @@ class Biometrico extends Command
             $progressBar->advance();
             }
 	    $progressBar->finish();
-
+*/
         //BIOMETRICO 5 TECATE
         $zk5 = new ZKTeco("192.165.171.253");
         $zk5->connect();
