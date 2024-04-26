@@ -106,7 +106,7 @@ class Biometrico extends Command
 	    $progressBar->finish();
 
         //BIOMETRICO 9 ALMACEN
-       /* $zk9 = new ZKTeco("192.160.169.230");
+        $zk9 = new ZKTeco("192.160.169.230");
         $zk9->connect();
         sleep(1);
         $checadas_9 =  $zk9->getAttendance();
@@ -133,7 +133,7 @@ class Biometrico extends Command
             }
 	    $progressBar->finish();
 
-*/
+
 
 
         //BIOMETRICO 4 SAN FELIPE
