@@ -105,6 +105,25 @@
             grid-template-columns: 1fr;
         }
     }
+
+    [data-tooltip] {
+        position: relative;
+    }
+
+    [data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 1000;
+        font-size: 12px;
+    }
 </style>
 
 
