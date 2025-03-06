@@ -375,7 +375,7 @@ public function verRegistrosBiometricos(Request $request)
         return redirect()->route('biometrico.registros');
     }
 }
-
+/*
 private function tieneParametrosValidos(Request $request)
 {
     return $request->has('centro');
@@ -400,6 +400,6 @@ private function tieneParametrosValidos(Request $request)
             return $registro;
         });
     }
-
+*/
 
 }
