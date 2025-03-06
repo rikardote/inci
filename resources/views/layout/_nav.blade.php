@@ -19,7 +19,7 @@
                         <li><a href="#">Fecha de Cierre: {{ getFechaCierre() }}</a></li>
                         <li><a href="{{ route('employees.index') }}">Empleados</a></li>
                         <li><a href="{{ route('incidencias.index') }}">Captura de Incidencias</a></li>
-                        <li><a href="{{ route('biometrico.get_checadas') }}"> Biometrico</a></li>
+                        <li><a href="{{ route('biometrico.registros') }}"> Biometrico</a></li>
                     @endif
 
 
@@ -69,7 +69,7 @@
                             <li><a href="{{ route('reports.por_incidencia') }}"></i> REPORTE POR INCIDENCIA</a></li>
                             <li><a href="{{ route('reports.val_aguinaldo') }}"></i> REPORTE ANUAL DE FALTAS Y LICENCIAS
                                     S/G</a></li>
-                            <li><a href="{{ route('biometrico.get_checadas') }}"></i> REPORTE BIOMETRICO</a></li>
+                            <li><a href="{{ route('biometrico.registros') }}"></i> REPORTE BIOMETRICO</a></li>
 
                             @if (Auth::user()->username == '376597')
                                 <li role="separator" class="divider"></li>
