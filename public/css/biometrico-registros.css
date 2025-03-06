@@ -1,218 +1,355 @@
+/* Estilos generales */
+.badge {
+    font-size: 90%;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+/* Color unificado para badges */
+.bg-light-red {
+    background-color: #e74c3c !important; /* Rojo "flat design" */
+    color: #fff;
+}
+
+/* Contenedor de tablas y estructura */
+.tables-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin: 15px 0 20px;
+}
+
+/* Estilos para tablas de empleados */
+.employee-table {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+    height: 100%; /* Para que todas las tablas tengan la misma altura */
+}
+
+.employee-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #f4f6f9;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.employee-info h4 {
+    margin: 0;
+    font-size: 0.95em;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-info h5 {
+    margin: 0;
+    color: #333;
+}
+
+.employee-schedule {
+    background-color: #e9ecef;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    display: inline-block;
+}
+
+/* Estilos de tabla */
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 0.95em; /* Reducir un poco el tamaño de fuente en tablas para que quepa todo */
+}
+
+.table thead th {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #eef2e7;
+}
+
+/* Estados de filas */
+.retardo {
+    background-color: rgba(255, 152, 0, 0.1) !important;
+}
+
+.incidencia {
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.label {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+.label-warning {
+    background-color: #ff9800;
+    color: white;
+}
+
+.label-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.sin-registro {
+    display: inline-block;
+    text-align: center;
+    color: #e74c3c;
+    font-weight: 500;
+}
+
+.omision-entrada {
+    cursor: help;
+    border-bottom: 1px dashed #e67e22;
+}
+
+.omision-salida {
+    cursor: help;
+    border-bottom: 1px dashed #3498db;
+    color: #2980b9;
+    font-weight: 500;
+}
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+    background-color: #f5f5f5;
+}
+
+@media (max-width: 1200px) {
     .tables-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-        margin: 20px 0 40px;
+        grid-template-columns: 1fr;
     }
+}
 
-    .employee-table {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
+@media (max-width: 767px) {
     .employee-name {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 15px;
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: white;
-        border-bottom: 3px solid #3498db;
-    }
-
-    .employee-info h4 {
-        margin: 0;
-        font-size: 0.95em;
-        font-weight: 500;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .employee-schedule {
-        color: #ecf0f1;
-        font-size: 0.9em;
-        padding: 3px 10px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
+        margin-top: 5px;
     }
 
-    .table {
+    /* En móviles, poner una tabla por fila */
+    .col-md-6 {
         width: 100%;
-        margin-bottom: 0;
     }
+}
 
-    .table thead th {
-        background: #f8f9fa;
-        padding: 12px 8px;
-        font-weight: 600;
-        border-bottom: 2px solid #dee2e6;
-    }
+[data-tooltip] {
+    position: relative;
+}
 
-    .table tbody td {
-        padding: 8px;
-        border-bottom: 1px solid #eef2e7;
-    }
+[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 12px;
+}
 
-    .retardo {
-        background-color: rgba(255, 152, 0, 0.1) !important;
-    }
+.panel-body {
+    padding: 25px;
+}
 
-    .incidencia {
-        background-color: rgba(244, 67, 54, 0.1) !important;
-    }
+.form-group {
+    margin-bottom: 20px;
+}
 
-    .label {
-        display: inline-block;
-        padding: 2px 6px;
-        border-radius: 3px;
-        font-size: 0.85em;
-    }
+.form-group label {
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+}
 
-    .label-warning {
-        background-color: #ff9800;
-        color: white;
-    }
+.form-group .select2-container {
+    width: 100% !important;
+}
 
-    .label-danger {
-        background-color: #f44336;
-        color: white;
-    }
+.select2-container .select2-selection--single {
+    height: 38px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
 
-    .sin-registro {
-        color: #e74c3c;
-        font-weight: 500;
-    }
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 36px;
+    padding-left: 12px;
+}
 
-    .omision-entrada {
-        cursor: help;
-        border-bottom: 1px dashed #e67e22;
-    }
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px;
+}
 
-    .omision-salida {
-        cursor: help;
-        border-bottom: 1px dashed #3498db;
-        color: #2980b9;
-        font-weight: 500;
-    }
+.well {
+    background-color: #f9f9f9;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+}
 
-    .clickable-row {
-        cursor: pointer;
-    }
+.panel-primary>.panel-heading {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    padding: 15px 25px;
+}
 
-    .clickable-row:hover {
-        background-color: rgba(52, 152, 219, 0.1) !important;
-    }
+.panel-title {
+    font-size: 18px;
+    font-weight: 500;
+}
 
-    @media (max-width: 1200px) {
-        .tables-container {
-            grid-template-columns: 1fr;
-        }
-    }
+.btn-primary {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-    [data-tooltip] {
-        position: relative;
-    }
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #2c3e50 100%);
+}
 
-    [data-tooltip]:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #333;
-        color: white;
-        padding: 5px 10px;
+/* Ajuste específico para el centro de trabajo */
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+/* Actualizar el margen del último form-group dentro del well */
+.well .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Agregar separación entre secciones del well */
+.well .mb-4 {
+    margin-bottom: 25px;
+}
+
+/* Ajuste para el botón */
+.button-container {
+    padding: 20px 15px 0;
+}
+
+/* Tooltips nativos (usando title) */
+[title] {
+    cursor: help;
+}
+  /* Estilos adicionales */
+    .panel {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        white-space: nowrap;
-        z-index: 1000;
-        font-size: 12px;
-    }
-
-     .panel-body {
-        padding: 25px;
-    }
-
-    .form-group {
         margin-bottom: 20px;
     }
 
-    .form-group label {
-        color: #555;
-        font-weight: 600;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .form-group .select2-container {
-        width: 100% !important;
-    }
-
-    .select2-container .select2-selection--single {
-        height: 38px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 36px;
-        padding-left: 12px;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 36px;
-    }
-
-    .well {
-        background-color: #f9f9f9;
-        border: 1px solid #e3e3e3;
-        border-radius: 4px;
-        padding: 20px;
-        margin: 20px 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+    .panel-primary {
+        border-color: #3c8dbc;
     }
 
     .panel-primary>.panel-heading {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        padding: 15px 25px;
+        background-color: #3c8dbc;
+        border-color: #3c8dbc;
     }
 
-    .panel-title {
-        font-size: 18px;
-        font-weight: 500;
+    .panel-info {
+        border-color: #00c0ef;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-        border: none;
-        padding: 12px 30px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    .panel-info>.panel-heading {
+        background-color: #00c0ef;
+        border-color: #00c0ef;
     }
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #2980b9 0%, #2c3e50 100%);
+    .filtros-container .panel-heading {
+        background-color: #3c8dbc;
+        color: white;
     }
 
-    /* Ajuste específico para el centro de trabajo */
-    .mb-4 {
-        margin-bottom: 2rem;
+    .form-group label {
+        font-size: 14px;
     }
 
-    /* Actualizar el margen del último form-group dentro del well */
-    .well .form-group:last-child {
-        margin-bottom: 0;
+    .input-group-addon {
+        background-color: #f4f6f9;
     }
 
-    /* Agregar separación entre secciones del well */
-    .well .mb-4 {
-        margin-bottom: 25px;
+    .label-indicator {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        border-radius: 3px;
+        vertical-align: middle;
     }
 
-    /* Ajuste para el botón */
-    .button-container {
-        padding: 20px 15px 0;
+    .label-indicator.retardo {
+        background-color: #f39c12;
+    }
+
+    .label-indicator.incidencia {
+        background-color: #dd4b39;
+    }
+
+    .label-indicator.omision {
+        background-color: #00a65a;
+    }
+
+    /* Mejora de tablas */
+    .employee-table {
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .employee-name {
+        background-color: #f4f6f9;
+        border-bottom: 2px solid #e9ecef;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .table thead th {
+        background-color: #f4f6f9;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .employee-schedule {
+        background-color: #e9ecef;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        display: inline-block;
     }
