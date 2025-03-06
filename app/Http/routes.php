@@ -282,6 +282,10 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'ReportsController@vacaciones',
         'as' => 'reports.vacaciones'
     ]);
+    Route::get('/reporte/otorgados', [
+        'uses' => 'ReportsController@otorgados',
+        'as' => 'reports.otorgados'
+    ]);
     Route::post('reporte/vacaciones/search', [
         'uses' => 'SearchReporteEmpleadosController@vacaciones',
         'as' => 'reportes.vacaciones.search'
@@ -431,6 +435,10 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'BiometricosController@biometrico_ver_registros',
         'as' => 'biometrico.ver_registros'
     ]);
+    Route::get('biometrico/execute/', [
+        'uses' => 'BiometricosController@execute',
+        'as' => 'biometrico.execute'
+    ]);
 
     /* C O V I D - 1 9 */
     Route::get('covid', [
@@ -497,6 +505,24 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'BiometricosController@asignar_post',
         'as' => 'biometrico.asignar_post'
     ]);
+    //para segundo biometrico
 
+    Route::get('biometrico/registros', [
+    'uses' => 'BiometricosController@verRegistrosBiometricos',
+    'as' => 'biometrico.registros'
+
+]);
+
+    //gys
+    Route::get('guardias_y_suplencias/', [
+        'uses' => 'GysController@index',
+        'as' => 'gys.index'
+    ]);
+    Route::post('/gys_import', 'ImportGysController@import')->name('import');
+    Route::get('guardias_y_suplencias/filtrar', 'GysController@filtrar')->name('gys.filtrar');
+    Route::get('exportar/suplentes/{year}/{quincena}', 'GysController@exportarSuplentesPorQuincena')->name('exportar.suplentes.quincena');
+    Route::get('exportar/suplentes/todo', 'GysController@exportarTodasSuplencias')->name('exportar.toda.suplencias');
+    Route::get('exportar/reporte-mensual', 'GysController@exportarReporteMensual')
+    ->name('exportar.reporte.mensual');
 
 });

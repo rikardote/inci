@@ -15,7 +15,7 @@
 
         </ul>
     </div>
-    <h3><strong>IMPORTANTE! VALIDAR DOBLEMENTE LAS LICENCIAS SIN GOCE DE SUELDO PERIODO 01/01/2023 AL 31/12/2023</strong>
+    <h3><strong>IMPORTANTE! VALIDAR DOBLEMENTE LAS LICENCIAS SIN GOCE DE SUELDO PERIODO 01/01/2024 AL 31/12/2024</strong>
     </h3>
     <table class="table table-hover table-striped table-condensed" style="width:100%;" id="myTable">
         <thead>

@@ -3,7 +3,7 @@
     * Better Defaults
     **/
     "editor.copyWithSyntaxHighlighting": false,
-    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.ignoreTrimWhitespace": true,
     "editor.emptySelectionClipboard": false,
     "workbench.editor.enablePreview": false,
     "window.newWindowDimensions": "inherit",
