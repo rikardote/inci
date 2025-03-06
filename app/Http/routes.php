@@ -511,7 +511,12 @@ Route::group(['middleware' => 'web'], function () {
     'uses' => 'BiometricosController@verRegistrosBiometricos',
     'as' => 'biometrico.registros'
 
-]);
+    ]);
+    //nueva implementacion de exportar registros a pdf
+    Route::get('biometrico/registros/exportar', [
+        'as' => 'biometrico.exportar',
+        'uses' => 'BiometricosController@exportar'
+    ]);
 
     //gys
     Route::get('guardias_y_suplencias/', [
