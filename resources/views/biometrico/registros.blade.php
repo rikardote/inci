@@ -178,6 +178,18 @@
         $('#btn-exportar').click(function(e) {
         e.preventDefault();
 
+        // Obtener los valores seleccionados del formulario
+        var centro = $('select[name="centro"]').val();
+        var año = $('select[name="año"]').val();
+        var quincena = $('select[name="quincena"]').val();
+
+        // Construir la URL para la exportación
+        var url = '{{ route('biometrico.exportar') }}' +
+        '?centro=' + centro +
+        '&año=' + año +
+        '&quincena=' + quincena;
+
+        // Redirigir a la URL de exportación
         window.location.href = url;
         });
     });
