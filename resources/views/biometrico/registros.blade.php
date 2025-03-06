@@ -95,8 +95,7 @@
 @endsection
 
 @section('css')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('plugins/select2/select2.min.css') }}">
 <style>
     .panel-body {
         padding: 25px;
@@ -187,7 +186,7 @@
 @endsection
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('.select2').select2({

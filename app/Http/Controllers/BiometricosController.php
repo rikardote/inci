@@ -269,13 +269,13 @@ class BiometricosController extends Controller
             return redirect('/dashboard')->with($aviso);
 
     }
-    public function verRegistrosBiometricos(Request $request)
+public function verRegistrosBiometricos(Request $request)
 {
     try {
         // Obtener solo los centros asignados al usuario
         $centrosUsuario = \Auth::user()->centros->pluck('id')->toArray();
         $centros = Deparment::whereIn('id', $centrosUsuario)
-                           ->pluck('description', 'id');
+                         ->pluck('description', 'id');
 
         // Valores por defecto
         $año_seleccionado = $request->get('año', date('Y'));
@@ -332,27 +332,41 @@ class BiometricosController extends Controller
 
         // Obtener registros si hay centro seleccionado
         $registros = collect(); // Inicializar como Collection vacía
+        $empleados = collect(); // Inicializar la variable empleados
+        $incidenciasSinColor = ['7','17','40','41','42','46','49','51','53','54','55','60','61','62','63','77','94','901'];
+
         if ($centro_seleccionado) {
             if (!in_array($centro_seleccionado, $centrosUsuario)) {
                 Flash::warning('No tiene acceso a este centro de trabajo');
-                return redirect()->route('biometrico.registros');
+                return redirect()->route('biometrico.registros', [
+                    'año' => $año_seleccionado,
+                    'quincena' => $quincena_seleccionada
+                    // No incluimos centro para evitar el bucle de redirección
+                ]);
             }
 
             $checada = new Checada();
             $resultados = $checada->obtenerRegistros($centro_seleccionado, $fecha_inicio, $fecha_fin);
-            $registros = collect($resultados); // Convertir explícitamente a Collection
+            $registros = $resultados instanceof \Illuminate\Support\Collection ? $resultados : collect($resultados);
+
+            // Agrupar por número de empleado y ordenar
+            $empleados = $registros->groupBy('num_empleado')->sortBy(function($grupo) {
+                return intval($grupo->first()->num_empleado);
+            });
         }
 
         return view('biometrico.registros', compact(
             'centros',
             'registros',
+            'empleados', // Añadimos la variable procesada
+            'incidenciasSinColor', // Añadimos el array de incidencias sin color
             'años',
             'quincenas',
             'año_seleccionado',
             'quincena_seleccionada',
             'centro_seleccionado',
             'fecha_inicio',
-            'fecha_fin'
+            'fecha_fin',
         ));
 
     } catch (\Exception $e) {

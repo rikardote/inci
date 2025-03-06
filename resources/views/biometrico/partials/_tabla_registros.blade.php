@@ -107,14 +107,7 @@
     }
 </style>
 
-@php
-// Asegurarnos de que $registros sea una Collection
-$registros = $registros instanceof \Illuminate\Support\Collection ? $registros : collect($registros);
-$empleados = $registros->groupBy('num_empleado')->sortBy(function($grupo) {
-return intval($grupo->first()->num_empleado);
-});
-$incidenciasSinColor = ['7','17','40','41','42','46','49','51','53','54','55','60','61','62','63','77','94','901'];
-@endphp
+
 
 <div class="tables-container">
     @foreach($empleados as $num_empleado => $registrosEmpleado)
