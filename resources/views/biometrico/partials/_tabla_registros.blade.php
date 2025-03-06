@@ -54,7 +54,7 @@
 
     .table tbody td {
         padding: 8px;
-        border-bottom: 1px solid #eef2f7;
+        border-bottom: 1px solid #eef2e7;
     }
 
     .retardo {
@@ -90,6 +90,13 @@
     .omision-entrada {
         cursor: help;
         border-bottom: 1px dashed #e67e22;
+    }
+
+    .omision-salida {
+        cursor: help;
+        border-bottom: 1px dashed #3498db;
+        color: #2980b9;
+        font-weight: 500;
     }
 
     .clickable-row {
@@ -160,26 +167,99 @@
                             @php
                             $horaLimite = strtotime("+4 hours",
                             strtotime($registrosEmpleado->first()->horario_entrada));
+                            $horaMitadJornada = strtotime("+5 hours",
+                            strtotime($registrosEmpleado->first()->horario_entrada));
                             $horaEntrada = $registro->hora_entrada ? strtotime($registro->hora_entrada) : null;
-                            $tieneAlgunRegistro = $registro->hora_entrada || $registro->hora_salida;
+                            $horaSalida = $registro->hora_salida ? strtotime($registro->hora_salida) : null;
+                            $tieneUnaSolaChecada = $registro->hora_entrada && $registro->hora_entrada ===
+                            $registro->hora_salida;
+
+                            // Validación de tiempo mínimo entre entrada y salida (3 horas)
+                            $tiempoMinimoJornada = 3 * 60 * 60; // 3 horas en segundos
+                            $esJornadaValida = $horaEntrada && $horaSalida && ($horaSalida - $horaEntrada) >=
+                            $tiempoMinimoJornada;
                             @endphp
 
-                            @if($registro->hora_entrada)
-                            @if($horaEntrada <= $horaLimite) {{ substr($registro->hora_entrada, 0, 5) }}
-                                @if($registro->retardo && $registro->incidencia != '7')
-                                <span class="label label-warning">R</span>
-                                @endif
-                                @else
-                                <span class="sin-registro omision-entrada"
-                                    data-tooltip="Checada: {{ substr($registro->hora_entrada, 0, 5) }}">
-                                    Omisión de entrada
-                                </span>
-                                @endif
-                                @endif
+                            @php
+                            $horarioEntrada = strtotime($registrosEmpleado->first()->horario_entrada);
+                            $horarioSalida = strtotime($registrosEmpleado->first()->horario_salida);
+                            $medioDia = ($horarioEntrada + $horarioSalida) / 2; // punto medio entre entrada y salida
+
+                            $horaChecada = $registro->hora_entrada ? strtotime($registro->hora_entrada) : null;
+                            $horaLimite = strtotime("+4 hours", $horarioEntrada);
+                            $tieneUnaSolaChecada = $registro->hora_entrada && $registro->hora_entrada ===
+                            $registro->hora_salida;
+
+                            // Determinar si la checada única está más cerca del horario de salida que de entrada
+                            $esMasCercanaASalida = $horaChecada && $tieneUnaSolaChecada && ($horaChecada > $medioDia);
+                            @endphp
+
+                            @if($tieneUnaSolaChecada && $esMasCercanaASalida)
+                            <span class="sin-registro omision-entrada" data-tooltip="Sin registro de entrada">
+                                Omisión de entrada
+                            </span>
+                            @elseif($registro->hora_entrada)
+                            {{ substr($registro->hora_entrada, 0, 5) }}
+                            @if($registro->retardo && $registro->incidencia != '7' && !($tieneUnaSolaChecada &&
+                            $esMasCercanaASalida))
+                            <span class="label label-warning">R</span>
+                            @endif
+                            @endif
                         </td>
                         <td>
-                            @if($registro->hora_salida)
+                            @php
+                            // Variables existentes
+                            $horaLimite = strtotime("+4 hours",
+                            strtotime($registrosEmpleado->first()->horario_entrada));
+                            $horaMitadJornada = strtotime("+5 hours",
+                            strtotime($registrosEmpleado->first()->horario_entrada));
+                            $horaEntrada = $registro->hora_entrada ? strtotime($registro->hora_entrada) : null;
+                            $horaSalida = $registro->hora_salida ? strtotime($registro->hora_salida) : null;
+                            $tieneUnaSolaChecada = $registro->hora_entrada && $registro->hora_entrada ===
+                            $registro->hora_salida;
+                            $tiempoMinimoJornada = 3 * 60 * 60;
+                            $esJornadaValida = $horaEntrada && $horaSalida && ($horaSalida - $horaEntrada) >=
+                            $tiempoMinimoJornada;
+
+                            // Nuevas variables para verificar si debemos mostrar omisión de salida
+                            $fechaRegistro = $registro->fecha;
+                            $fechaActual = date('Y-m-d');
+                            $esHoy = ($fechaRegistro == $fechaActual);
+                            $horaSalidaProgramada = strtotime($registrosEmpleado->first()->horario_salida);
+                            $horaActual = strtotime(date('H:i:s'));
+                            $jornadalaboralTerminada = !$esHoy || ($esHoy && $horaActual > $horaSalidaProgramada);
+                            @endphp
+
+                            @php
+                            // Variables existentes
+                            $tiempoMinimoJornada = 3 * 60 * 60;
+                            $esJornadaValida = $horaEntrada && $horaSalida && ($horaSalida - $horaEntrada) >=
+                            $tiempoMinimoJornada;
+
+                            // Variables para jornada laboral
+                            $fechaRegistro = $registro->fecha;
+                            $fechaActual = date('Y-m-d');
+                            $esHoy = ($fechaRegistro == $fechaActual);
+                            $jornadalaboralTerminada = !$esHoy || ($esHoy && $horaActual > $horarioSalida);
+                            @endphp
+
+                            @if($tieneUnaSolaChecada && $esMasCercanaASalida)
                             {{ substr($registro->hora_salida, 0, 5) }}
+                            @elseif($registro->hora_salida && !$tieneUnaSolaChecada && $esJornadaValida)
+                            {{ substr($registro->hora_salida, 0, 5) }}
+                            @elseif($registro->hora_salida && !$tieneUnaSolaChecada && !$esJornadaValida)
+                            <span class="sin-registro omision-salida"
+                                data-tooltip="Posible checada duplicada: {{ substr($registro->hora_salida, 0, 5) }}">
+                                Omisión de salida
+                            </span>
+                            @elseif($tieneUnaSolaChecada && !$esMasCercanaASalida && $jornadalaboralTerminada)
+                            <span class="sin-registro omision-salida" data-tooltip="Sin registro de salida">
+                                Omisión de salida
+                            </span>
+                            @elseif($registro->hora_entrada && !$tieneUnaSolaChecada && $jornadalaboralTerminada)
+                            <span class="sin-registro omision-salida" data-tooltip="Sin registro de salida">
+                                Omisión de salida
+                            </span>
                             @endif
                         </td>
                         <td>
