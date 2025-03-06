@@ -4,28 +4,8 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/select2/select2.min.css') }}">
-<style>
-    .employee-name {
-        padding: 12px 15px;
-        background: #f4f6f9;
-        border-bottom: 1px solid #dee2e6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+<link rel="stylesheet" href="{{ asset('css/biometrico-registros.css') }}">
 
-    .employee-info h5 {
-        margin: 0;
-        color: #333;
-    }
-
-    .employee-schedule {
-        background-color: #e9ecef;
-        padding: 3px 10px;
-        border-radius: 15px;
-        font-size: 0.9em;
-    }
-</style>
 
 @endsection
 
@@ -194,17 +174,11 @@
             }
         });
 
-        // Impresión
-        $('#btn-imprimir').click(function(e) {
-            e.preventDefault();
-            window.print();
-        });
-
         // Exportar a Excel (requiere implementación adicional en el controlador)
         $('#btn-exportar').click(function(e) {
-            e.preventDefault();
+        e.preventDefault();
 
-            window.location.href = url;
+        window.location.href = url;
         });
     });
 </script>
