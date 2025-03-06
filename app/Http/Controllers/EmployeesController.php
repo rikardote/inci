@@ -21,7 +21,7 @@ use Carbon\Carbon;
 
 class EmployeesController extends Controller
 {
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -49,7 +49,7 @@ class EmployeesController extends Controller
      */
     public function create(Employe $employe)
     {
-        
+
         //$deparments = Deparment::all()->pluck('deparment', 'id')->toArray();
         $deparments = \Auth::user()->centros->pluck('deparment', 'id')->toArray();
         //$deparments = Deparment::whereIn('deparments.id', $dptos)->get();
@@ -61,7 +61,7 @@ class EmployeesController extends Controller
         asort($puestos);
         asort($horarios);
         asort($jornadas);
-        
+
         return view('admin.employees.createorupdate')
         ->with('deparments', $deparments)
         ->with('employe', $employe)
@@ -98,7 +98,7 @@ class EmployeesController extends Controller
      */
     public function show($num_empleado)
     {
-       
+
     }
 
     /**
@@ -145,7 +145,7 @@ class EmployeesController extends Controller
         $employe->estancia = $request->has('estancia') ? 1:0;
         $employe->lactancia = $request->has('lactancia') ? 1:0;
         $employe->comisionado = $request->has('comisionado') ? 1:0;
-        
+
         if ($employe->lactancia) {
             $employe->lactancia_inicio = fecha_ymd($request->lactancia_inicio);
             $employe->lactancia_fin = fecha_ymd($request->lactancia_fin);
@@ -202,7 +202,7 @@ class EmployeesController extends Controller
         foreach ($data as $v) {
             $return_array[] = array('value'=>$v->num_empleado,'label' => $v->father_lastname.' '.$v->mother_lastname.' '.$v->name);
         }
-        
+
         return Response::json($return_array);
     }
     public function autocomplete_medicos()
@@ -221,7 +221,8 @@ class EmployeesController extends Controller
         foreach ($data as $v) {
             $return_array[] = array('value'=>$v->id,'label' => $v->father_lastname.' '.$v->mother_lastname.' '.$v->name);
         }
-        
+
         return Response::json($return_array);
     }
+
 }

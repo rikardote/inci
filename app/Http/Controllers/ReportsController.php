@@ -16,6 +16,7 @@ use App\Horario;
 use \mPDF;
 use Carbon\Carbon;
 use Laracasts\Flash\Flash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
@@ -543,8 +544,8 @@ class ReportsController extends Controller
     return view('reportes.inasistencias.show')->with('incidencias', $incidencias);
   }
   public function val_aguinaldo(Request $request){
-    $fecha_inicial = "2023-01-01";
-    $fecha_final = "2023-12-31";
+    $fecha_inicial = "2024-01-01";
+    $fecha_final = "2024-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
 
 
@@ -553,8 +554,8 @@ class ReportsController extends Controller
     return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
   }
   public function val_aguinaldo_pdf(Request $request){
-    $fecha_inicial = "2023-01-01";
-    $fecha_final = "2023-12-31";
+    $fecha_inicial = "2024-01-01";
+    $fecha_final = "2024-12-31";
     $dptos = \Auth::user()->centros->pluck('id')->toArray();
     $incidencias = Incidencia::valAguinaldo($fecha_inicial, $fecha_final, $dptos);
     $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
@@ -624,6 +625,22 @@ class ReportsController extends Controller
           $mpdf->Output($pdfFilePath, "D");
       }
    }
+   public function otorgados(Request $request){
+
+
+    //$dpto = Deparment::find($request->deparment_id);
+    $fecha_inicial = "2024-01-01";
+    $fecha_final = "2024-09-30";
+    //$fecha_inicial = fecha_ymd($request->fecha_inicio);
+    //$fecha_final = fecha_ymd($request->fecha_final);
+    $incidencias = Incidencia::getPorOtorgado($request->code, $fecha_inicial, $fecha_final);
+
+
+   return view('reportes.otorgado_incidencia_show')->with('incidencias',$incidencias)
+                                                     ->with('fecha_inicial', $fecha_inicial)
+                                                     ->with('fecha_final', $fecha_final);
+
+  }
 
 
 

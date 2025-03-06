@@ -38,65 +38,51 @@ class BiometricosController extends Controller
             return view('home')->with('qna', $qna);
         }
         else {
-            //\Artisan::call('biometrico:checadas');
-        date_default_timezone_set('America/Tijuana');
-        //BIOMETRICO 1 DELEGACION
-        $zk = new ZKTeco("192.160.141.37");
-        $zk->connect();
-        sleep(1);
-        $checadas_1 =  $zk->getAttendance();
-        sleep(1);
-        $zk->setTime(date("Y-m-d H:i:s"));
-        sleep(1);
-        $zk->disconnect();
-        sleep(1);
-        //$checadas_1 = array_chunk($checadas_1, 50);
-        //dd($checadas_1);
-        //$progressBar = $this->output->createProgressBar(count($checadas_1));
-        //$this->info('Iniciando Guardado en base de datos de checador principal delegacion...'."\n");
-
-        //foreach ($checadas_1 as $batch) {
-
-          //  DB::transaction(function () use ($batch) {
-                //$progressBar->start();
-                $data=[];
-                foreach($checadas_1 as $checada){
-                        $identificador = md5($checada['id'].date("Y-m-d", strtotime($checada['timestamp'])).date("H:i", strtotime($checada['timestamp'])));
-
-                        if(!Checada::where('identificador', $identificador)->exists()){
-                            $data[] = [
-                                'num_empleado' => $checada['id'],
-                                'fecha'    => date("Y-m-d H:i:s", strtotime($checada['timestamp'])),
-                                'identificador' => $identificador,
-                                'created_at' => date('Y-m-d H:i:s')
-                            ];
-
-                        }
-
-                            $temp_array = [];
-                            foreach ($data as &$v) {
-                                if (!isset($temp_array[$v['identificador']]))
-                                $temp_array[$v['identificador']] =& $v;
-                            }
-                            $a = array_values($temp_array);
-
-                }
-
-                //Checada::insertOrUpdate($a);
-                Checada::insert($a);
-                    //$progressBar->advance();
-            //    }
-            //});
-        //}
-	    //$progressBar->finish();
-
-        $aviso = 'Se descargaron y grabaron todas las checadas exitosamente, y se sincronizo la hora y fecha';
-
-            Flash::success($aviso);
-
-            return redirect('/dashboard')->with($aviso);
+            return view('biometrico.index');
         }
 
+    }
+    public function execute()
+    {
+            // Obtener la ruta base de Laravel
+        $basePath = base_path();
+
+        // Ejecutar comando con ruta completa
+        $descriptorspec = array(
+            0 => array("pipe", "r"),  // stdin
+            1 => array("pipe", "w"),  // stdout
+            2 => array("pipe", "w")   // stderr
+        );
+
+        $command = 'php "' . $basePath . '/artisan" biometrico:checadas';
+        $process = proc_open($command, $descriptorspec, $pipes);
+
+        if (is_resource($process)) {
+            // Configurar cabeceras para SSE
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+            header('Connection: keep-alive');
+            header('X-Accel-Buffering: no');
+
+            // Leer la salida
+            while (!feof($pipes[1])) {
+                $output = fgets($pipes[1]);
+                if ($output) {
+                    echo "data: " . json_encode(['output' => $output]) . "\n\n";
+                    ob_flush();
+                    flush();
+                }
+                usleep(100000); // 0.1 segundos
+            }
+
+            // Cerrar los pipes y el proceso
+            fclose($pipes[0]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            proc_close($process);
+        }
+
+        exit();
     }
     public function get_checadas(){
         $dptos = \Auth::user()->centros->pluck('id')->toArray();
@@ -107,7 +93,7 @@ class BiometricosController extends Controller
         ];
         //$years = ['2024' => '2024','2023' => '2023','2022' => '2022','2021' => '2021','2020' => '2020','2019' => '2019','2018' => '2018'];
         $years = array();
-        for($i = 2023; $i<= date("Y"); $i++) {
+        for($i = 2024; $i<= date("Y"); $i++) {
             $years["$i"] = $i;
         }
         $title = "Reporte Biometrico";
@@ -283,4 +269,123 @@ class BiometricosController extends Controller
             return redirect('/dashboard')->with($aviso);
 
     }
+    public function verRegistrosBiometricos(Request $request)
+{
+    try {
+        // Obtener solo los centros asignados al usuario
+        $centrosUsuario = \Auth::user()->centros->pluck('id')->toArray();
+        $centros = Deparment::whereIn('id', $centrosUsuario)
+                           ->pluck('description', 'id');
+
+        // Valores por defecto
+        $año_seleccionado = $request->get('año', date('Y'));
+        $quincena_actual = (date('d') <= 15) ? ((date('n') * 2) - 1) : (date('n') * 2);
+        $quincena_seleccionada = $request->get('quincena', $quincena_actual);
+        $centro_seleccionado = $request->get('centro');
+
+        // Años disponibles
+        $años = range(2024, (int)date('Y'));
+
+        // Definir las 24 quincenas del año
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+        $mesesEspanol = [
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
+        ];
+
+        $quincenas = [];
+        for ($mes = 1; $mes <= 12; $mes++) {
+            $ultimoDia = date('t', mktime(0, 0, 0, $mes, 1));
+
+            $quincenas[] = [
+                'value' => ($mes * 2 - 1),
+                'label' => "1ra Quincena de {$mesesEspanol[$mes]} (1-15)"
+            ];
+
+            $quincenas[] = [
+                'value' => ($mes * 2),
+                'label' => "2da Quincena de {$mesesEspanol[$mes]} (16-{$ultimoDia})"
+            ];
+        }
+
+        // Calcular fechas basado en la quincena
+        $mes = ceil($quincena_seleccionada / 2);
+        $es_primera_quincena = ($quincena_seleccionada % 2) != 0;
+
+        $fecha_inicio = $es_primera_quincena
+            ? "{$año_seleccionado}-" . str_pad($mes, 2, '0', STR_PAD_LEFT) . "-01"
+            : "{$año_seleccionado}-" . str_pad($mes, 2, '0', STR_PAD_LEFT) . "-16";
+
+        $fecha_fin = $es_primera_quincena
+            ? "{$año_seleccionado}-" . str_pad($mes, 2, '0', STR_PAD_LEFT) . "-15"
+            : "{$año_seleccionado}-" . str_pad($mes, 2, '0', STR_PAD_LEFT) . "-" . date('t', strtotime("{$año_seleccionado}-{$mes}-01"));
+
+        // Obtener registros si hay centro seleccionado
+        $registros = collect(); // Inicializar como Collection vacía
+        if ($centro_seleccionado) {
+            if (!in_array($centro_seleccionado, $centrosUsuario)) {
+                Flash::warning('No tiene acceso a este centro de trabajo');
+                return redirect()->route('biometrico.registros');
+            }
+
+            $checada = new Checada();
+            $resultados = $checada->obtenerRegistros($centro_seleccionado, $fecha_inicio, $fecha_fin);
+            $registros = collect($resultados); // Convertir explícitamente a Collection
+        }
+
+        return view('biometrico.registros', compact(
+            'centros',
+            'registros',
+            'años',
+            'quincenas',
+            'año_seleccionado',
+            'quincena_seleccionada',
+            'centro_seleccionado',
+            'fecha_inicio',
+            'fecha_fin'
+        ));
+
+    } catch (\Exception $e) {
+        \Log::error("Error en verRegistrosBiometricos: " . $e->getMessage());
+        Flash::error('Error al cargar los registros: ' . $e->getMessage());
+        return redirect()->route('biometrico.registros');
+    }
+}
+
+private function tieneParametrosValidos(Request $request)
+{
+    return $request->has('centro');
+}
+
+        private function obtenerRegistros(Request $request)
+    {
+        $registros = Checada::obtenerRegistros(
+            $request->input('centro'),
+            $request->input('fecha_inicio'),
+            $request->input('fecha_fin')
+        );
+
+        return collect($registros)->map(function($registro) {
+            $incidencia = Checada::buscarIncidencias(
+                $registro->num_empleado,
+                $registro->fecha
+            );
+
+            $registro->tiene_incidencia = !empty($incidencia);
+            $registro->tipo_incidencia = !empty($incidencia) ? $incidencia[0]->tipo : null;
+            return $registro;
+        });
+    }
+
+
 }

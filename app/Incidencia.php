@@ -828,4 +828,23 @@ class Incidencia extends Model
 
         return $incidencias;
   }
+
+  public static function getPorOtorgado($code, $fecha_inicio, $fecha_final)
+    {
+      //$conteo_total = DB::raw('SUM(total_dias) as total');
+      $incidencias = Incidencia::getQuery()
+                 ->select('*','deparments.code as depa_code','employees.id as empleado_id','incidencias.id as inc_id','jornadas.id as jornada_id','puestos.puesto as puesto_p')
+                 ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
+                 ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
+                 ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+                 ->leftJoin('puestos', 'puestos.id', '=', 'employees.puesto_id')
+                 ->leftJoin('jornadas', 'jornadas.id', '=', 'employees.jornada_id')
+                 ->whereNull('incidencias.deleted_at')
+                 //->where('deparments.id', '=', $dpto)
+                 ->where('codigos_de_incidencias.code', '901')
+                 ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
+                 ->orderBy('num_empleado')
+                 ->get();
+     return $incidencias;
+    }
 }

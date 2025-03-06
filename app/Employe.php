@@ -34,9 +34,9 @@ class Employe extends Model
     {
         return $this->hasMany('App\Jornada');
     }
-    public function checada()
+    public function checadas()
     {
-        return $this->hasMany('App\Checada');
+        return $this->hasMany('App\Checada', 'num_empleado', 'num_empleado');
     }
     public function getfullnameAttribute($value)
     {
