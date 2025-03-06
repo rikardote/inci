@@ -17,11 +17,11 @@ class Incidencia extends Model
 
     public function employee()
     {
-      return $this->belongsTo('App\employe');
+      return $this->belongsTo('App\Employe');
     }
     public function qna()
     {
-      return $this->belongsTo('App\qna');
+      return $this->belongsTo('App\Qna');
     }
     public function codigodeincidencia()
     {
@@ -29,7 +29,7 @@ class Incidencia extends Model
     }
      public function periodo()
     {
-      return $this->belongsTo('App\periodo');
+      return $this->belongsTo('App\Periodo');
     }
     public function setPeriodoIdAttribute($value)
     {
