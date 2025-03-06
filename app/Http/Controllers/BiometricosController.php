@@ -366,7 +366,7 @@ public function verRegistrosBiometricos(Request $request)
             'quincena_seleccionada',
             'centro_seleccionado',
             'fecha_inicio',
-            'fecha_fin',
+            'fecha_fin'
         ));
 
     } catch (\Exception $e) {
