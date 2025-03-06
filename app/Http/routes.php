@@ -403,6 +403,10 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'IncidenciasController@logs',
         'as' => 'logs.index'
     ]);
+    Route::get('/logs/incidencias', [
+    'as' => 'api.logs.incidencias',
+    'uses' => 'LogsController@getIncidencias'
+]);
 
     /* B IO M E T R I C O  */
     Route::get('biometrico', [

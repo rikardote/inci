@@ -91,10 +91,7 @@
                         </button>
                         @if(isset($registros) && count($registros) > 0)
                         <a href="#" id="btn-exportar" class="btn btn-success">
-                            <i class="fa fa-file-excel-o"></i> Exportar a Excel
-                        </a>
-                        <a href="#" id="btn-imprimir" class="btn btn-info">
-                            <i class="fa fa-print"></i> Imprimir
+                            <i class="fa fa-file-pdf-o"></i> Exportar a PDF
                         </a>
                         @endif
                     </div>
