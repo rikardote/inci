@@ -3,6 +3,9 @@
 @section('title', 'Panel de Control')
 
 @section('css')
+<!-- Añade esto al inicio de la sección CSS existente -->
+<link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+<!-- Mantén el resto del CSS existente -->
 <style>
     .dashboard-container {
         padding: 20px 0;
@@ -165,6 +168,85 @@
         border-bottom: 3px solid #dd4b39;
     }
 
+    /* Widget de mantenimiento */
+    .maintenance-widget {
+        position: relative;
+        border-left: 4px solid #dd4b39;
+    }
+
+    .maintenance-widget .stat-icon {
+        color: #dd4b39;
+    }
+
+    .maintenance-toggle {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    /* Interruptor de mantenimiento */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #dd4b39;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #dd4b39;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .text-success {
+        color: #00a65a;
+    }
+
+    .text-danger {
+        color: #dd4b39;
+    }
+
     /* Responsive */
     @media (max-width: 992px) {
         .module-card {
@@ -181,6 +263,7 @@
 @endsection
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="dashboard-container">
     <div class="container">
         <!-- Widget de estadísticas -->
@@ -190,7 +273,7 @@
                     <div class="stat-icon">
                         <i class="fa fa-users"></i>
                     </div>
-                    <div class="stat-value">{{ \App\Employe::count() }}</div>
+                    <div class="stat-value">{{ \App\Employe::where('deparment_id', '!=', 33)->count() }}</div>
                     <div class="stat-label">Empleados</div>
                 </div>
             </div>
@@ -217,6 +300,35 @@
                     </div>
                     <div class="stat-value">{{ getFechaCierre() }}</div>
                     <div class="stat-label">Fecha de Cierre</div>
+                </div>
+            </div>
+            <!-- Widget de mantenimiento - AÑADIDO DENTRO DE LA FILA -->
+            <div class="col-md-4 col-sm-6">
+                <div class="stat-card maintenance-widget">
+                    <div class="stat-icon">
+                        <i class="fa fa-wrench"></i>
+                    </div>
+                    <div class="stat-value">
+                        @php
+                        $mantenimiento = \App\Configuration::first();
+                        $estadoActual = $mantenimiento && $mantenimiento->state ? 'Activo' : 'Apagado';
+                        $colorEstado = $mantenimiento && $mantenimiento->state ? 'text-danger' : 'text-success';
+                        @endphp
+                        <span class="{{ $colorEstado }}">{{ $estadoActual }}</span>
+                    </div>
+                    <div class="stat-label">Modo Mantenimiento</div>
+
+                    <div class="maintenance-toggle">
+                        <label class="switch">
+                            @if($mantenimiento)
+                            <input type="checkbox" id="toggle-maintenance" {{ $mantenimiento->state ? 'checked' : '' }}>
+                            <span class="slider round"></span>
+                            @else
+                            <input type="checkbox" id="toggle-maintenance">
+                            <span class="slider round"></span>
+                            @endif
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -366,4 +478,77 @@
 </div>
 
 @include('modals.form-modal', ['title' => 'Agregar Fecha de cierre'])
+@endsection
+
+@section('js')
+<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+<script>
+    // Configuración de toastr
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "1000", // Reducido para que la recarga sea más rápida
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).ready(function() {
+        // Toggle para el modo mantenimiento - sin confirmación
+        $('#toggle-maintenance').change(function() {
+            // Mostrar indicador de carga
+            var $statValue = $(this).closest('.stat-card').find('.stat-value span');
+            $statValue.html('<i class="fa fa-spinner fa-spin"></i>');
+
+            // Realizar petición AJAX
+            $.ajax({
+                url: '{{ route("mantenimiento.toggle") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if(response.success) {
+                        // Actualizar la interfaz
+                        $statValue.removeClass('text-success text-danger')
+                                .addClass(response.state ? 'text-danger' : 'text-success')
+                                .text(response.state ? 'Activo' : 'Inactivo');
+
+                        // Mostrar notificación y luego recargar
+                        toastr.success('El modo mantenimiento ha sido ' +
+                            (response.state ? 'activado' : 'desactivado') +
+                            ' correctamente.');
+
+                        // Recargar la página después de un breve retraso
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        // Error en la operación
+                        toastr.error('Ocurrió un error al cambiar el estado: ' + (response.message || 'Error desconocido'));
+                        // Revertir el interruptor
+                        $('#toggle-maintenance').prop('checked', !$('#toggle-maintenance').prop('checked'));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error AJAX:", xhr.responseText);
+                    toastr.error('Error de conexión. Inténtelo de nuevo.');
+                    // Revertir el interruptor
+                    $('#toggle-maintenance').prop('checked', !$('#toggle-maintenance').prop('checked'));
+                }
+            });
+        });
+    });
+</script>
 @endsection

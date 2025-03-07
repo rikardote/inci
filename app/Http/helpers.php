@@ -324,9 +324,36 @@ function array_split_value($array)
 function getFechaCierre(){
     $qna = Qna::where('active', '=', 1)->first();
     if ($qna->cierre) {
-        return fecha_dmy($qna->cierre);
-    }
+        $dt = Carbon::parse($qna->cierre);
+        $dia = $dt->day;
+        $año = $dt->year;
 
+        // Obtener el mes en texto en inglés y luego traducirlo
+        $mes = $dt->format('F'); // Usar format('F') en lugar de monthName
+
+        // Traducción de meses a español
+        $meses_es = [
+            'January' => 'enero',
+            'February' => 'febrero',
+            'March' => 'marzo',
+            'April' => 'abril',
+            'May' => 'mayo',
+            'June' => 'junio',
+            'July' => 'julio',
+            'August' => 'agosto',
+            'September' => 'septiembre',
+            'October' => 'octubre',
+            'November' => 'noviembre',
+            'December' => 'diciembre'
+        ];
+
+        if (isset($meses_es[$mes])) {
+            $mes = $meses_es[$mes];
+        }
+
+        return "$dia de $mes de $año";
+    }
+    return null;
 }
 
 function checkWeekdays($fecha_inicio, $fecha_final){
@@ -616,5 +643,6 @@ function getDia($date) {
       case 7:
         return 'DOM '.$dia;
     }
+
 
 }
