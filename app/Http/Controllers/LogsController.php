@@ -9,17 +9,19 @@ use Illuminate\Http\Request;
 
 class LogsController extends Controller
 {
-    public function getIncidencias()
+    public function getIncidencias(Request $request)
     {
-            $incidencias = Incidencia::withTrashed()
-            ->with([
+        $limit = $request->input('limit', 100);  // Por defecto 100 registros
+        $page = $request->input('page', 1);      // Por defecto página 1
+
+        $query = Incidencia::with([
             'employee' => function($query) {
                 $query->select('id', 'deparment_id', 'num_empleado', 'name', 'father_lastname', 'mother_lastname');
             },
             'employee.deparment' => function($query) {
                 $query->select('id', 'code');
             },
-            'codigoDeIncidencia' => function($query) {
+            'codigodeincidencia' => function($query) {
                 $query->select('id', 'code');
             },
             'periodo' => function($query) {
@@ -37,9 +39,10 @@ class LogsController extends Controller
             'incidencias.created_at',
             'incidencias.deleted_at'
         ])
-        ->orderBy('created_at', 'desc')
-        ->limit(100)
-        ->get();
+        ->orderBy('created_at', 'desc');
+
+        // Usar paginación de Laravel
+        $incidencias = $query->paginate($limit);
 
         return response()->json($incidencias);
     }
