@@ -475,6 +475,7 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'MantenimientoController@state',
         'as' => 'mantenimiento.state'
     ]);
+    Route::post('/mantenimiento/toggle', 'MantenimientoController@toggle')->name('mantenimiento.toggle');
 
         /* P R I M A  D O M I N I C A L */
         Route::get('/reporte/prima_dominical', [
