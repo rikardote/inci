@@ -98,7 +98,7 @@ class Checada extends Model
                 WHERE DAYOFWEEK(fecha) NOT IN (1, 7);
             ");
 
-            // Crear tabla de empleados
+            // Crear tabla de empleados RELACIONANDO CON JORNADAS
             $connection->unprepared("
                 CREATE TEMPORARY TABLE empleados_temp AS
                 SELECT
@@ -110,14 +110,19 @@ class Checada extends Model
                     h.horario,
                     SUBSTRING_INDEX(h.horario, ' A ', 1) as horario_entrada,
                     SUBSTRING_INDEX(h.horario, ' A ', -1) as horario_salida,
-                    e.id as employee_id
+                    e.id as employee_id,
+                    -- Campo calculado para vespertinos
+                    CASE
+                        WHEN TIME(SUBSTRING_INDEX(h.horario, ' A ', 1)) >= '12:00:00' THEN 1
+                        ELSE 0
+                    END as es_jornada_vespertina
                 FROM sistemas.employees e
                 INNER JOIN sistemas.horarios h ON h.id = e.horario_id
                 WHERE e.deparment_id = " . (int)$centro . "
                 AND e.deleted_at IS NULL
             ");
 
-            // Consulta principal
+            // Modificar consulta principal para incluir información de jornada
             $resultados = $connection->select("
                 SELECT
                     e.num_empleado,
@@ -127,6 +132,7 @@ class Checada extends Model
                     e.deparment_id,
                     e.horario_entrada,
                     e.horario_salida,
+                    e.es_jornada_vespertina,
                     f.fecha,
                     MIN(c.fecha) as primera_checada,
                     MAX(c.fecha) as ultima_checada,
@@ -158,6 +164,7 @@ class Checada extends Model
                     e.deparment_id,
                     e.horario_entrada,
                     e.horario_salida,
+                    e.es_jornada_vespertina,
                     e.employee_id,
                     f.fecha
                 ORDER BY e.num_empleado, f.fecha

@@ -642,6 +642,12 @@ class ReportsController extends Controller
 
   }
 
+  public function cambio_de_guardia(Request $request){
+
+    echo "hola";
+
+  }
+
 
 
 

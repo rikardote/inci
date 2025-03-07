@@ -290,7 +290,7 @@
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fa fa-users"></i>
+                        <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-value">{{ \App\Employe::where('deparment_id', '!=', 33)->count() }}</div>
                     <div class="stat-label">Empleados</div>
@@ -299,11 +299,11 @@
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fa fa-calendar-check-o"></i>
+                        <i class="fas fa-calendar-check"></i>
                     </div>
                     <div class="stat-value">
                         <span id="incidencias-count">{{ $count ?? 0 }}</span>
-                        <small id="refresh-indicator" style="display:none; margin-left:5px;"><i class="fa fa-refresh fa-spin"></i></small>
+                        <small id="refresh-indicator" style="display:none; margin-left:5px;"><i class="fas fa-arrows-rotate fa-spin"></i></small>
                     </div>
                     <div class="stat-label">Incidencias Hoy <small id="last-update" class="text-muted"></small></div>
                 </div>
@@ -311,7 +311,7 @@
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fa fa-clock-o"></i>
+                        <i class="fas fa-clock"></i>
                     </div>
                     <div class="stat-value">{{ getFechaCierre() }}</div>
                     <div class="stat-label">Fecha de Cierre</div>
@@ -324,7 +324,7 @@
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card maintenance-widget">
                     <div class="stat-icon">
-                        <i class="fa fa-wrench"></i>
+                        <i class="fas fa-wrench"></i>
                     </div>
                     <div class="stat-value">
                         @php
@@ -358,7 +358,7 @@
                 <div class="module-card module-admin">
                     <a href="{{ route('users.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-users"></i>
+                            <i class="fas fa-users"></i>
                         </div>
                         <div class="module-title">Usuarios</div>
                     </a>
@@ -366,7 +366,7 @@
                 <div class="module-card module-admin">
                     <a href="{{ route('deparments.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-list-alt"></i>
+                            <i class="fas fa-list-alt"></i>
                         </div>
                         <div class="module-title">Departamentos</div>
                     </a>
@@ -374,7 +374,7 @@
                 <div class="module-card module-admin">
                     <a href="{{ route('qnas.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-calendar-check-o"></i>
+                            <i class="fas fa-calendar-check"></i>
                         </div>
                         <div class="module-title">Quincenas</div>
                     </a>
@@ -383,7 +383,7 @@
                     <a data-url="{{ route('fechadecierre.create') }}" class="load-form-modal" data-toggle="modal"
                         data-target='#form-modal'>
                         <div class="module-icon">
-                            <i class="fa fa-calendar"></i>
+                            <i class="fas fa-calendar"></i>
                         </div>
                         <div class="module-title">Fecha de Cierre</div>
                     </a>
@@ -391,7 +391,7 @@
                 <div class="module-card module-admin">
                     <a href="{{ route('logs.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-clipboard"></i>
+                            <i class="fas fa-clipboard"></i>
                         </div>
                         <div class="module-title">Logs</div>
                     </a>
@@ -399,7 +399,7 @@
                 <div class="module-card module-admin">
                     <a href="{{ route('admin.ausentismo') }}">
                         <div class="module-icon">
-                            <i class="fa fa-bar-chart"></i>
+                            <i class="fas fa-chart-bar"></i>
                         </div>
                         <div class="module-title">Ausentismo</div>
                     </a>
@@ -414,7 +414,7 @@
                 <div class="module-card module-hr">
                     <a href="{{ route('codigosdeincidencias.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-th-list"></i>
+                            <i class="fas fa-list-ul"></i>
                         </div>
                         <div class="module-title">Códigos de Incidencia</div>
                     </a>
@@ -422,7 +422,7 @@
                 <div class="module-card module-hr">
                     <a href="{{ route('periodos.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-plane"></i>
+                            <i class="fas fa-plane"></i>
                         </div>
                         <div class="module-title">Periodos Vacacionales</div>
                     </a>
@@ -430,7 +430,7 @@
                 <div class="module-card module-hr">
                     <a href="{{ route('puestos.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-briefcase"></i>
+                            <i class="fas fa-briefcase"></i>
                         </div>
                         <div class="module-title">Puestos</div>
                     </a>
@@ -438,7 +438,7 @@
                 <div class="module-card module-hr">
                     <a href="{{ route('horarios.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-clock-o"></i>
+                            <i class="fas fa-clock"></i>
                         </div>
                         <div class="module-title">Horarios</div>
                     </a>
@@ -446,7 +446,7 @@
                 <div class="module-card module-hr">
                     <a href="{{ route('gys.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-tasks"></i>
+                            <i class="fas fa-tasks"></i>
                         </div>
                         <div class="module-title">GyS</div>
                     </a>
@@ -461,7 +461,7 @@
                 <div class="module-card module-biometric">
                     <a href="{{ route('biometrico.index') }}">
                         <div class="module-icon">
-                            <i class="fa fa-cloud-download"></i>
+                            <i class="fas fa-cloud-arrow-down"></i>
                         </div>
                         <div class="module-title">Actualizar Registros</div>
                     </a>
@@ -469,7 +469,7 @@
                 <div class="module-card module-biometric">
                     <a href="{{ route('biometrico.registros') }}">
                         <div class="module-icon">
-                            <i class="fa fa-hand-o-up"></i>
+                            <i class="fas fa-hand-point-up"></i>
                         </div>
                         <div class="module-title">Ver Checadas</div>
                     </a>
@@ -485,7 +485,7 @@
                 <div class="module-card module-config">
                     <a href="{{ route('mantenimiento.show') }}">
                         <div class="module-icon">
-                            <i class="fa fa-cog"></i>
+                            <i class="fas fa-gear"></i>
                         </div>
                         <div class="module-title">Mantenimiento</div>
                     </a>
@@ -527,7 +527,7 @@
         $('#toggle-maintenance').change(function() {
             // Mostrar indicador de carga
             var $statValue = $(this).closest('.stat-card').find('.stat-value span');
-            $statValue.html('<i class="fa fa-spinner fa-spin"></i>');
+            $statValue.html('<i class="fas fa-spinner fa-spin"></i>');
 
             // Realizar petición AJAX
             $.ajax({
