@@ -12,7 +12,7 @@
                 </h5>
             </div>
             <div class="employee-schedule">
-                <i class="fa fa-clock-o"></i>
+                <i class="fas fa-clock"></i>
                 {{ substr($registrosEmpleado->first()->horario_entrada, 0, 5) }} A
                 {{ substr($registrosEmpleado->first()->horario_salida, 0, 5) }}
             </div>
@@ -21,10 +21,10 @@
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th width="15%"><i class="fa fa-calendar"></i> Fecha</th>
-                        <th width="30%"><i class="fa fa-sign-in"></i> Entrada</th>
-                        <th width="30%"><i class="fa fa-sign-out"></i> Salida</th>
-                        <th width="25%"><i class="fa fa-exclamation-triangle"></i> Incidencia</th>
+                        <th width="15%"><i class="fas fa-calendar"></i> Fecha</th>
+                        <th width="30%"><i class="fas fa-right-to-bracket"></i> Entrada</th>
+                        <th width="30%"><i class="fas fa-right-from-bracket"></i> Salida</th>
+                        <th width="25%"><i class="fas fa-triangle-exclamation"></i> Incidencia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,17 +33,29 @@
                     // Definir todas las variables necesarias para la lógica de procesamiento
                     $horarioEntrada = strtotime($registrosEmpleado->first()->horario_entrada);
                     $horarioSalida = strtotime($registrosEmpleado->first()->horario_salida);
-                    
-                    // Ajuste importante: definir medio día como las 12:00 PM
-                    $medioDia = strtotime('12:00:00');
-                    
+
+                    // Usar la información de jornada directamente de la base de datos
+                    $esJornadaVespertina = $registrosEmpleado->first()->es_jornada_vespertina == 1;
+
+                    // Determinar el punto de referencia para separar entradas y salidas
+                    if ($esJornadaVespertina) {
+                        // Para vespertinos: usar el punto medio de su jornada específica
+                        $horaMedia = $horarioEntrada + (($horarioSalida - $horarioEntrada) / 2);
+                    } else {
+                        // Para matutinos: seguir usando el mediodía
+                        $horaMedia = strtotime('12:00:00');
+                    }
+
+                    // En lugar de usar $medioDia, ahora usamos $horaMedia en toda la lógica
+                    $medioDia = $horaMedia; // Mantener variable por compatibilidad
+
                     $horaEntrada = $registro->hora_entrada ? strtotime($registro->hora_entrada) : null;
                     $horaSalida = $registro->hora_salida ? strtotime($registro->hora_salida) : null;
 
                     // Detectar si es una sola checada (entrada y salida iguales)
                     $tieneUnaSolaChecada = $registro->hora_entrada && $registro->hora_entrada === $registro->hora_salida;
 
-                    // Verificar si la checada está después del medio día
+                    // Verificar si la checada está después del punto medio
                     $horaChecada = $registro->hora_entrada ? strtotime($registro->hora_entrada) : null;
                     $estaChecadaDespuesMedioDia = $horaChecada && $horaChecada > $medioDia;
 
@@ -52,8 +64,8 @@
                     $tieneMasDeUnaChecada = $checadasDelDia->count() > 1;
                     $esLaPrimeraChecadaDelDia = $checadasDelDia->first() === $registro;
                     $esLaUltimaChecadaDelDia = $checadasDelDia->last() === $registro;
-                    
-                    // Verificar si todas las checadas del día están después del mediodía
+
+                    // Verificar si todas las checadas del día están después del punto medio
                     $todasLasChecadasDespuesMediodia = true;
                     foreach ($checadasDelDia as $c) {
                         $checadaHora = $c->hora_entrada ? strtotime($c->hora_entrada) : null;
@@ -63,7 +75,7 @@
                         }
                     }
 
-                    // NUEVO: Contar cuántas checadas hay después del mediodía
+                    // Contar checadas después del punto medio
                     $conteoChecadasDespuesMedioDia = 0;
                     foreach ($checadasDelDia as $c) {
                         $checadaHora = $c->hora_entrada ? strtotime($c->hora_entrada) : null;
@@ -71,12 +83,10 @@
                             $conteoChecadasDespuesMedioDia++;
                         }
                     }
-                    
-                    // NUEVO: Es salida por estar después del mediodía, excepto la primera checada después de mediodía
+
+                    // Es salida por estar después del punto medio, excepto primera checada después del punto medio
                     $esSalidaPorHorario = $estaChecadaDespuesMedioDia;
                     if ($estaChecadaDespuesMedioDia && $conteoChecadasDespuesMedioDia > 1) {
-                        // Si hay varias checadas después del mediodía, todas son salidas
-                        // excepto si es la primera del grupo de checadas post-mediodía
                         $primeraChecadaPostMediodia = null;
                         foreach ($checadasDelDia as $c) {
                             $checadaHora = $c->hora_entrada ? strtotime($c->hora_entrada) : null;
@@ -88,12 +98,21 @@
                         $esPrimeraChecadaDespuesMediodia = ($primeraChecadaPostMediodia === $registro);
                         $esSalidaPorHorario = !$esPrimeraChecadaDespuesMediodia || $tieneUnaSolaChecada;
                     }
-                    
-                    // NUEVO: Determinar si mostrar como omisión de entrada
-                    $mostrarOmisionEntrada = ($estaChecadaDespuesMedioDia && 
-                                            ($esLaPrimeraChecadaDelDia || 
-                                            ($conteoChecadasDespuesMedioDia > 1 && 
+
+                    // MODIFICACIÓN: Determinar omisión de entrada considerando horario vespertino
+                    $mostrarOmisionEntrada = ($estaChecadaDespuesMedioDia &&
+                                            ($esLaPrimeraChecadaDelDia ||
+                                            ($conteoChecadasDespuesMedioDia > 1 &&
                                             $esPrimeraChecadaDespuesMediodia)));
+
+                    // NUEVO: Para jornada vespertina, verificar si la primera checada está dentro del margen de entrada
+                    if ($esJornadaVespertina && $esLaPrimeraChecadaDelDia && $horaChecada) {
+                        // Si está dentro de ±1 hora de su horario de entrada, no mostrar omisión
+                        $diferenciaMinutos = abs($horaChecada - $horarioEntrada) / 60;
+                        if ($diferenciaMinutos <= 90) { // 90 minutos de margen
+                            $mostrarOmisionEntrada = false;
+                        }
+                    }
 
                     // Variables para verificar si la jornada ha terminado
                     $fechaRegistro = $registro->fecha;
@@ -107,41 +126,49 @@
                         data-empleado="{{ $num_empleado }}" onclick="submitForm(this)">
                         <td>{{ date('d/m/Y', strtotime($registro->fecha)) }}</td>
                         <td>
-                            @if($mostrarOmisionEntrada)
-                            <!-- Caso especial: Omisión de entrada en checadas después del mediodía -->
-                            <span class="label label-danger rounded sin-registro" title="Sin registro de entrada - checada después del mediodía">
-                                <i class="fa fa-sign-in"></i> ✕ Omisión de entrada
-                            </span>
+                            @if($esJornadaVespertina && $esLaPrimeraChecadaDelDia && $registro->hora_entrada)
+                                <!-- Primera checada del personal vespertino (siempre mostrar como entrada) -->
+                                <span class="{{ $registro->retardo && $registro->incidencia != '7' ? 'text-warning font-weight-bold' : '' }}">
+                                    <i class="fas fa-clock"></i> {{ substr($registro->hora_entrada, 0, 5) }}
+                                    @if($registro->retardo && $registro->incidencia != '7')
+                                        <span class="label label-danger rounded">R</span>
+                                    @endif
+                                </span>
+                            @elseif($mostrarOmisionEntrada)
+                                <!-- Omisión de entrada -->
+                                <span class="label label-danger rounded sin-registro" title="Sin registro de entrada">
+                                    <i class="fas fa-right-to-bracket"></i> ✕ Omisión de entrada
+                                </span>
                             @elseif($registro->hora_entrada)
-                            <!-- Caso normal: Mostrar hora de entrada -->
-                            <span class="{{ $registro->retardo && $registro->incidencia != '7' ? 'text-warning font-weight-bold' : '' }}">
-                                <i class="fa fa-clock-o"></i> {{ substr($registro->hora_entrada, 0, 5) }}
-                            </span>
-                            @if($registro->retardo && $registro->incidencia != '7')
-                            <span class="label label-danger rounded">R</span>
-                            @endif
+                                <!-- Caso normal: Mostrar hora de entrada -->
+                                <span class="{{ $registro->retardo && $registro->incidencia != '7' ? 'text-warning font-weight-bold' : '' }}">
+                                    <i class="fas fa-clock"></i> {{ substr($registro->hora_entrada, 0, 5) }}
+                                </span>
+                                @if($registro->retardo && $registro->incidencia != '7')
+                                    <span class="label label-danger rounded">R</span>
+                                @endif
                             @endif
                         </td>
                         <td>
                             @if(($estaChecadaDespuesMedioDia && $esSalidaPorHorario) || ($registro->hora_salida && !$tieneUnaSolaChecada))
                             <!-- Caso 1: Salida normal o checada después del mediodía que es considerada salida -->
                             <span>
-                                <i class="fa fa-clock-o"></i> {{ substr($registro->hora_salida, 0, 5) }}
+                                <i class="fas fa-clock"></i> {{ substr($registro->hora_salida, 0, 5) }}
                                 @if($conteoChecadasDespuesMedioDia > 1 && $esLaUltimaChecadaDelDia && $todasLasChecadasDespuesMediodia)
                                 <span class="label label-info rounded" title="Múltiples salidas registradas">
-                                    <i class="fa fa-info-circle"></i> {{ $conteoChecadasDespuesMedioDia }}
+                                    <i class="fas fa-circle-info"></i> {{ $conteoChecadasDespuesMedioDia }}
                                 </span>
                                 @endif
                             </span>
                             @elseif($tieneUnaSolaChecada && !$estaChecadaDespuesMedioDia && $jornadalaboralTerminada)
                             <!-- Caso 2: Sin registro de salida (solo entrada) -->
                             <span class="label label-danger rounded sin-registro" title="Sin registro de salida">
-                                <i class="fa fa-sign-out"></i> ✕
+                                <i class="fas fa-right-from-bracket"></i> ✕
                             </span>
                             @elseif($registro->hora_entrada && !$registro->hora_salida && $jornadalaboralTerminada)
                             <!-- Caso 3: Sin registro de salida (con entrada registrada) -->
                             <span class="label label-danger rounded sin-registro" title="Sin registro de salida">
-                                <i class="fa fa-sign-out"></i> ✕
+                                <i class="fas fa-right-from-bracket"></i> ✕
                             </span>
                             @endif
                         </td>

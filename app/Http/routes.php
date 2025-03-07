@@ -300,10 +300,13 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'ReportsController@captura_diaria_post',
         'as' => 'reports.captura_diaria.post'
     ]);
-
-
-
+    Route::get('/reporte/cambio_de_guardia', [
+        'uses' => 'ReportsController@cambio_de_guardia',
+        'as' => 'reports.cambio_de_guardia'
+    ]);
         ///END-REPORTES
+
+
 
         ///INICIO-CAPTURA
     Route::get('/capturar', [
