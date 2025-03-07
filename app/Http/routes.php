@@ -129,6 +129,8 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'dashboard.index'
     ]);
 
+    Route::get('/dashboard/incidencias-hoy', 'DashboardController@getIncidenciasHoy')->name('dashboard.incidencias-hoy');
+
     ///REPORTES
     Route::get('/reporte/general/', [
         'uses' => 'ReportsController@general',

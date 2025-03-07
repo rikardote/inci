@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Qna;
 use Carbon\Carbon;
+use App\Incidencia;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Configuration;
 
 class DashboardController extends Controller
 {
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,15 +24,25 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
-        if (!\Auth::user()->admin()) {
+        // Calcular incidencias de hoy considerando el desfase horario
+        $hoy = Carbon::now()->startOfDay();
+        $count = Incidencia::whereRaw('DATE(created_at) = ?', [$hoy->format('Y-m-d')])->count();
 
-            return view('home')->with('qna', $qna);
-        }
-        else {
-            
-        	return view('dashboard');	
-        }
-        
+        // Obtener configuración de mantenimiento si existe
+        $mantenimiento = Configuration::first();
+
+        // Pasar las variables a la vista
+        return view('dashboard', compact('count', 'mantenimiento'));
+    }
+
+    public function getIncidenciasHoy()
+    {
+        $hoy = Carbon::now()->startOfDay();
+        $count = Incidencia::whereRaw('DATE(created_at) = ?', [$hoy->format('Y-m-d')])->count();
+
+        return response()->json([
+            'count' => $count,
+            'time' => Carbon::now()->format('H:i:s')
+        ]);
     }
 }

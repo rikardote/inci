@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<div class="panel panel-default">
+
 
     <div class="panel-body">
         @if(session('error'))
@@ -23,14 +23,7 @@
 
         {!! Form::open(['route' => 'biometrico.registros', 'method' => 'GET', 'id' => 'form-consulta']) !!}
 
-        <div class="row filtros-container">
-            <div class="col-md-12" style="margin-bottom: 15px;">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <i class="fa fa-filter"></i> Filtros de búsqueda
-                        </h4>
-                    </div>
+
                     <div class="panel-body">
                         <div class="row">
                             <!-- Centro de Trabajo -->
@@ -85,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer text-right">
+                    <div class="text-right">
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-search"></i> Consultar Registros
                         </button>
@@ -95,9 +88,7 @@
                         </a>
                         @endif
                     </div>
-                </div>
-            </div>
-        </div>
+
         {!! Form::close() !!}
 
         @if(isset($registros) && count($registros) > 0)
@@ -151,7 +142,7 @@
         </div>
         @endif
     </div>
-</div>
+
 @endsection
 
 

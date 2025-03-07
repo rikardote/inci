@@ -1,4 +1,20 @@
-/* Contenedor de tablas y estructura */
+/* Incorporar variables de color del tema guinda */
+:root {
+    /* Variables importadas del tema principal */
+    --primary-color: #B22222; /* Guinda claro para botones/elementos activos */
+    --primary-dark: #8B0000; /* Guinda intermedio */
+    --primary-darker: #600018; /* Guinda oscuro */
+    --primary-light: #d8a7a7; /* Guinda muy claro */
+    --primary-lighter: #f5e9e9; /* Guinda extra claro */
+
+    /* Colores de estado adaptados al tema guinda */
+    --warning-color: #ff9800;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --success-color: #28a745;
+}
+
+/* Contenedor de tablas y estructura específica de biométrico */
 .tables-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Cambiado de 2 a 3 columnas */
@@ -6,7 +22,7 @@
     margin: 15px 0 20px;
 }
 
-/* Estilos para tablas de empleados */
+/* Estilos específicos para tablas de empleados */
 .employee-table {
     background: #fff;
     border-radius: 5px;
@@ -52,7 +68,7 @@
     display: inline-block;
 }
 
-/* Estilos de tabla */
+/* Estilos específicos para tablas del módulo biométrico */
 .table {
     width: 100%;
     margin-bottom: 0;
@@ -71,7 +87,7 @@
     border-bottom: 1px solid #eef2e7;
 }
 
-/* Estados de filas */
+/* Estados específicos de filas para biométrico */
 .retardo {
     background-color: rgba(255, 152, 0, 0.1) !important;
 }
@@ -94,44 +110,46 @@
 }
 
 .label-warning {
-    background-color: #ff9800;
+    background-color: var(--warning-color);
     color: white;
 }
 
 .label-danger {
-    background-color: #f44336;
+    background-color: var(--danger-color);
     color: white;
 }
 
 .label-info {
-    background-color: #2196F3;
+    background-color: var(--info-color);
     color: white;
 }
 
 .label-primary {
-    background-color: #3c8dbc;
+    background-color: var(--primary-color);
     color: white;
 }
 
 .sin-registro {
-        white-space: nowrap;
-        color: #ffffff !important; /* Forzar color blanco para el texto */
-        font-weight: 600; /* Hacer el texto más grueso */
-        text-shadow: 0px 0px 1px rgba(0,0,0,0.5); /* Agregar sombra sutil para mejor legibilidad */
+    white-space: nowrap;
+    color: #ffffff !important; /* Forzar color blanco para el texto */
+    font-weight: 600; /* Hacer el texto más grueso */
+    text-shadow: 0px 0px 1px rgba(0,0,0,0.5); /* Agregar sombra sutil para mejor legibilidad */
 }
 
+/* Omisiones específicas del módulo */
 .omision-entrada {
     cursor: help;
-    border-bottom: 1px dashed #e67e22;
+    border-bottom: 1px dashed var(--warning-color);
 }
 
 .omision-salida {
     cursor: help;
-    border-bottom: 1px dashed #3498db;
-    color: #2980b9;
+    border-bottom: 1px dashed var(--info-color);
+    color: var(--info-color);
     font-weight: 500;
 }
 
+/* Filas clickeables */
 .clickable-row {
     cursor: pointer;
     transition: background-color 0.2s;
@@ -179,7 +197,7 @@
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
+    background-color: var(--primary-darker);
     color: white;
     padding: 5px 10px;
     border-radius: 4px;
@@ -232,8 +250,13 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
 }
 
+.panel-primary {
+    border-color: var(--primary-color);
+}
+
 .panel-primary>.panel-heading {
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    background: var(--primary-color);
+    border-color: var(--primary-color);
     padding: 15px 25px;
 }
 
@@ -243,8 +266,8 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    border: none;
+    background: var(--primary-color);
+    border-color: var(--primary-dark);
     padding: 12px 30px;
     font-weight: 600;
     text-transform: uppercase;
@@ -252,7 +275,8 @@
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #2980b9 0%, #2c3e50 100%);
+    background: var(--primary-dark);
+    border-color: var(--primary-darker);
 }
 
 /* Ajuste específico para el centro de trabajo */
@@ -286,26 +310,9 @@
     margin-bottom: 20px;
 }
 
-.panel-primary {
-    border-color: #3c8dbc;
-}
-
-.panel-primary>.panel-heading {
-    background-color: #3c8dbc;
-    border-color: #3c8dbc;
-}
-
-.panel-info {
-    border-color: #00c0ef;
-}
-
-.panel-info>.panel-heading {
-    background-color: #00c0ef;
-    border-color: #00c0ef;
-}
 
 .filtros-container .panel-heading {
-    background-color: #3c8dbc;
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -327,15 +334,15 @@
 }
 
 .label-indicator.retardo {
-    background-color: #f39c12;
+    background-color: var(--warning-color);
 }
 
 .label-indicator.incidencia {
-    background-color: #dd4b39;
+    background-color: var(--danger-color);
 }
 
 .label-indicator.omision {
-    background-color: #00a65a;
+    background-color: var(--success-color);
 }
 
 /* Mejora de tablas */

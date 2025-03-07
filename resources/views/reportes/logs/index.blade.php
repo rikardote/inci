@@ -587,11 +587,19 @@
         // Total de registros
         document.getElementById('total-records').textContent = data.length;
 
-        // Registros de hoy
-        const today = new Date().toISOString().split('T')[0];
-        const todayRecords = data.filter(inc =>
-            inc.created_at && inc.created_at.startsWith(today)
-        ).length;
+        // Registros de hoy - CORREGIDO PARA MANEJAR EL DESFASE HORARIO
+        const todayRecords = data.filter(inc => {
+            if (!inc.created_at) return false;
+
+            // Convertir fecha UTC a fecha local con ajuste horario
+            const createdDate = new Date(inc.created_at);
+            const localNow = new Date();
+
+            // Verificar si la fecha está en "hoy" en tiempo local
+            return createdDate.getFullYear() === localNow.getFullYear() &&
+                   createdDate.getMonth() === localNow.getMonth() &&
+                   createdDate.getDate() === localNow.getDate();
+        }).length;
         document.getElementById('today-records').textContent = todayRecords;
 
         // Registros eliminados

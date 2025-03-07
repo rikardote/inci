@@ -4,7 +4,7 @@
 
 @section('css')
 <!-- Añade esto al inicio de la sección CSS existente -->
-<link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/toastr/css/toastr.min.css') }}">
 <!-- Mantén el resto del CSS existente -->
 <style>
     .dashboard-container {
@@ -259,6 +259,24 @@
             flex: 0 0 calc(100% - 20px);
         }
     }
+
+    /* Añade esto a la sección de estilos */
+    .highlight-change {
+        animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+        0% { color: #444; }
+        50% { color: #2196F3; }
+        100% { color: #444; }
+    }
+
+    #last-update {
+        font-size: 10px;
+        white-space: nowrap;
+        display: inline-block;
+        margin-left: 5px;
+    }
 </style>
 @endsection
 
@@ -268,6 +286,7 @@
     <div class="container">
         <!-- Widget de estadísticas -->
         <div class="row stats-container">
+            <!-- Primera fila de widgets - 3 widgets por fila -->
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card">
                     <div class="stat-icon">
@@ -283,14 +302,10 @@
                         <i class="fa fa-calendar-check-o"></i>
                     </div>
                     <div class="stat-value">
-                        @php
-                        $inicioDelDia = \Carbon\Carbon::today()->subHours(8)->format('Y-m-d H:i:s');
-                        $finDelDia = \Carbon\Carbon::tomorrow()->subHours(8)->format('Y-m-d H:i:s');
-                        $count = \App\Incidencia::whereBetween('created_at', [$inicioDelDia, $finDelDia])->count();
-                        @endphp
-                        {{ $count }}
+                        <span id="incidencias-count">{{ $count ?? 0 }}</span>
+                        <small id="refresh-indicator" style="display:none; margin-left:5px;"><i class="fa fa-refresh fa-spin"></i></small>
                     </div>
-                    <div class="stat-label">Incidencias Hoy</div>
+                    <div class="stat-label">Incidencias Hoy <small id="last-update" class="text-muted"></small></div>
                 </div>
             </div>
             <div class="col-md-4 col-sm-6">
@@ -302,7 +317,10 @@
                     <div class="stat-label">Fecha de Cierre</div>
                 </div>
             </div>
-            <!-- Widget de mantenimiento - AÑADIDO DENTRO DE LA FILA -->
+        </div>
+
+        <!-- Segunda fila con el widget de mantenimiento -->
+        <div class="row stats-container">
             <div class="col-md-4 col-sm-6">
                 <div class="stat-card maintenance-widget">
                     <div class="stat-icon">
@@ -481,7 +499,7 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+<script src="{{ asset('plugins/toastr/js/toastr.min.js') }}"></script>
 <script>
     // Configuración de toastr
     toastr.options = {
@@ -549,6 +567,59 @@
                 }
             });
         });
+    });
+</script>
+
+// Añade esto al final de la sección de JS
+<script>
+    $(document).ready(function() {
+        // Configuración para el widget de incidencias
+        const updateInterval = 5000; // 5 segundos
+        let isUpdating = false;
+        let lastCount = parseInt($('#incidencias-count').text());
+
+        // Función para actualizar el contador de incidencias
+        function updateIncidenciasCount() {
+            if (isUpdating) return;
+            isUpdating = true;
+
+            $('#refresh-indicator').show();
+
+            $.ajax({
+                url: '{{ route("dashboard.incidencias-hoy") }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const newCount = parseInt(data.count);
+                    const $counter = $('#incidencias-count');
+
+                    // Animar la actualización solo si el valor cambió
+                    if (newCount !== lastCount) {
+                        $counter.fadeOut(200, function() {
+                            $(this).text(newCount).fadeIn(200);
+                            // Añadir clase para destacar cambio
+                            $counter.addClass('highlight-change');
+                            setTimeout(() => $counter.removeClass('highlight-change'), 1000);
+                        });
+                        lastCount = newCount;
+                    }
+
+                    // Actualizar la hora de última actualización
+                    $('#last-update').text('Act: ' + data.time);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error actualizando incidencias:", error);
+                },
+                complete: function() {
+                    $('#refresh-indicator').hide();
+                    isUpdating = false;
+                }
+            });
+        }
+
+        // Actualizar inmediatamente y luego cada 5 segundos
+        updateIncidenciasCount();
+        setInterval(updateIncidenciasCount, updateInterval);
     });
 </script>
 @endsection

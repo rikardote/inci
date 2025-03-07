@@ -22,12 +22,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/toastr/css/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/jquery/css/themes/smothness/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('css/application.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-theme-guinda.css') }}">
 
     @yield('css')
 
 </head>
 
-<body>
+<body class="skin-guinda">
 
     <!--NAVEGACION PARTIAL-->
     <div class="iner">
