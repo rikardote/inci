@@ -1,9 +1,18 @@
+<div class="module-card module-biometric">
+    <a href="{{ route('biometrico.asignar') }}">
+        <div class="module-icon">
+            <i class="fa fa-id-badge"></i>
+        </div>
+        <div class="module-title"></div>
+    </a>
+</div>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Example 2</title>
-   
+
   </head>
   <body>
 
