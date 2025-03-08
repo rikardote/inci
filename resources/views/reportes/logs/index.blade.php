@@ -423,7 +423,7 @@
         });
     }
 
-    // Formatear fecha y hora en formato DD/MM/YYYY HH:MM:SS
+    // Formatear fecha y hora en formato DD/MM/YYYY HH:MM:SS con desfase horario de 9 horas
     function formatDateTime(dateString) {
         if (!dateString) return '-';
 
@@ -434,6 +434,9 @@
             if (isNaN(date.getTime())) {
                 return '-';
             }
+
+            // Aplicar desfase horario de 9 horas
+            date.setHours(date.getHours() - 8);
 
             return date.toLocaleDateString('es-ES', {
                 day: '2-digit',

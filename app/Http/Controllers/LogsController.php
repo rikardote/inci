@@ -14,7 +14,7 @@ class LogsController extends Controller
         $limit = $request->input('limit', 100);  // Por defecto 100 registros
         $page = $request->input('page', 1);      // Por defecto página 1
 
-        $query = Incidencia::with([
+        $query = Incidencia::withTrashed()->with([
             'employee' => function($query) {
                 $query->select('id', 'deparment_id', 'num_empleado', 'name', 'father_lastname', 'mother_lastname');
             },
