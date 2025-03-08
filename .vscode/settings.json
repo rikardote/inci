@@ -52,7 +52,7 @@
     /**
     * Typography
     **/
-    "workbench.colorTheme": "Sublime Material Theme - Dark",
+    "workbench.colorTheme": "Copilot Theme - Higher Contrast",
     "editor.fontFamily": "MonoLisa",
     "editor.fontSize": 11,
     "editor.lineHeight": 20,

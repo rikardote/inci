@@ -12,7 +12,7 @@
 
 				</thead>
 				<tbody id="after_tr">
-				
+
 				@foreach($incidencias as $incidencia)
 							<tr>
 								<td>{{$incidencia->qna}}/{{$incidencia->qna_year}}</td>
@@ -25,12 +25,12 @@
 								 @else
 								 			<td></td>
 								 @endif
-							 
+
 								 @if(!$incidencia->capturada)
                                  <td>
 								 	<button class="fa fa-trash fa-2x button button-info" value="{{$incidencia->token}}/{{$employee->num_empleado}}/{{$incidencia->id}}/destroy" OnClick='Eliminar(this);'></button>
 								 </td>
-                                 
+
 								 @endif
 
                                  @if(isset($incidencia->capturado_por))
@@ -42,4 +42,3 @@
 				@endforeach
 				</tbody>
 		</table>
-

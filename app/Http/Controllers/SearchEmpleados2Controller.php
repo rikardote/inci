@@ -16,12 +16,12 @@ use App\Jornada;
 class SearchEmpleados2Controller extends Controller
 {
 	public function index(Request $request)
-	{	
-		
+	{
+
 		$dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$query = $request->num;
-		$empleado = Employe::getEmpleadoSearch($query, $dptos);  
-		$title = "Empleado";   
+		$empleado = Employe::getEmpleadoSearch($query, $dptos);
+		$title = "Empleado";
 
         if ($empleado==null) {
 			$noencontrado = " Empleado no encontrado, o no pertenece a su adscripcion.<br>Informacion en Recursos Humanos";
@@ -31,25 +31,25 @@ class SearchEmpleados2Controller extends Controller
 				->with('title', $title);
 		}
 		else {
-			
+
 			$noencontrado = null;
 	        $jornadas = Jornada::all()->pluck('jornada', 'id')->toArray();
 	        $horarios = Horario::all()->pluck('horario', 'id')->toArray();
 	        asort($horarios);
 	        asort($jornadas);
 
-            $checadas = Checada::where('num_empleado', $empleado->num_empleado)->limit(10)->orderBy('fecha','desc')->get();
+            $checadas = Checada::where('num_empleado', $empleado->num_empleado)->limit(20)->orderBy('fecha','desc')->get();
 
 			return view('admin.employees.empleado_show')
-				->with('employe', $empleado)	
+				->with('employe', $empleado)
 				->with('title', $title)
 				->with('horarios', $horarios)
 				->with('jornadas', $jornadas)
                 ->with('checadas', $checadas);
-			
+
 		}
-		
-	
+
+
 	}
-	
+
 }

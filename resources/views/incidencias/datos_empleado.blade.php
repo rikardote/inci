@@ -8,7 +8,7 @@
         </ul>
     </div>
             <div class="notice notice-info notice-sm">
-                <h2 align="center"><strong>{{$employee->num_empleado}} - {{$employee->name}} {{$employee->father_lastname}} {{$employee->mother_lastname}}</strong></h2>  
+                <h2 align="center"><strong>{{$employee->num_empleado}} - {{$employee->name}} {{$employee->father_lastname}} {{$employee->mother_lastname}}</strong></h2>
             </div>
 
               <div align="center">
@@ -19,13 +19,13 @@
               @endif
               </div>
               <div align="center">{{$employee->puesto}}</div>
-                
+
                 <div align="center" >{{$employee->horario}} | {{$employee->jornada}} &nbsp;
-                {{$employee->estancia ? '| ESTANCIA &nbsp;':''}} 
+                {{$employee->estancia ? '| ESTANCIA &nbsp;':''}}
                 {{$employee->comisionado ? '| COMISIONADO &nbsp;':''}}
                 <br>
-                {{$employee->lactancia ? 'LACTANCIA: '.fecha_dmy($employee->lactancia_inicio)." AL ".fecha_dmy($employee->lactancia_fin) :''}} 
-                
+                {{$employee->lactancia ? 'LACTANCIA: '.fecha_dmy($employee->lactancia_inicio)." AL ".fecha_dmy($employee->lactancia_fin) :''}}
+
 
                 </div>
                 <div align="center">
