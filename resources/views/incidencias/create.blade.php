@@ -182,7 +182,8 @@ $('#datepicker_expedida').flatpickr({
       } else {
         //
         $('#coberturaTXT').hide();
-        document.getElementById("coberturaTXT").value = null;
+        document.getElementById("cobertura_txt").value = null;
+        document.getElementById("autoriza_txt").value = null;
 
       }
     });
