@@ -19,6 +19,7 @@
     var frmsaltar_validacion_txt = '';
     var frmhoras_otorgadas = $("#horas_otorgadas").val();;
     var frmcobertura_txt = $("#cobertura_txt").val();;
+    var frmautoriza_txt = $("#autoriza_txt").val();;
     var c=document.getElementById("saltar_validacion");
     var c2=document.getElementById("saltar_validacion_inca");
     var c3=document.getElementById("saltar_validacion_lic");
@@ -55,7 +56,7 @@
     //var route = "http://incidencias.slyip.com/incidencias/";
     var route = url+"/incidencias/";
 
-    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments+'&cobertura_txt='+frmcobertura_txt+'&horas_otorgadas='+frmhoras_otorgadas;
+    var dataString = 'codigo='+frmcodigo+'&empleado_id='+frmemployee+'&datepicker_inicial='+frmfecha_inicio+'&datepicker_final='+frmfecha_final+'&periodo_id='+frmperiodo+'&medico_id='+frmdmedico_id+'&diagnostico='+frmdiagnostico+'&datepicker_expedida='+frmexpedida+'&num_licencia='+frmnum_licencia+'&otorgado='+frmotorgado+'&pendientes='+frmpendientes+'&saltar_validacion='+frmsaltavalidacion+'&saltar_validacion_inca='+frmsaltar_validacion_inca+'&saltar_validacion_lic='+frmsaltar_validacion_lic+'&qna_id='+frmqna_id+'&becas_comments='+frmbecas_comments+'&cobertura_txt='+frmcobertura_txt+'&horas_otorgadas='+frmhoras_otorgadas+'&autoriza_txt='+frmautoriza_txt;
     $.ajax({
       url: route,
       headers: {'X-CSRF-TOKEN': token},

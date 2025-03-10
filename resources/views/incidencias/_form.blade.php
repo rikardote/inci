@@ -89,14 +89,16 @@
       <input name="saltar_validacion_lic" id="saltar_validacion_lic" type="checkbox" />
 </div>
 <div id="coberturaTXT" class="well well-sm">
-
-
         {!! Form::label('cobertura_txt', 'Sustituto') !!}
         {!! Form::text('cobertura_txt', null, [
           'class' => 'form-control',
           'placeholder' => 'Ingresar nombre completo del sustituto',
          ]) !!}
-
+        {!! Form::label('autoriza_txt', 'Autorizacion') !!}
+        {!! Form::text('autoriza_txt', null, [
+        'class' => 'form-control',
+        'placeholder' => 'Ingresar quien autoriza el cambio de guardia',
+        ]) !!}
 </div>
 
 <div id="pendientes" class="well well-sm">

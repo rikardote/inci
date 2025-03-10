@@ -26,7 +26,9 @@
                 <th>Puesto</th>
                 <th>Jornada</th>
                 <th>Codigo</th>
+                <th>Fecha</th>
                 <th>Trabajador Sustituto</th>
+                <th>Autoriza</th>
                 <th>Total dias</th>
             </thead>
             <tbody>
@@ -39,9 +41,11 @@
                         </td>
                         <td align=left>{{ $incidencia->puesto }}</td>
                         <td align=left>{{ $incidencia->jornada }}</td>
-                        <td align=center>{{ str_pad($incidencia->code, '2', '0', STR_PAD_LEFT) }}</td>
+                        <td align=left>{{ str_pad($incidencia->code, '2', '0', STR_PAD_LEFT) }}</td>
+                        <td align=left>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
                         <td align=left>{{ $incidencia->cobertura_txt }}</td>
-                        <td align=center>{{ $incidencia->total }}</td>
+                        <td align=left>{{ $incidencia->autoriza_txt }}</td>
+                        <td align=left>{{ $incidencia->total_dias}}</td>
                     </tr>
                     {{-- */ $tmp = $incidencia->num_empleado /* --}}
                 @endforeach

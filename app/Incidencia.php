@@ -13,7 +13,7 @@ class Incidencia extends Model
     protected $dates = ['incidencias.deleted_at'];
     protected $table = 'incidencias';
 
-    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado', 'cobertura_txt', 'horas_otorgadas'];
+    protected $fillable = ['qna_id', 'employee_id', 'fecha_inicio', 'fecha_final', 'codigodeincidencia_id', 'periodo_id', 'token', 'diagnostico', 'medico_id', 'fecha_expedida', 'num_licencia', 'otorgado', 'pendientes', 'becas_comments', 'fecha_capturado', 'cobertura_txt', 'horas_otorgadas','autoriza_txt'];
 
     public function employee()
     {
@@ -46,6 +46,10 @@ class Incidencia extends Model
     public function setcoberturatxtAttribute($value)
     {
         $this->attributes['cobertura_txt'] = strtoupper($value);
+    }
+    public function setautorizatxtAttribute($value)
+    {
+        $this->attributes['autoriza_txt'] = strtoupper($value);
     }
     public function setotorgadoAttribute($value)
     {
@@ -521,9 +525,9 @@ class Incidencia extends Model
     }
     public static function getIncidenciasByCode2($code, $fecha_inicio, $fecha_final, $dpto)
     {
-      $conteo_total = DB::raw('SUM(total_dias) as total');
+
       $incidencias = Incidencia::getQuery()
-                 ->select('*','employees.id as empleado_id','incidencias.id as inc_id','jornadas.id as jornada_id','puestos.puesto as puesto_p', DB::raw($conteo_total))
+                 ->select('*','employees.id as empleado_id','incidencias.id as inc_id','jornadas.id as jornada_id','puestos.puesto as puesto_p')
                  ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
                  ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
@@ -533,7 +537,7 @@ class Incidencia extends Model
                  ->where('deparments.id', '=', $dpto)
                  ->where('codigos_de_incidencias.code', $code)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
-                 ->groupBy('num_empleado')
+                 ->orderBy('num_empleado')
                  ->get();
      return $incidencias;
     }

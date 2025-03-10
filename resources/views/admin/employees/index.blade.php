@@ -7,7 +7,7 @@
 <div class="supreme-container">
     <a data-url="{{ route('employees.create') }}" class="load-form-modal panelColorGreen" data-toggle="modal"
         data-target='#form-modal'>
-        <span class="fas fa-circle-plus fa-lg" aria-hidden='true'> Nuevo Empleado</span>
+        <span class="fa-solid fa-user-plus fa-2x" aria-hidden='true'></span>
     </a>
     @include('admin.employees.search')
 </div>

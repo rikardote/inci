@@ -23,7 +23,7 @@ class ReportsController extends Controller
 
    public function general()
    {
-   	$dptos = \Auth::user()->centros->pluck('id')->toArray();
+   	    $dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$dptos = Deparment::whereIn('deparments.id', $dptos)->get();
         $default_year = Carbon::now()->format('Y');
         $qnas = ['1' => '01 - 1RA ENERO','2' => '02 - 2DA ENERO','3' => '03 - 1RA FEBRERO','4' => '04 -	2DA FEBRERO','5' => '05 - 1RA MARZO','6' => '06 - 2DA MARZO','7' => '07 - 1RA ABRIL','8' => '08 - 2DA ABRIL','9' => '09 - 1RA MAYO','10' => '10 - 2DA MAYO','11' => '11 - 1RA JUNIO','12' => '12 - 2DA JUNIO','13' => '13 - 1RA JULIO','14' => '14 - 2DA JULIO'
@@ -639,12 +639,6 @@ class ReportsController extends Controller
    return view('reportes.otorgado_incidencia_show')->with('incidencias',$incidencias)
                                                      ->with('fecha_inicial', $fecha_inicial)
                                                      ->with('fecha_final', $fecha_final);
-
-  }
-
-  public function cambio_de_guardia(Request $request){
-
-    echo "hola";
 
   }
 

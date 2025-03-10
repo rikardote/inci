@@ -1,6 +1,6 @@
 <header>
     <nav class="navbar navbar-guinda navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-target="#app-navbar-collapse" data-toggle="collapse">
                     <span class="sr-only">Interruptor de Navegación</span>
@@ -9,15 +9,15 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/incidencias">
-                    <img src="{{ asset('images/avatar.png') }}">
+                    <img src="{{ asset('images/60issste.png') }}" alt="Logo ISSSTE" class="navbar-logo">
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     @if (\Auth::user()->admin() || \Auth::user()->member())
-                        <li class="nav-item date-badge">
-                            <a href="#"><i class="fas fa-calendar-check"></i> Cierre: {{ getFechaCierre() }}</a>
+                        <li class="nav-item ">
+                            <a href="#"><i class="fas fa-calendar-check"></i> Fecha de Cierre: {{ getFechaCierre() }}</a>
                         </li>
                         <li class="nav-item"><a href="{{ route('employees.index') }}"><i class="fas fa-users"></i> Empleados</a></li>
                         <li class="nav-item"><a href="{{ route('incidencias.index') }}"><i class="fas fa-pen-to-square"></i> Captura</a></li>
@@ -49,7 +49,7 @@
                             <li><a href="{{ route('reports.estadistica') }}"><i class="fas fa-chart-bar"></i> Estadístico</a></li>
                             <li><a href="{{ route('reports.por_incidencia') }}"><i class="fas fa-list"></i> Por Incidencia</a></li>
                             <li><a href="{{ route('reports.val_aguinaldo') }}"><i class="fas fa-file-lines"></i> Anual de Faltas y Licencias</a></li>
-
+                          <!--  <li><a href="{{ route('reports.cambio_de_guardia') }}"><i class="fas fa-light fa-table"></i></i> Cambio de Guardia (TXT)</a></li> -->
                             <li><a href="{{ route('biometrico.registros') }}"><i class="fas fa-fingerprint"></i> Biométrico</a></li>
 
                             @if (Auth::user()->username == '376597')
@@ -67,7 +67,7 @@
                                 <span class="avatar-circle">
                                     <img src="{{ asset('images/logo_horizontal_ISSSTE.png') }}" class="avatar-img" alt="Avatar">
                                 </span>
-                                {{ str_limit(Auth::user()->name, 15) }} <span class="caret"></span>
+                                {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu user-menu" role="menu">

@@ -1,0 +1,3 @@
+UPDATE incidencias
+SET cobertura_txt = NULL
+WHERE codigodeincidencia_id != 38;
