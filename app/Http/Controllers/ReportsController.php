@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Incidencia;
-use App\Codigo_De_Incidencia;
-use App\Employe;
-use App\Deparment;
-use App\Qna;
-use App\Jornada;
-use App\Horario;
 use \mPDF;
+
+use App\Qna;
+use App\Employe;
+use App\Horario;
+use App\Jornada;
+use App\Deparment;
 use Carbon\Carbon;
+use App\Incidencia;
+use App\Http\Requests;
 use Laracasts\Flash\Flash;
+use Illuminate\Http\Request;
+use App\Codigo_De_Incidencia;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
@@ -313,77 +314,40 @@ class ReportsController extends Controller
     }
     public function ausentismo_centro(Request $request)
     {
-      $fecha_inicial = fecha_ymd($request->fecha_inicio);
-      $fecha_final = fecha_ymd($request->fecha_final);
+        $fecha_inicial = fecha_ymd($request->fecha_inicio);
+        $fecha_final = fecha_ymd($request->fecha_final);
+        $dpto_id = $request->deparment_id;
+        $dpto = Deparment::where('id', $dpto_id)->first();
 
-      $dpto_id = $request->deparment_id;
-      $dpto = Deparment::where('id','=', $dpto_id)->first();
+        $codigos = [1, 2, 3, 4, 8, 9, 10, 14, 15, 17, 30, 40, 41, 42, 46, 47, 48, 49, 51, 53, 54, 55, 60, 61, 62, 63, 94, 100];
 
-      //$codigos = ['10','14', '17', '40','41','46','47','48','49','51','53','54','55','60','62','63','94','100'];
-      $codigo_01 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 1);
-      $codigo_02 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 2);
-      $codigo_03 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 3);
-      $codigo_04 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 4);
-      $codigo_08 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 8);
-      $codigo_09 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 9);
-      $codigo_10 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 10);
-      $codigo_14 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 14);
-      $codigo_17 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 17);
-      $codigo_15 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 15);
-      $codigo_30 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 30);
-      $codigo_40 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 40);
-      $codigo_41 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 41);
-      $codigo_42 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 42);
-      $codigo_46 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 46);
-      $codigo_47 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 47);
-      $codigo_48 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 48);
-      $codigo_49 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 49);
-      $codigo_51 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 51);
-      $codigo_53 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 53);
-      $codigo_54 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 54);
-      $codigo_55 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 55);
-      $codigo_60 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 60);
-      $codigo_61 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 61);
-      $codigo_62 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 62);
-      $codigo_63 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 63);
-      $codigo_94 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 94);
-      $codigo_100 = Incidencia::getTotalIncidenciasPorCentro($fecha_inicial, $fecha_final,$dpto_id, 100);
+        $incidencias = Incidencia::select('codigos_de_incidencias.code', DB::raw('SUM(total_dias) AS count'))
+            ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
+            ->leftjoin('deparments', 'deparments.id', '=', 'employees.deparment_id')
+            ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+            ->whereNull('incidencias.deleted_at')
+            ->where('deparments.id', '=', $dpto_id)
+            ->whereIn('codigos_de_incidencias.code', $codigos)
+            ->whereBetween('fecha_inicio', [$fecha_inicial, $fecha_final])
+            ->groupBy('codigos_de_incidencias.code')
+            ->get()
+            ->pluck('count', 'code')
+            ->toArray();
 
-      return view('reportes.ausentismo_centro')
-        ->with('codigo_01', $codigo_01)
-        ->with('codigo_02', $codigo_02)
-        ->with('codigo_03', $codigo_03)
-        ->with('codigo_04', $codigo_04)
-        ->with('codigo_08', $codigo_08)
-        ->with('codigo_09', $codigo_09)
-        ->with('codigo_10', $codigo_10)
-        ->with('codigo_14', $codigo_14)
-        ->with('codigo_15', $codigo_15)
-        ->with('codigo_17', $codigo_17)
-        ->with('codigo_30', $codigo_30)
-        ->with('codigo_40', $codigo_40)
-        ->with('codigo_41', $codigo_41)
-        ->with('codigo_42', $codigo_42)
-        ->with('codigo_46', $codigo_46)
-        ->with('codigo_47', $codigo_47)
-      ->with('codigo_48', $codigo_48)
-      ->with('codigo_49', $codigo_49)
-      ->with('codigo_51', $codigo_51)
-      ->with('codigo_53', $codigo_53)
-      ->with('codigo_54', $codigo_54)
-      ->with('codigo_55', $codigo_55)
-      ->with('codigo_60', $codigo_60)
-      ->with('codigo_61', $codigo_61)
-      ->with('codigo_62', $codigo_62)
-      ->with('codigo_63', $codigo_63)
-      ->with('codigo_94', $codigo_94)
-      ->with('codigo_100', $codigo_100)
-      ->with('fecha_inicial', $fecha_inicial)
-      ->with('fecha_final', $fecha_final)
-      ->with('dpto_id', $dpto_id)
-      ->with('dpto', $dpto);
+        $results = [];
+        foreach ($codigos as $codigo) {
+            $codigoStr = sprintf("%02d", $codigo);
+            $results['codigo_' . $codigoStr] = $incidencias[$codigo] ?? 0;
+        }
 
-  }
+        return view('reportes.ausentismo_centro', [
+            'fecha_inicial' => $fecha_inicial,
+            'fecha_final' => $fecha_final,
+            'dpto_id' => $dpto_id,
+            'dpto' => $dpto,
+            'incidencias' => $results, // Pasar $results como $incidencias
+        ]);
+    }
   public function ausentismo_incidencias($codigo, $fecha_inicial, $fecha_final, $dpto_id)
   {
     $inc_empleados = Incidencia::getIncidenciasByCodeAndDate($codigo, $fecha_inicial, $fecha_final, $dpto_id);
