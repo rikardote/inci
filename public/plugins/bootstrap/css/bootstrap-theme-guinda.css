@@ -48,37 +48,11 @@ a:hover, a:focus {
     text-decoration: none;
 }
 
-/* Eliminar contornos azules en todos los elementos interactivos */
-.navbar-guinda a:focus,
-.navbar-guinda button:focus,
-.navbar-guinda .dropdown-toggle:focus,
-.navbar-guinda .navbar-nav > li > a:focus,
-.navbar-guinda .navbar-brand:focus,
-.dropdown-menu > li > a:focus,
-.dropdown-menu > li > a:active,
-.btn:focus,
-.form-control:focus {
+/* Eliminar outline y manejar el estado activo */
+a:focus,
+a:active {
     outline: none !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-}
-
-/* Agregar estilos alternativos para accesibilidad */
-.navbar-guinda .navbar-nav > li > a:focus {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.dropdown-menu > li > a:focus {
-    background-color: var(--primary-lighter);
-    color: var(--primary-dark);
-}
-
-/* Para otros elementos interactivos que podrían tener outline */
-input:focus,
-select:focus,
-textarea:focus,
-a:focus {
-    outline: none !important;
+    background-color: transparent; /* Evita el fondo blanco predeterminado */
 }
 
 /* ----------------------
@@ -114,11 +88,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .navbar-guinda .navbar-nav > li > a {
     color: #fff; /* Mantén el color del texto */
     padding: 15px 20px;
+    transition: background-color 0.2s ease; /* Transición suave */
 }
 
 .navbar-guinda .navbar-nav > li > a:hover,
 .navbar-guinda .navbar-nav > li > a:focus {
     background-color: var(--primary-darker); /* Guinda muy oscuro */
+    color: #fff; /* Mantén el color del texto */
+}
+
+.navbar-guinda .navbar-nav > li > a:active {
+    background-color: var(--primary-darker); /* o el color que desees */
     color: #fff; /* Mantén el color del texto */
 }
 
@@ -550,4 +530,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         right: auto;
         width: 100% !important;
     }
+}
+
+/* Eliminar contornos azules en todos los elementos interactivos */
+.navbar-guinda a:focus,
+.navbar-guinda button:focus,
+.navbar-guinda .dropdown-toggle:focus,
+.navbar-guinda .navbar-nav > li > a:focus,
+.navbar-guinda .navbar-brand:focus,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:active,
+.btn:focus,
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }

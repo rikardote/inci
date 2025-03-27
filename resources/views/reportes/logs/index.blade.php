@@ -24,106 +24,14 @@
                     <button id="refresh-btn" class="btn btn-primary">
                         <i class="fa fa-refresh"></i> Actualizar ahora
                     </button>
-                    <button class="btn btn-default" id="toggle-filters">
-                        <i class="fa fa-filter"></i> Filtros
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Panel de filtros (oculto por defecto) -->
-    <div id="filters-panel" class="filters-panel" style="display: none;">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Tipo de Incidencia</label>
-                    <select class="form-control" id="filter-type">
-                        <option value="">Todas</option>
-                        <option value="danger">Eliminadas</option>
-                        <option value="active">Activas</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Fecha</label>
-                    <input type="date" class="form-control" id="filter-date">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Empleado</label>
-                    <input type="text" class="form-control" id="filter-employee" placeholder="Nombre o número">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Unidad</label>
-                    <input type="text" class="form-control" id="filter-department" placeholder="Código o nombre">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Panel de estadísticas resumidas -->
-    <div class="stats-container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fa fa-calendar-check-o"></i>
-                    </div>
-                    <div class="stat-data">
-                        <h3 id="total-records">-</h3>
-                        <p>Total registros</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fa fa-user-plus"></i>
-                    </div>
-                    <div class="stat-data">
-                        <h3 id="today-records">-</h3>
-                        <p>Agregados hoy</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="stat-icon danger-bg">
-                        <i class="fa fa-trash"></i>
-                    </div>
-                    <div class="stat-data">
-                        <h3 id="deleted-records">-</h3>
-                        <p>Eliminados</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="stat-icon warning-bg">
-                        <i class="fa fa-exclamation-circle"></i>
-                    </div>
-                    <div class="stat-data">
-                        <h3 id="alerts-count">-</h3>
-                        <p>Alertas</p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Tabla de registros -->
-    <div class="panel panel-default data-panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Registros de incidencias</h3>
-            <div class="panel-tools">
-                <input type="text" class="form-control search-input" placeholder="Buscar..." id="table-search">
-            </div>
-        </div>
+
+
         <div class="panel-body">
             <div class="table-responsive">
                 <table id="logs-table" class="table table-hover table-striped" style="width:100%;">
@@ -159,7 +67,7 @@
                 <p class="lead text-muted">No se encontraron registros</p>
             </div>
         </div>
-    </div>
+
 </div>
 @endsection
 
@@ -210,93 +118,10 @@
         font-weight: 400;
     }
 
-    /* Filtros */
-    .filters-panel {
-        background: #f9f9f9;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-    }
-
-    /* Estadísticas */
-    .stats-container {
-        margin-bottom: 25px;
-    }
-
-    .stat-card {
-        background: white;
-        border-radius: 5px;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-        transition: all 0.2s ease;
-        margin-bottom: 15px;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: #3c8dbc;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        margin-right: 15px;
-    }
-
-    .danger-bg {
-        background-color: #dd4b39;
-    }
-
-    .warning-bg {
-        background-color: #f39c12;
-    }
-
-    .stat-data h3 {
-        margin: 0 0 5px 0;
-        font-size: 24px;
-        font-weight: 700;
-    }
-
-    .stat-data p {
-        margin: 0;
-        color: #888;
-        font-size: 14px;
-    }
-
     /* Panel de datos */
     .data-panel {
         border-radius: 5px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .data-panel .panel-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px;
-    }
-
-    .panel-tools {
-        display: flex;
-        align-items: center;
-    }
-
-    .search-input {
-        width: 250px;
-        border-radius: 20px;
-        padding-left: 15px;
     }
 
     /* Tabla */
@@ -383,10 +208,6 @@
             width: 100%;
             justify-content: space-between;
         }
-
-        .search-input {
-            width: 100%;
-        }
     }
 </style>
 @endsection
@@ -395,19 +216,14 @@
 <script>
     // Variables globales
     let lastUpdateTime = new Date();
-    let updateInterval = 10000; // 30 segundos
+    let updateInterval = 10000; // 10 segundos
     let intervalId = null;
     let isLoading = false;
     let allIncidencias = [];
     let currentPage = 1;
     let isLastPage = false;
     let pageSize = 20;
-    let isFetching = false;
-
-    // Agrega estas variables para el manejo del scroll
-    let lastScrollPosition = 0;
-    let scrollRestoreElement = null;
-    let preserveScrollOnNextUpdate = false;
+    let scrollObserver = null; // IntersectionObserver
 
     // Formatear fecha en formato DD/MM/YYYY
     function formatDate(dateString) {
@@ -423,7 +239,7 @@
         });
     }
 
-    // Formatear fecha y hora en formato DD/MM/YYYY HH:MM:SS con desfase horario de 9 horas
+    // Formatear fecha y hora en formato DD/MM/YYYY HH:MM:SS (sin ajuste de horario)
     function formatDateTime(dateString) {
         if (!dateString) return '-';
 
@@ -435,186 +251,195 @@
                 return '-';
             }
 
-            // Aplicar desfase horario de 9 horas
-            date.setHours(date.getHours() - 7);
+            // Aplicar la diferencia horaria de 7 horas (en milisegundos)
+            const timeZoneOffset = 7 * 60 * 60 * 1000;
+            const adjustedDate = new Date(date.getTime() - timeZoneOffset);
 
-            return date.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }) + ' ' + date.toLocaleTimeString('es-ES', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            const day = String(adjustedDate.getDate()).padStart(2, '0');
+            const month = String(adjustedDate.getMonth() + 1).padStart(2, '0');
+            const year = adjustedDate.getFullYear();
+            const hour = String(adjustedDate.getHours()).padStart(2, '0');
+            const minute = String(adjustedDate.getMinutes()).padStart(2, '0');
+            const second = String(adjustedDate.getSeconds()).padStart(2, '0');
+
+            return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
         } catch (e) {
             console.error('Error formateando fecha:', e);
             return '-';
         }
     }
 
-    // Modifica la función de actualización automática para preservar el scroll
+    // Cargar incidencias con manejo mejorado de estado
     function loadIncidencias(page = 1, resetData = true, preserveScroll = false) {
-        if (isLoading || isFetching) return;
+        if (isLoading) return;
 
-        // Guardar la posición del scroll si es necesario
+        // Guardar posición de scroll si es necesario
+        let savedScrollPosition = 0;
+        let scrollMarkerElement = null;
+
         if (preserveScroll) {
-            preserveScrollOnNextUpdate = true;
-            lastScrollPosition = window.scrollY;
-
-            // Identificar un elemento cercano a la posición actual para referencia
-            const tableRows = document.querySelectorAll('#logs-body tr');
-            if (tableRows.length > 0) {
-                // Encontrar el elemento visible más cercano al centro de la pantalla
-                const viewportHeight = window.innerHeight;
-                const viewportCenter = lastScrollPosition + (viewportHeight / 2);
-
-                let closestRow = null;
-                let closestDistance = Infinity;
-
-                tableRows.forEach(row => {
-                    const rowRect = row.getBoundingClientRect();
-                    const rowCenter = rowRect.top + window.scrollY + (rowRect.height / 2);
-                    const distance = Math.abs(viewportCenter - rowCenter);
-
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        closestRow = row;
-                    }
-                });
-
-                if (closestRow) {
-                    // Guardar el ID del elemento o crear uno temporal
-                    if (!closestRow.id) {
-                        closestRow.id = 'scroll-marker-' + Date.now();
-                    }
-                    scrollRestoreElement = closestRow.id;
-                }
-            }
+            savedScrollPosition = window.scrollY;
+            // Identificar elemento visible cerca del centro de la pantalla
+            scrollMarkerElement = findVisibleCenterElement('#logs-body tr');
         }
 
-        isFetching = true;
+        isLoading = true;
 
+        // Mostrar indicador de carga apropiado
         if (page === 1) {
-            isLoading = true;
             document.getElementById('loading-indicator').style.display = 'block';
             document.getElementById('empty-indicator').style.display = 'none';
             document.getElementById('update-status').className = 'label label-warning rounded';
             document.getElementById('update-status').innerHTML = '<i class="fa fa-refresh fa-spin"></i> Actualizando...';
         } else {
-            // Mostrar indicador de carga adicional al final de la tabla
-            const loadMoreIndicator = document.createElement('tr');
-            loadMoreIndicator.id = 'load-more-indicator';
-            loadMoreIndicator.innerHTML = `
-                <td colspan="10" class="text-center py-3">
-                    <i class="fa fa-circle-o-notch fa-spin"></i> Cargando más registros...
-                </td>
-            `;
-            document.getElementById('logs-body').appendChild(loadMoreIndicator);
+            // Añadir indicador al final de la tabla
+            showLoadMoreIndicator();
         }
 
         fetch(`{{ route('api.logs.incidencias') }}?page=${page}&limit=${pageSize}`)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
                 return response.json();
             })
             .then(data => {
-                // Si es la primera página, reemplazar datos, de lo contrario añadirlos
+                // Procesar datos
                 if (resetData) {
                     allIncidencias = data.data || data;
                 } else {
-                    // Agregar nuevos datos a los existentes
-                    if (data.data) {
-                        allIncidencias = [...allIncidencias, ...(data.data || [])];
-                    } else {
-                        allIncidencias = [...allIncidencias, ...(data || [])];
-                    }
+                    // Añadir nuevos datos a los existentes
+                    allIncidencias = [...allIncidencias, ...(data.data || data)];
                 }
 
-                // Verificar si es la última página
-                if (data.last_page) {
-                    isLastPage = page >= data.last_page;
-                } else {
-                    isLastPage = Array.isArray(data) ? data.length < pageSize : true;
-                }
+                // Determinar si es la última página
+                isLastPage = data.last_page ? (page >= data.last_page) :
+                    (Array.isArray(data) ? data.length < pageSize : true);
 
-                // Actualizar la página actual
+                // Actualizar página actual
                 currentPage = page;
 
-                // Renderizar datos (filtrados si es necesario)
-                if (page === 1) {
-                    renderTable(allIncidencias, true);
-                    updateStatistics(allIncidencias);
-                    updateStatus(true);
+                // Renderizar datos
+                renderTable(page === 1 ? allIncidencias : (Array.isArray(data) ? data : (data.data || [])), resetData);
 
-                    // Restaurar posición del scroll si es necesario
-                    if (preserveScrollOnNextUpdate) {
-                        setTimeout(restoreScrollPosition, 100);
-                    }
-                } else {
-                    const loadMoreIndicator = document.getElementById('load-more-indicator');
-                    if (loadMoreIndicator) {
-                        loadMoreIndicator.remove();
-                    }
-
-                    renderTable(
-                        Array.isArray(data) ? data : (data.data || []),
-                        false
-                    );
+                // Restaurar scroll si es necesario
+                if (preserveScroll && scrollMarkerElement) {
+                    setTimeout(() => restoreScroll(scrollMarkerElement, savedScrollPosition), 100);
                 }
             })
             .catch(error => {
-                console.error('Error al cargar los datos:', error);
-                updateStatus(false, error.message);
+                console.error('Error al cargar datos:', error);
+                window.updateStatus(false, error.message);
             })
             .finally(() => {
-                isFetching = false;
+                isLoading = false;
 
+                // Ocultar indicadores de carga
                 if (page === 1) {
-                    isLoading = false;
                     document.getElementById('loading-indicator').style.display = 'none';
                 } else {
-                    const loadMoreIndicator = document.getElementById('load-more-indicator');
-                    if (loadMoreIndicator) {
-                        loadMoreIndicator.remove();
-                    }
+                    hideLoadMoreIndicator();
+                }
+
+                // Inicializar observador de scroll solo después de renderizar
+                if (!isLastPage) {
+                    window.addScrollDetection();
                 }
             });
     }
 
-    // Actualizar las estadísticas con los datos recibidos
-    function updateStatistics(data) {
-        if (!data) return;
+    // Encontrar elemento visible cercano al centro
+    function findVisibleCenterElement(selector) {
+        const elements = document.querySelectorAll(selector);
+        if (!elements.length) return null;
 
-        // Total de registros
-        document.getElementById('total-records').textContent = data.length;
+        const viewportHeight = window.innerHeight;
+        const viewportCenter = window.scrollY + (viewportHeight / 2);
 
-        // Registros de hoy - CORREGIDO PARA MANEJAR EL DESFASE HORARIO
-        const todayRecords = data.filter(inc => {
-            if (!inc.created_at) return false;
+        let closestElement = null;
+        let closestDistance = Infinity;
 
-            // Convertir fecha UTC a fecha local con ajuste horario
-            const createdDate = new Date(inc.created_at);
-            const localNow = new Date();
+        elements.forEach(element => {
+            const rect = element.getBoundingClientRect();
+            const elementCenter = rect.top + window.scrollY + (rect.height / 2);
+            const distance = Math.abs(viewportCenter - elementCenter);
 
-            // Verificar si la fecha está en "hoy" en tiempo local
-            return createdDate.getFullYear() === localNow.getFullYear() &&
-                   createdDate.getMonth() === localNow.getMonth() &&
-                   createdDate.getDate() === localNow.getDate();
-        }).length;
-        document.getElementById('today-records').textContent = todayRecords;
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestElement = element;
+            }
+        });
 
-        // Registros eliminados
-        const deletedRecords = data.filter(inc => inc.deleted_at).length;
-        document.getElementById('deleted-records').textContent = deletedRecords;
+        // Asegurarse de que el elemento tenga un ID para referencia
+        if (closestElement && !closestElement.id) {
+            closestElement.id = 'scroll-marker-' + Date.now();
+        }
 
-        // Alertas (podría ser basado en algún criterio específico)
-        const alerts = data.filter(inc => {
-            // Ejemplo: incidencias con más de 10 días
-            return inc.total_dias > 10;
-        }).length;
-        document.getElementById('alerts-count').textContent = alerts;
+        return closestElement;
+    }
+
+    // Configuración de scroll infinito con IntersectionObserver
+    window.setupInfiniteScroll = function() {
+        // Limpiar observador anterior si existe
+        if (scrollObserver) {
+            scrollObserver.disconnect();
+            scrollObserver = null;
+        }
+
+        // Crear o asegurar que existe el elemento trigger
+        let scrollTrigger = document.getElementById('scroll-trigger');
+        if (!scrollTrigger) {
+            scrollTrigger = document.createElement('div');
+            scrollTrigger.id = 'scroll-trigger';
+            scrollTrigger.style.width = '100%';
+            scrollTrigger.style.height = '20px';
+            scrollTrigger.style.margin = '20px 0';
+            document.querySelector('.panel-body').appendChild(scrollTrigger);
+        }
+
+        // Crear nuevo observador con configuración optimizada
+        scrollObserver = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            if (entry && entry.isIntersecting && !isLoading && !isLastPage) {
+                console.log('Trigger activado - Cargando página:', currentPage + 1);
+                loadIncidencias(currentPage + 1, false);
+            }
+        }, {
+            root: null,
+            rootMargin: '0px 0px 300px 0px', // Más sensible: detecta a 300px del viewport
+            threshold: 0.1 // Más sensible: dispara cuando 10% es visible
+        });
+
+        // Observar el elemento trigger
+        scrollObserver.observe(scrollTrigger);
+    }
+
+    // Mostrar indicador de carga al final
+    function showLoadMoreIndicator() {
+        // Eliminar si existe uno anterior
+        hideLoadMoreIndicator();
+
+        const indicator = document.createElement('tr');
+        indicator.id = 'load-more-indicator';
+        indicator.innerHTML = `
+            <td colspan="10" class="text-center py-3">
+                <i class="fa fa-circle-o-notch fa-spin"></i> Cargando más registros...
+            </td>
+        `;
+        document.getElementById('logs-body').appendChild(indicator);
+    }
+
+    // Ocultar indicador de carga
+    function hideLoadMoreIndicator() {
+        const indicator = document.getElementById('load-more-indicator');
+        if (indicator) indicator.remove();
+    }
+
+    // Restaurar posición de scroll
+    function restoreScroll(element, fallbackPosition) {
+        if (element) {
+            element.scrollIntoView({ behavior: 'auto', block: 'center' });
+        } else if (fallbackPosition) {
+            window.scrollTo(0, fallbackPosition);
+        }
     }
 
     // Renderizar la tabla con los datos obtenidos
@@ -653,16 +478,14 @@
                         ${codigoInc.code ? String(codigoInc.code).padStart(2, '0') : '-'}
                     </span>
                 </td>
-                <td align="center">${formatDate(incidencia.fecha_inicio)}</td>
-                <td align="center">${formatDate(incidencia.fecha_final)}</td>
-                <td align="center">
-                    <span class="badge bg-info">
-                        ${incidencia.total_dias || '-'}
-                    </span>
+                <td>${formatDate(incidencia.fecha_inicio)}</td>
+                <td>${formatDate(incidencia.fecha_final)}</td>
+                <td>
+                    ${incidencia.total_dias || '-'}
                 </td>
-                <td align="center">${periodo.periodo ? periodo.periodo + '/' + periodo.year : '-'}</td>
-                <td align="center">${formatDateTime(incidencia.created_at)}</td>
-                <td align="center">
+                <td>${periodo.periodo ? periodo.periodo + '/' + periodo.year : '-'}</td>
+                <td>${formatDateTime(incidencia.created_at)}</td>
+                <td>
                     ${incidencia.deleted_at ?
                         `<span class="text-danger">${formatDateTime(incidencia.deleted_at)}</span>` :
                         '<span class="text-muted">-</span>'}
@@ -677,10 +500,13 @@
         // Siempre añadir el detector de scroll al final de renderizar
         if (!isLastPage) {
             // Programar la adición después de un pequeño delay para estar seguro que el DOM está actualizado
-            setTimeout(addScrollDetection, 100);
+            setTimeout(window.addScrollDetection, 100);
         } else {
-            // Limpiar listener de scroll si es la última página
-            window.removeEventListener('scroll', handleScroll);
+            // Limpiar observer de scroll si es la última página
+            if (scrollObserver) {
+                scrollObserver.disconnect();
+                scrollObserver = null;
+            }
 
             // Añadir mensaje de "no hay más registros"
             const noMoreRow = document.createElement('tr');
@@ -693,8 +519,29 @@
         }
     }
 
+    window.checkForUpdates = function() {
+        fetch('{{ route('api.logs.checkForUpdates') }}?last_update=' + lastUpdateTime.toISOString())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error checking for updates');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.has_updates) {
+                    loadIncidencias(1, true, true); // Recargar solo si hay actualizaciones
+                } else {
+                    window.updateStatus(true); // Actualizar el estado para mostrar la hora de la última comprobación
+                }
+            })
+            .catch(error => {
+                console.error('Error checking for updates:', error);
+                window.updateStatus(false, error.message);
+            });
+    }
+
     // Función mejorada para añadir detección de scroll
-    function addScrollDetection() {
+    window.addScrollDetection = function() {
         // Eliminar detector de scroll anterior si existe
         const oldTrigger = document.getElementById('scroll-trigger');
         if (oldTrigger) {
@@ -719,12 +566,12 @@
         };
 
         // Crear y aplicar observer
-        const observer = new IntersectionObserver((entries) => {
+        scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 // Añadir mensaje de depuración
-                console.log('Elemento trigger detectado:', entry.isIntersecting, 'isLastPage:', isLastPage, 'isFetching:', isFetching);
+                console.log('Elemento trigger detectado:', entry.isIntersecting, 'isLastPage:', isLastPage, 'isLoading:', isLoading);
 
-                if (entry.isIntersecting && !isLastPage && !isFetching) {
+                if (entry.isIntersecting && !isLastPage && !isLoading) {
                     console.log('Cargando página:', currentPage + 1);
                     // Cargar más datos al llegar al final
                     loadIncidencias(currentPage + 1, false);
@@ -733,33 +580,11 @@
         }, options);
 
         // Observar el elemento
-        observer.observe(scrollTrigger);
-
-        // Añadir también un detector de scroll alternativo como respaldo
-        window.addEventListener('scroll', handleScroll);
-    }
-
-    // Detector de scroll alternativo
-    function handleScroll() {
-        // Si ya estamos cargando o es la última página, no hacemos nada
-        if (isLastPage || isFetching) return;
-
-        // Calcular si estamos cerca del final de la página
-        const scrollHeight = document.documentElement.scrollHeight;
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const clientHeight = window.innerHeight;
-
-        const scrollRemaining = scrollHeight - scrollTop - clientHeight;
-        const scrollThreshold = 200; // cargar cuando falten 200px para el final
-
-        if (scrollRemaining < scrollThreshold) {
-            console.log('Detector de scroll alternativo activado. Cargando página:', currentPage + 1);
-            loadIncidencias(currentPage + 1, false);
-        }
+        scrollObserver.observe(scrollTrigger);
     }
 
     // Actualizar el estado de la actualización
-    function updateStatus(success, errorMsg = '') {
+    window.updateStatus = function(success, errorMsg = '') {
         const statusElement = document.getElementById('update-status');
         const timeElement = document.getElementById('last-update-time');
 
@@ -782,140 +607,23 @@
         }
     }
 
-    // Filtrar datos de la tabla
-    function filterTable() {
-        currentPage = 1;
-        isLastPage = false;
-
-        const filterType = document.getElementById('filter-type').value;
-        const filterDate = document.getElementById('filter-date').value;
-        const filterEmployee = document.getElementById('filter-employee').value.toLowerCase();
-        const filterDepartment = document.getElementById('filter-department').value.toLowerCase();
-        const searchText = document.getElementById('table-search').value.toLowerCase();
-
-        // Si hay filtros activos, filtrar datos localmente
-        if (filterType || filterDate || filterEmployee || filterDepartment || searchText) {
-            let filteredData = [...allIncidencias];
-
-            // Aplicar filtros como antes...
-            if (filterType === 'danger') {
-                filteredData = filteredData.filter(inc => inc.deleted_at);
-            } else if (filterType === 'active') {
-                filteredData = filteredData.filter(inc => !inc.deleted_at);
-            }
-
-            // Filtrar por fecha
-            if (filterDate) {
-                filteredData = filteredData.filter(inc =>
-                    inc.fecha_inicio && inc.fecha_inicio.startsWith(filterDate)
-                );
-            }
-
-            // Filtrar por empleado
-            if (filterEmployee) {
-                filteredData = filteredData.filter(inc => {
-                    const employee = inc.employee || {};
-                    const fullName = `${employee.father_lastname || ''} ${employee.mother_lastname || ''} ${employee.name || ''}`.toLowerCase();
-                    return fullName.includes(filterEmployee) ||
-                          (employee.num_empleado && employee.num_empleado.toString().includes(filterEmployee));
-                });
-            }
-
-            // Filtrar por departamento
-            if (filterDepartment) {
-                filteredData = filteredData.filter(inc => {
-                    const employee = inc.employee || {};
-                    const deparment = employee.deparment || {};
-                    return (deparment.code && deparment.code.toString().toLowerCase().includes(filterDepartment)) ||
-                           (deparment.name && deparment.name.toLowerCase().includes(filterDepartment));
-                });
-            }
-
-            // Filtrar por texto de búsqueda
-            if (searchText) {
-                filteredData = filteredData.filter(inc => {
-                    const employee = inc.employee || {};
-                    const deparment = employee.deparment || {};
-                    const codigoInc = inc.codigodeincidencia || {};
-                    const periodo = inc.periodo || {};
-
-                    const searchFields = [
-                        deparment.code,
-                        deparment.name,
-                        employee.num_empleado,
-                        employee.name,
-                        employee.father_lastname,
-                        employee.mother_lastname,
-                        codigoInc.code,
-                        inc.fecha_inicio,
-                        inc.fecha_final
-                    ].filter(Boolean).map(field => field.toString().toLowerCase());
-
-                    return searchFields.some(field => field.includes(searchText));
-                });
-            }
-
-            renderTable(filteredData, true);
-        } else {
-            // Si no hay filtros, reiniciar la carga con paginación
-            loadIncidencias(1, true);
-        }
-    }
-
-    // Función para restaurar la posición del scroll
-    function restoreScrollPosition() {
-        if (scrollRestoreElement) {
-            // Intenta encontrar el elemento de referencia
-            const marker = document.getElementById(scrollRestoreElement);
-            if (marker) {
-                // Scroll hasta el elemento con un pequeño offset para mejor visibilidad
-                marker.scrollIntoView({ behavior: 'auto', block: 'center' });
-            } else {
-                // Si no encuentra el elemento, restaura por posición
-                window.scrollTo(0, lastScrollPosition);
-            }
-        } else {
-            // Sin elemento de referencia, restaura por posición
-            window.scrollTo(0, lastScrollPosition);
-        }
-
-        // Resetear las variables
-        preserveScrollOnNextUpdate = false;
-    }
-
     // Modifica la función de actualización periódica para preservar el scroll
     function initApp() {
         // Cargar datos iniciales
         loadIncidencias();
-
-        // Asegurarnos de limpiar listeners antiguos
-        window.removeEventListener('scroll', handleScroll);
 
         // Configurar actualización periódica con preservación de scroll
         if (intervalId) {
             clearInterval(intervalId);
         }
         intervalId = setInterval(() => {
-            loadIncidencias(1, true, true);  // Importante: preserveScroll = true
+            window.checkForUpdates(); // Comprobar si hay actualizaciones antes de recargar
         }, updateInterval);
 
         // Resto del código de inicialización...
         document.getElementById('refresh-btn').addEventListener('click', () => {
             loadIncidencias(1, true, true);  // Preservar scroll en actualización manual
         });
-
-        // Resto del código de inicialización...
-        document.getElementById('toggle-filters').addEventListener('click', () => {
-            const filtersPanel = document.getElementById('filters-panel');
-            filtersPanel.style.display = filtersPanel.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // Configurar eventos para filtros (estos no preservan el scroll, ya que cambian los datos)
-        document.getElementById('filter-type').addEventListener('change', filterTable);
-        document.getElementById('filter-date').addEventListener('change', filterTable);
-        document.getElementById('filter-employee').addEventListener('input', filterTable);
-        document.getElementById('filter-department').addEventListener('input', filterTable);
-        document.getElementById('table-search').addEventListener('input', filterTable);
 
         // Mostrar tiempo inicial
         document.getElementById('last-update-time').textContent = 'Iniciando...';
