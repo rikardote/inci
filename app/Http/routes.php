@@ -415,7 +415,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/logs/incidencias', [
     'as' => 'api.logs.incidencias',
     'uses' => 'LogsController@getIncidencias'
-]);
+    ]);
+    Route::get('logs/checkForUpdates', 'LogsController@checkForUpdates')->name('api.logs.checkForUpdates');
 
     /* B IO M E T R I C O  */
     Route::get('biometrico', [
