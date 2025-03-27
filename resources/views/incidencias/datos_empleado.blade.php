@@ -25,9 +25,10 @@
                 {{$employee->comisionado ? '| COMISIONADO &nbsp;':''}}
                 <br>
                 {{$employee->lactancia ? 'LACTANCIA: '.fecha_dmy($employee->lactancia_inicio)." AL ".fecha_dmy($employee->lactancia_fin) :''}}
-
-
                 </div>
+
+
+
                 <div align="center">
                   @if(isset($comment))
 
@@ -35,5 +36,4 @@
 
                   @endif
               </div>
-
 @endif

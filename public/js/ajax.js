@@ -1,4 +1,4 @@
-  $('#register').click(function(){
+$('#register').click(function(){
     var frmemployee = $('#empleado_id').val();
     var frmcodigo = $('#codigo').val();
     var frmfecha_inicio = $('#datepicker_inicial').val();
@@ -62,53 +62,57 @@
       headers: {'X-CSRF-TOKEN': token},
       type: 'POST',
       data: dataString,
-           success: function(res) {
-            console.log(res);
-             moment.locale('es');
-              $("#after_tr").empty();
-              $(res).each(function(key, value){
-                var finicio = moment(value.fecha_inicio);
-                var ffinal = moment(value.fecha_final);
+      success: function(res) {
+        console.log(res);
+        moment.locale('es');
+        $("#after_tr").empty();
+        $(res).each(function(key, value){
+          var finicio = moment(value.fecha_inicio);
+          var ffinal = moment(value.fecha_final);
 
-                if (value.periodo==null) {
-                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");
-                }
-                else{
-                  tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");
-                };
-              });
-               //$('#periodo').hide();
-               function toasterOptions() {
-                      toastr.options = {
-                          "closeButton": false,
-                          "debug": false,
-                          "newestOnTop": false,
-                          "progressBar": true,
-                          "positionClass": "toast-bottom-center",
-                          "timeOut": "1500",
-                      };
-                };
-               toasterOptions();
-               toastr.success('Incidencia Registrada Correctamente');
-
-               document.getElementById('register').style.visibility='visible';
-           },
-
-             error: function (res) {
-               swal({
-                title: "Error!!... ",
-                text: res.responseText,
-                type: "error",
-                confirmButtonColor: "#DD6B55",
-                closeOnConfirm: false,
-                timer: 3000
-               });
-               document.getElementById('register').style.visibility='visible';
-
-
-
-             }
+          if (value.periodo==null) {
+            tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td></td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");
+          }
+          else{
+            tablaDatos.append("<tr><td>"+value.qna+"/"+value.qna_year+"</td><td>"+zPad(value.code, 2)+"</td><td>"+finicio.format("L")+"</td><td>"+ffinal.format("L")+"</td><td>"+value.total_dias+"</td><td>"+value.periodo+"/"+value.periodo_year+"</td><td><button class='fa fa-trash fa-2x' value='"+value.token+"/"+value.num_empleado+"/"+value.id+"/destroy'  OnClick='Eliminar(this);'></button></td><td>"+value.capturado_por+" - "+value.fecha_capturado+"</td></tr>");
+          };
         });
+        //$('#periodo').hide();
+        function toasterOptions() {
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-center",
+            "timeOut": "1500",
+          };
+        };
+        toasterOptions();
+        toastr.success('Incidencia Registrada Correctamente');
+
+        document.getElementById('register').style.visibility='visible';
+
+        // AGREGAR ESTE CÓDIGO: Actualizar el contador de licencias médicas después de agregar
+        if (typeof cargarLicenciasMedicas === 'function') {
+          cargarLicenciasMedicas();
+        } else {
+          // Alternativa: disparar un evento personalizado que la página pueda escuchar
+          $(document).trigger('licenciaAgregada');
+        }
+      },
+      error: function (res) {
+        swal({
+          title: "Error!!... ",
+          text: res.responseText,
+          type: "error",
+          confirmButtonColor: "#DD6B55",
+          closeOnConfirm: false,
+          timer: 3000
+        });
+        document.getElementById('register').style.visibility='visible';
+      }
+    });
   });
 
 function zPad(n, l, r){
@@ -116,10 +120,6 @@ function zPad(n, l, r){
 }
 
 function Eliminar(btn){
-  //var route = "http://incidencias.test/incidencias/"+btn.value+"";
-  //var route = "http://incidencias.slyip.com/incidencias/"+btn.value+"";
-  //var route = "http://incidencias.ddns.net/incidencias/"+btn.value+"";
-  //var route = "http://localhost/incidencias/"+btn.value+"";
   var url = document.location.origin;
   var route = url+"/incidencias/"+btn.value+"";
 
@@ -131,13 +131,10 @@ function Eliminar(btn){
     headers: {'X-CSRF-TOKEN': token},
     type: 'GET',
     dataType: 'json',
-
     success: function(res){
-
-    moment.locale('es');
+      moment.locale('es');
       $("#after_tr").empty();
        $(res).each(function(key, value){
-
         var finicio = moment(value.fecha_inicio);
         var ffinal = moment(value.fecha_final);
           if (value.periodo==null) {
@@ -159,7 +156,14 @@ function Eliminar(btn){
       };
       toasterOptions();
       toastr.warning('Incidencia Eliminada Correctamente');
+
+      // Actualizar el contador de licencias médicas después de eliminar
+      if (typeof cargarLicenciasMedicas === 'function') {
+        cargarLicenciasMedicas();
+      } else {
+        // Alternativa: disparar un evento personalizado que la página pueda escuchar
+        $(document).trigger('licenciaEliminada');
+      }
     }
   });
-
 }

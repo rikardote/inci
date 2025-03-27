@@ -436,27 +436,68 @@ class ReportsController extends Controller
 
   public function exceso_incapacidades()
   {
-   $dptos = \Auth::user()->centros->pluck('id')->toArray();
+    $dptos = \Auth::user()->centros->pluck('id')->toArray();
 
-   $empleados = Employe::getEmpleado($dptos);
+    // Obtener todos los empleados de una vez
+    $empleados = Employe::getEmpleado($dptos);
 
-   //$empleado = Employe::where('num_empleado','=','159145')->first();
-   foreach ($empleados as $empleado) {
-     $fecha_inicio = getdateActual($empleado->fecha_ingreso); //"2018-12-01";
-     $fecha_final = getdatePosterior($fecha_inicio); //"2019-12-01";
+    // Convertir a colección si es un array o preparar directamente los IDs
+    $empleadosIds = is_array($empleados) ?
+                   array_map(function($empleado) { return $empleado->num_empleado; }, $empleados) :
+                   $empleados->pluck('num_empleado')->toArray();
 
-     $incapacidades[] = Incidencia::getIncapacidades($fecha_inicio, $fecha_final,$empleado->num_empleado);
-   }
-   $data = array_map('array_filter', $incapacidades);
-   $data = array_filter($data);
+    // Obtener fechas límite para calcular incapacidades
+    $fechasLimite = [];
+    foreach ($empleados as $empleado) {
+        $fechaInicio = getdateActual($empleado->fecha_ingreso);
+        $fechaFinal = getdatePosterior($fechaInicio);
+        $fechasLimite[$empleado->num_empleado] = [
+            'fecha_inicio' => $fechaInicio,
+            'fecha_final' => $fechaFinal
+        ];
+    }
 
-   $return = array();
-   foreach ($data as $key => $value) {
-       if (is_array($value)){ $return = array_merge($return, array_flatten($value));}
-       else {$return[$key] = $value;}
-   }
+    // Obtener todas las incapacidades en una sola consulta
+    $todasIncapacidades = Incidencia::getIncapacidadesMultiples($empleadosIds, $fechasLimite);
 
-    return view('reportes.excesos_de_incacapacidades.index')->with('data', $return);
+    // Filtrar resultados vacíos y aplicar regla de exceso de incapacidades
+    $data = [];
+    foreach ($todasIncapacidades as $numEmpleado => $incapacidadesInfo) {
+        if (empty($incapacidadesInfo) || empty($incapacidadesInfo['incapacidades'])) {
+            continue;
+        }
+
+        $totalDias = $incapacidadesInfo['total_dias'];
+        $incapacidades = $incapacidadesInfo['incapacidades'];
+
+        if (empty($incapacidades)) {
+            continue;
+        }
+
+        // Calcular antigüedad en años
+        $fechaIngreso = new Carbon($incapacidades[0]->fecha_ingreso);
+        $hoy = Carbon::now();
+        $antiguedad = $fechaIngreso->diffInYears($hoy);
+
+        // Verificar si excede el límite según antigüedad
+        if ($this->getExcesodeIncapacidad($totalDias, $antiguedad)) {
+            $data[$numEmpleado] = $incapacidadesInfo;
+        }
+    }
+
+    return view('reportes.excesos_de_incacapacidades.index')->with('data', $data);
+  }
+
+  private function getExcesodeIncapacidad($dias_lic, $antiguedad)
+  {
+      // Pequeño ajuste para manejar casos límite exactos (>=)
+      if (($dias_lic > 15 && $antiguedad < 1) ||
+          ($dias_lic > 30 && $antiguedad >= 1 && $antiguedad <= 4) ||  // Cambiado a >= 1
+          ($dias_lic > 45 && $antiguedad >= 5 && $antiguedad <= 9) ||
+          ($dias_lic > 60 && $antiguedad >= 10)) {
+          return 1;
+      }
+      return 0;
   }
 
  public function estadistica()

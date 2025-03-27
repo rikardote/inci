@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/jquery/css/themes/smothness/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('css/application.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap-theme-guinda.css') }}">
+
 <!-- filepath: /d:/swtools/laragon/www/incidencias/resources/views/layout/app.blade.php -->
 <!-- Reemplazar la antigua referencia a Font Awesome -->
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
@@ -73,7 +74,7 @@
         <script src="{{ asset('plugins/toastr/js/toastr.min.js') }}"></script>
         <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
         <script src="{{ asset('plugins/flatpickr/dist_l10n_es.js') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
 
         <script src="{{ asset('js/script.js') }}"></script>
 

@@ -1,5 +1,8 @@
+<div align="center">
+            <div id="licencias-medicas-container"></div>
+        </div>
 
-		<table id="records_table" class="table table-hover table-condensed">
+        <table id="records_table" class="table table-hover table-condensed">
 				<thead>
 					<th>Qna</th>
 					<th>Codigo</th>

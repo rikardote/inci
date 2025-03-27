@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Response;
 
-use App\Http\Controllers\Controller;
-use App\Deparment;
-use App\Employe;
 use App\Puesto;
+use App\Employe;
 use App\Horario;
-use App\Condicion;
 use App\Jornada;
-use App\Http\Requests\EmployessRequest;
+use Maintenance;
+use App\Condicion;
+use App\Deparment;
+use Carbon\Carbon;
+use App\Incidencia;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
-use Response;
-use Maintenance;
-use Carbon\Carbon;
+use App\Http\Requests\EmployessRequest;
 
 class EmployeesController extends Controller
 {
@@ -224,5 +225,43 @@ class EmployeesController extends Controller
 
         return Response::json($return_array);
     }
+    public function getLicenciasMedicas($num_empleado)
+    {
+        $empleado = Employe::where('num_empleado', $num_empleado)->first();
+        $fechaInicio = getdateActual($empleado->fecha_ingreso);
+        $fechaFinal  = getdatePosterior($fechaInicio);
 
+        // Calcular antigüedad en años
+        $fechaIngreso = new Carbon($empleado->fecha_ingreso);
+        $hoy = Carbon::now();
+        $antiguedad = $fechaIngreso->diffInYears($hoy);
+
+        try {
+            $dias_lic = Incidencia::getIncapacidadesEmpleado($empleado->num_empleado, $fechaInicio, $fechaFinal);
+
+            // Verificar si se excede el límite según antigüedad
+            if (($dias_lic > 15 && $antiguedad < 1) ||
+                ($dias_lic > 30 && $antiguedad >= 1 && $antiguedad <= 4) ||
+                ($dias_lic > 45 && $antiguedad >= 5 && $antiguedad <= 9) ||
+                ($dias_lic > 60 && $antiguedad >= 10)) {
+
+                return response()->json([
+                    'success' => true,
+                    'licenciasMedicas' => $dias_lic
+                ]);
+            }
+
+            // Si no excede el límite, retornar cero
+            return response()->json([
+                'success' => true,
+                'licenciasMedicas' => 0
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

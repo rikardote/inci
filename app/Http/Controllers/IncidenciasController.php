@@ -65,281 +65,204 @@ class IncidenciasController extends Controller
     //, $empleado_id, $qna_id
     public function store(Request $request)
     {
-        // VALIDANDO MANTENIMIENTO EN TRUE
-        if (check_manto() && !\Auth::user()->admin()) {
-            return response()->json('El sistema este en periodo de mantenimiento... intentar mas tarde',500);
-        }
-        date_default_timezone_set('UTC');
+    // Validar mantenimiento
+    $mantenimiento = $this->validarMantenimiento();
+    if ($mantenimiento !== true) {
+        return response()->json($mantenimiento['message'], 500);
+    }
 
-        if($request->qna_id != 0){
-            $fecha_inicio = getFechaInicioPorQna($request->qna_id);
-            $fecha_final = getFechaFinalPorQna($fecha_inicio);
-        }
-        else {
-            $fecha_inicio = fecha_ymd($request->datepicker_inicial);
-            $fecha_final = fecha_ymd($request->datepicker_final);
-        }
+    date_default_timezone_set('UTC');
 
-        $empleado = Employe::find($request->empleado_id);
+    // Obtener fechas
+    list($fecha_inicio, $fecha_final) = $this->obtenerFechas($request);
 
+    // Buscar empleado
+    $empleado = Employe::find($request->empleado_id);
+    if (!$empleado) {
+        return response()->json('Empleado no encontrado', 500);
+    }
 
+    // Generar fechas por quincena
+    $grupos = $this->generarFechasPorQna($fecha_inicio, $fecha_final);
+    $fecha_expedida = $request->datepicker_expedida ? fecha_ymd($request->datepicker_expedida) : null;
 
-        $fecha_expedida = ($request->datepicker_expedida) ? fecha_ymd($request->datepicker_expedida) : NULL;
-        $fecha1 = strtotime($fecha_inicio);
-        $fecha2 = strtotime($fecha_final);
+    foreach ($grupos as $grupo) {
+        // Preparar incidencia
+        $incidencia = $this->prepararIncidencia($request, $grupo, $fecha_expedida);
 
-        $mat_desp = [14,17];
-        $syf_dyf = [1,15];
-        $guardias = [2,3,5,6,18,13,20,4,7,8,9,10,11,19,21,22,23,24,25,26,27,28,29,30,31,32,34];
-
-        $fechas = array();
-
-        for ($i=$fecha1; $i <= $fecha2; $i+=86400) {
-            $fecha = date("Y-m-d", $i);
-            $qna = qna_year($fecha);
-            $fechas[] =  ['fecha' => $fecha,'qna' => $qna];
-        }
-        $group = array_group_by($fechas,'qna');
-
-        foreach ($group as $key => $value) {
-            $incidencia = new Incidencia($request->all());
-            $incidencia->employee_id = $request->empleado_id;
-            $incidencia->codigodeincidencia_id = $request->codigo;
-
-            $fecha_inicial = reset($value);
-            $fecha_final = end($value);
-
-            $start = Carbon::parse($fecha_inicial['fecha']);
-            $end = Carbon::parse($fecha_final['fecha'])->addDay();
-            $total_dias = $start->diffInDays($end);
-
-            $incidencia->qna_id = qna_year($start);
-            $incidencia->fecha_inicio = $fecha_inicial['fecha'];
-            $incidencia->fecha_final = $fecha_final['fecha'];
-            $incidencia->token = genToken();
-            $incidencia->total_dias = $total_dias;
-            $incidencia->fecha_expedida = $fecha_expedida;
-            $incidencia->capturado_por = capturado_por(\Auth::user()->id);
-
-            $incidencia->fecha_capturado =  Carbon::now();
-
-            $codigo = Codigo_De_Incidencia::where('id', $request->codigo)->first();
-
-            $qna = Qna::find($incidencia->qna_id);
-
-
-
-
-            /* Validando Qna Activa */
-                if(!isset($qna->id))
-                return response()->json('Quincena no activada',500);
-
-            /* WIP!! Validando 72 horas o tres dias limites de captura  */
-            /*
-            $now = Carbon::now();
-            $diff = $start->diffInDays($now);
-            switch ($now->dayOfWeek) {
-                case '1':
-                     if ($diff >= 3)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '2':
-                     if ($diff >= 3)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '3':
-                     if ($diff >= 5)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '4':
-                     if ($diff >= 5)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '5':
-                     if ($diff >= 5)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '6':
-                     if ($diff >= 4)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-                case '0':
-                     if ($diff >= 3)
-                       return response()->json(
-                         'Fecha de incidencia Excede limite de 3 dias',500);
-                break;
-
-            }
-
-        */
-            if ($codigo->code == 912) {
-                return response()->json('Codigo 912 ya no se encuentra activo, acude a Recursos Humanos',500);
-            }
-            /* Validando pases de salida */
-            if ($codigo->code == 905 && $empleado->condicion_id != 1 ) {
-                return response()->json('Pases de salida solo validos para el personal de BASE',500);
-            }
-
-            if ($codigo->code == 905 && $this->valPaseDeSalida($qna, $incidencia->employee_id)) {
-                return response()->json('Pase de salida de QNA: '.$qna->qna.'-'.$qna->year.' ya gozado',500);
-            }
-
-            /* Validando ya capturado y excepciones*/
-            $incidencias_duplicados = [01,18,19,02,03,04,07,92,905,30];
-            //if ($this->yaCapturado($incidencia->employee_id, $fecha_inicial['fecha'],$fecha_final['fecha']) && $codigo->code != 01 && $codigo->code != 905  && $codigo->code != 18 && $codigo->code != 19 && $codigo->code != 02  && $codigo->code != 03 && $codigo->code != 04 && $codigo->code != 07 && $codigo->code != 92) {
-                if ($this->yaCapturado($incidencia->employee_id, $fecha_inicial['fecha'],$fecha_final['fecha']) && !in_array($codigo->code,$incidencias_duplicados)) {
-                return response()->json(
-                       'Ya existe una incidencia este dia o periodo',500);
-            }
-
-            /* Validando Licencias sin goce de sueldo*/
-
-            /*
-             if(validar_licencia_sin_goce($incidencia->employee_id,$fecha_inicial['fecha'],$fecha_final['fecha'])) {
-                return response()->json(
-                    'Existe licencia sin goce de sueldo',500);
-             }
-             */
-
-            /* Se cierra licencia sin goce de sueldo */
-
-            /* Validacion que existq periodo de vacaciones 60-63 */
-
-            if ($codigo->code == 60 || $codigo->code==62 || $codigo->code==63) {
-                if (!$request->periodo_id) {
-                    if ($request->ajax()) {
-                        return response()->json(
-                            'Ingrese Periodo Vacacional',500);
-                    }
-                }
-             // Validacion de vacaciones saltando validacion
-
-                if ($request->saltar_validacion != 'true') {
-
-                        //if ($this->valVacaciones($incidencia, $total_dias))
-                    $vacaciones = Incidencia::getTotalVacaciones($incidencia->employee_id, $incidencia->periodo_id, $incidencia->codigodeincidencia_id);
-
-                    $vacacion = Periodo::find($incidencia->periodo_id);
-                    $de2 = [1,15];
-                    $de5 = [2,3,5,6,18,13,20,30,32,34];
-                    $de6 = [4,7,8,9,10,11,19,31];
-                    $demas = [14,17];
-                    //dd($vacaciones+$total_dias);
-
-                    if (($vacaciones+$total_dias) > 2 && in_array($empleado->jornada_id, $de2)) {
-                        return response()->json(
-                            'Error '.$vacaciones.' de 2 dias vacacionales periodo '.$vacacion->periodo.'-'.$vacacion->year, 500);
-                    }
-                    if (($vacaciones+$total_dias) > 5 && in_array($empleado->jornada_id, $de5)) {
-                        return response()->json(
-                            'Error '.$vacaciones.' de 5 dias vacacionales periodo '.$vacacion->periodo.'-'.$vacacion->year, 500);
-                    }
-                    if (($vacaciones+$total_dias) > 6 && in_array($empleado->jornada_id, $guardias)) {
-                        return response()->json(
-                            'Error '.$vacaciones.' de 6 dias vacacionales periodo '.$vacacion->periodo.'-'.$vacacion->year, 500);
-                    }
-                    if (($vacaciones+$total_dias) > 10 && in_array($empleado->jornada_id, $demas)) {
-                         return response()->json(
-                            'Error '.$vacaciones.' de 10 dias vacacionales periodo '.$vacacion->periodo.'-'.$vacacion->year, 500);
-                    }
-                }
-
-            } //termina if ($codigo->code == 60 || $codigo->code==62 || $codigo->code==63) {
-            if ($request->saltar_validacion_lic != 'true') {
-
-                    ///// Validacion faltas por jornadas
-                      if ($codigo->code == 10) {
-                          if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;
-
-                          if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;
-
-                      }
-                    ///// Validacion Dias de incapacidades
-                  if ($request->saltar_validacion_inca != 'true') {
-                      if ($codigo->code == 55) {
-
-                        if (in_array($empleado->jornada_id, $guardias))  $incidencia->total_dias = 2;
-
-                        if (in_array($empleado->jornada_id, $syf_dyf)) $incidencia->total_dias = 4;
-
-                      }
-                  }
-            }  //if ($request->saltar_validacion_lic != 'true') {
-
-
-              ///// Validacion Dias de licencia con goce
-            if ($request->saltar_validacion_lic != 'true') {
-                if ($codigo->code == 40 || $codigo->code == 41 || $codigo->code == 47 || $codigo->code == 48 || $codigo->code == 49 || $codigo->code == 29 || $codigo->code == 92) {
-
-                        if (in_array($empleado->jornada_id, $guardias)) $incidencia->total_dias = 2;
-
-                        if (in_array($empleado->jornada_id, $syf_dyf))  $incidencia->total_dias = 4;
-
-                        if ($codigo->code == 41) {
-                        //if ($codigo->code == 40 || $codigo->code == 41) {
-                            $antiguedad = getAntiguedad($empleado->fecha_ingreso);
-                            $a = getExcesodeLicenciasConGoce($start, $antiguedad, $empleado->num_empleado, $incidencia->total_dias);
-                            if ($a != 0) {
-                                if ($request->ajax()) {
-                                return response()->json(
-                                'Trabajador ya tomo '.$a.' dias economicos',500);
-                                }
-                            }
-                        }
-                }
-            }   // termina if ($request->saltar_validacion_lic != 'true') {
-                 //VALIDACION DE TXT
-           // if ($request->saltar_validacion_txt != 'true') {
-
-                if ($codigo->code == 900) {
-                    if($incidencia->cobertura_txt == NULL){
-                        return response()->json('Debe especificar el sustituto',500);
-                    }
-                    if($incidencia->autoriza_txt == NULL){
-                        return response()->json('Debe especificar quien autorizo el cambio de guardia',500);
-                    }
-
-                    $a = getTxtPorMes($empleado->num_empleado, $incidencia->fecha_inicio);
-                    $dias = $a + $incidencia->total_dias;
-
-                    //VALIDACION DE MAS DE LOS DIAS QUE TIENE PERMITIDO
-                    if ($dias > 5 && in_array($empleado->jornada_id, $mat_desp)) {
-                        if ($request->ajax()) {
-                                return response()->json('Trabajador no puede gozar mas de 5 dias de T.X.T',500);
-                            }
-                    }
-                    if ($dias > 1 && in_array($empleado->jornada_id, $syf_dyf)) {
-                        if ($request->ajax()) {
-                                return response()->json('Trabajador no puede gozar mas de 1 dias de T.X.T',500);
-                            }
-                    }
-
-                    if ($dias > 2 && in_array($empleado->jornada_id, $guardias)) {
-                        if ($request->ajax()) {
-                                return response()->json('Trabajador no puede gozar mas de 2 dias de T.X.T',500);
-                            }
-                    }
-
-            //    }
-                }   //termina if ($request->saltar_validacion_txt != 'true') {
-
-          $incidencia->save();
+        // Buscar código de incidencia
+        $codigo = Codigo_De_Incidencia::where('id', $request->codigo)->first();
+        if (!$codigo) {
+            return response()->json('Código de incidencia no encontrado', 500);
         }
 
-        $incidencias = Incidencia::getIncidencias($empleado->num_empleado);
-
-        if ($request->ajax()) {
-                return response()->json(
-                        $incidencias,200);
+        // Validar incidencia
+        $validacion = $this->validarIncidencia($incidencia, $empleado, $codigo, $request);
+        if ($validacion !== true) {
+            return response()->json($validacion['message'], 500);
         }
 
+        // Ajustar total_dias
+        $incidencia->total_dias = $this->ajustarTotalDias($incidencia, $empleado, $codigo, $request);
+
+        // Guardar incidencia
+        $incidencia->save();
+    }
+
+    // Obtener incidencias del empleado
+    $incidencias = Incidencia::getIncidencias($empleado->num_empleado);
+
+    if ($request->ajax()) {
+        return response()->json($incidencias, 200);
+    }
 }
+private function validarMantenimiento()
+{
+    if (check_manto() && !\Auth::user()->admin()) {
+        return ['message' => 'El sistema está en periodo de mantenimiento... intentar más tarde'];
+    }
+    return true;
+}
+private function obtenerFechas(Request $request)
+{
+    if ($request->qna_id != 0) {
+        $fecha_inicio = getFechaInicioPorQna($request->qna_id);
+        $fecha_final = getFechaFinalPorQna($fecha_inicio);
+    } else {
+        $fecha_inicio = fecha_ymd($request->datepicker_inicial);
+        $fecha_final = fecha_ymd($request->datepicker_final);
+    }
+    return [$fecha_inicio, $fecha_final];
+}
+private function generarFechasPorQna($fecha_inicio, $fecha_final) { // Validar que las fechas sean válidas
+    $inicioTimestamp = strtotime($fecha_inicio);
+    $finTimestamp = strtotime($fecha_final);
+    if ($inicioTimestamp === false || $finTimestamp === false) {
+        return []; // Retorna vacío si las fechas son inválidas
+    }
+// Asegurarse de que inicio sea menor o igual a fin
+    if ($inicioTimestamp > $finTimestamp) {
+        return [];
+    }
+    $fechas = []; $unDiaEnSegundos = 86400; // Iterar sobre el rango de fechas
+    for ($timestamp = $inicioTimestamp; $timestamp <= $finTimestamp; $timestamp += $unDiaEnSegundos) {
+        $fecha = date('Y-m-d', $timestamp); $quincena = qna_year($fecha); $fechas[] = [ 'fecha' => $fecha, 'qna' => $quincena ];
+    }
+    // Agrupar por quincena
+    return array_group_by($fechas, 'qna');
+}
+private function prepararIncidencia(Request $request, $grupoFechas, $fecha_expedida)
+{
+    $incidencia = new Incidencia($request->all());
+    $incidencia->employee_id = $request->empleado_id;
+    $incidencia->codigodeincidencia_id = $request->codigo;
+
+    $fecha_inicial = reset($grupoFechas)['fecha'];
+    $fecha_final = end($grupoFechas)['fecha'];
+
+    $start = Carbon::parse($fecha_inicial);
+    $end = Carbon::parse($fecha_final)->addDay();
+    $total_dias = $start->diffInDays($end);
+
+    $incidencia->qna_id = qna_year($start);
+    $incidencia->fecha_inicio = $fecha_inicial;
+    $incidencia->fecha_final = $fecha_final;
+    $incidencia->token = genToken();
+    $incidencia->total_dias = $total_dias;
+    $incidencia->fecha_expedida = $fecha_expedida;
+    $incidencia->capturado_por = capturado_por(\Auth::user()->id);
+    $incidencia->fecha_capturado = Carbon::now();
+
+    return $incidencia;
+}
+private function validarIncidencia($incidencia, $empleado, $codigo, Request $request)
+{
+    $qna = Qna::find($incidencia->qna_id);
+    if (!$qna) {
+        return ['message' => 'Quincena no activada'];
+    }
+
+    if ($codigo->code == 912) {
+        return ['message' => 'Código 912 ya no se encuentra activo, acude a Recursos Humanos'];
+    }
+
+    if ($codigo->code == 905) {
+        if ($empleado->condicion_id != 1) {
+            return ['message' => 'Pases de salida solo válidos para el personal de BASE'];
+        }
+        if ($this->valPaseDeSalida($qna, $incidencia->employee_id)) {
+            return ['message' => "Pase de salida de QNA: {$qna->qna}-{$qna->year} ya gozado"];
+        }
+    }
+
+    $incidencias_duplicados = [1, 18, 19, 2, 3, 4, 7, 92, 905, 30];
+    if ($this->yaCapturado($incidencia->employee_id, $incidencia->fecha_inicio, $incidencia->fecha_final) && !in_array($codigo->code, $incidencias_duplicados)) {
+        return ['message' => 'Ya existe una incidencia este día o período'];
+    }
+
+    if (in_array($codigo->code, [60, 62, 63])) {
+        if (!$request->periodo_id) {
+            return ['message' => 'Ingrese Periodo Vacacional'];
+        }
+        if ($request->saltar_validacion != 'true') {
+            $validacionVacaciones = $this->validarVacaciones($incidencia, $empleado, $request);
+            if ($validacionVacaciones !== true) {
+                return $validacionVacaciones;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
+
+private function validarVacaciones($incidencia, $empleado, Request $request)
+{
+    $vacaciones = Incidencia::getTotalVacaciones($incidencia->employee_id, $incidencia->periodo_id, $incidencia->codigodeincidencia_id);
+    $vacacion = Periodo::find($incidencia->periodo_id);
+    $total_dias = $incidencia->total_dias;
+
+    $jornadas = [
+        'de2' => [1, 15],
+        'de5' => [2, 3, 5, 6, 18, 13, 20, 30, 32],
+        'de6' => [4, 7, 8, 9, 10, 11, 19, 31],
+        'demas' => [14, 17]
+    ];
+
+    if (($vacaciones + $total_dias) > 2 && in_array($empleado->jornada_id, $jornadas['de2'])) {
+        return ['message' => "Error {$vacaciones} de 2 días vacacionales período {$vacacion->periodo}-{$vacacion->year}"];
+    }
+    if (($vacaciones + $total_dias) > 5 && in_array($empleado->jornada_id, $jornadas['de5'])) {
+        return ['message' => "Error {$vacaciones} de 5 días vacacionales período {$vacacion->periodo}-{$vacacion->year}"];
+    }
+    if (($vacaciones + $total_dias) > 6 && in_array($empleado->jornada_id, $jornadas['de6'])) {
+        return ['message' => "Error {$vacaciones} de 6 días vacacionales período {$vacacion->periodo}-{$vacacion->year}"];
+    }
+    if (($vacaciones + $total_dias) > 10 && in_array($empleado->jornada_id, $jornadas['demas'])) {
+        return ['message' => "Error {$vacaciones} de 10 días vacacionales período {$vacacion->periodo}-{$vacacion->year}"];
+    }
+
+    return true;
+}
+private function ajustarTotalDias($incidencia, $empleado, $codigo, Request $request)
+{
+    $guardias = [2, 3, 5, 6, 18, 13, 20, 4, 7, 8, 9, 10, 11, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+    $syf_dyf = [1, 15];
+
+    $codigos_ajustables = [10, 55, 40, 41, 47, 48, 49, 29, 92];
+    if (in_array($codigo->code, $codigos_ajustables) && $request->saltar_validacion_lic != 'true') {
+        if (in_array($empleado->jornada_id, $guardias)) {
+            return 2;
+        }
+        if (in_array($empleado->jornada_id, $syf_dyf)) {
+            return 4;
+        }
+    }
+    return $incidencia->total_dias;
+}
+
 
     public function show($num_empleado)
     {

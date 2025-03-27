@@ -302,5 +302,62 @@ $('#datepicker_expedida').flatpickr({
   });
   */
 </script>
+<script>
+    $(document).ready(function() {
+        // Verificar que exista un empleado con ID válido
+        @if(isset($employee->num_empleado))
+
+            // Variable para almacenar el último valor recibido
+            var ultimoValorLicencias = -1;
+
+            // Función para cargar licencias médicas
+            function cargarLicenciasMedicas() {
+                $.ajax({
+                    url: "{{ route('empleado.licencias-medicas', $employee->num_empleado) }}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        // Solo actualizar si el valor ha cambiado
+                        if (response.licenciasMedicas !== ultimoValorLicencias) {
+                            ultimoValorLicencias = response.licenciasMedicas;
+
+                            if (response.licenciasMedicas > 0) {
+                                var html = '<span class="text-danger blink" style="color: #ff0000; font-weight: bold; animation: blink 1s linear infinite;">';
+                                html += 'EL EMPLEADO TIENE ' + response.licenciasMedicas + ' DIAS DE LICENCIAS MEDICAS, VALIDAR EXCESOS.';
+                                html += '</span>';
+                                html += '<style>';
+                                html += '@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }';
+                                html += '.blink { animation: blink 1s linear infinite; }';
+                                html += '</style>';
+
+                                $('#licencias-medicas-container').html(html);
+                            } else {
+                                // Limpiar el contenedor si no hay licencias médicas
+                                $('#licencias-medicas-container').html('');
+                            }
+
+                            console.log('Licencias médicas actualizadas: ' + response.licenciasMedicas);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error al cargar licencias médicas:', xhr.responseText);
+                    }
+                });
+            }
+
+            // Cargar datos inmediatamente al cargar la página
+            cargarLicenciasMedicas();
+        @endif
+        // Escuchar el evento licenciaAgregada
+        $(document).on('licenciaAgregada', function() {
+           cargarLicenciasMedicas();
+        });
+        // Escuchar el evento licenciaEliminada
+        $(document).on('licenciaEliminada', function() {
+           cargarLicenciasMedicas();
+        });
+    });
+</script>
+
 
 @endsection

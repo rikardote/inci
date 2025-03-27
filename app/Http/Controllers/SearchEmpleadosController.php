@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Employe;
 use App\Qna;
+
+use App\Employe;
 use App\Periodo;
-use App\Codigo_De_Incidencia;
-use App\Incidencia;
+use Carbon\Carbon;
 use App\Comentario;
+use App\Incidencia;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Codigo_De_Incidencia;
+use App\Http\Controllers\Controller;
 
 class SearchEmpleadosController extends Controller
 {
 	public function index(Request $request)
-	{	
+	{
 		$qnas = Qna::where('active', '=', 1)->get();
-		
+
 		$dptos = \Auth::user()->centros->pluck('id')->toArray();
 		$query = $request->num;
 
@@ -41,16 +42,16 @@ class SearchEmpleadosController extends Controller
 			$incidencias = Incidencia::getIncidencias($empleado->num_empleado);
 			$comentario = Comentario::where('employee_id', '=', $empleado->emp_id)->get()->first();
 
-			return view('incidencias.create')
-				->with('incidencias', $incidencias)	
-				->with('employee', $empleado)	
+           	return view('incidencias.create')
+				->with('incidencias', $incidencias)
+				->with('employee', $empleado)
 				->with('noencontrado', $noencontrado)
 				->with('qnas', $qnas)
 				->with('periodos', $periodos)
 	            ->with('codigosdeincidencias', $codigosdeincidencias)
 	            ->with('comment', $comentario)
 	            ->with('medicos', $medicos);
-		
+
 			}
 	}
 		/*if (isset($empleado) && isset($request->qna_id))  {
@@ -61,5 +62,6 @@ class SearchEmpleadosController extends Controller
 		}*/
 
 
-		
+
+
 }

@@ -28,12 +28,13 @@
 @section('js')
 <script>
     const dispositivos = {
-'Delegación Principal': '192.160.141.37',
-'Almacén': '192.160.169.230',
-'San Felipe': '192.165.240.253',
-'Los Algodones': '192.165.232.253',
-'Tecate': '192.165.171.253'
-};
+        'Delegación Principal': '192.160.141.37',
+        'Almacén': '192.160.169.230',
+        'San Felipe': '192.165.240.253',
+        'Los Algodones': '192.165.232.253',
+        'Tecate': '192.165.171.253',
+        'EBDI 60': '192.161.192.253'
+        };
 
 document.addEventListener('DOMContentLoaded', function() {
 const startButton = document.getElementById('startProcess');

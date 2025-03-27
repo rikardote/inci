@@ -260,6 +260,10 @@ Route::group(['middleware' => 'web'], function () {
         'uses' => 'ReportsController@exceso_incapacidades',
         'as' => 'reports.exceso_incapacidades'
     ]);
+    Route::get('empleado/{num_empleado}/licencias-medicas', [
+    'as' => 'empleado.licencias-medicas',
+    'uses' => 'EmployeesController@getLicenciasMedicas'
+]);
     Route::get('/reporte/estadistica/incidencia', [
         'uses' => 'ReportsController@estadistica_por_incidencia',
         'as' => 'reports.por_incidencia'
@@ -507,7 +511,7 @@ Route::group(['middleware' => 'web'], function () {
         'as' => 'biometrico.show_checadas'
     ]);
     //asignar checadas
-    Route::get('biometrico/asignar_checadas', [
+    Route::get('biometrico/asignar', [
         'uses' => 'BiometricosController@asignar',
         'as' => 'biometrico.asignar'
     ]);
@@ -539,5 +543,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('exportar/suplentes/todo', 'GysController@exportarTodasSuplencias')->name('exportar.toda.suplencias');
     Route::get('exportar/reporte-mensual', 'GysController@exportarReporteMensual')
     ->name('exportar.reporte.mensual');
+    Route::get('obtener-suplencias-quincena', 'GysController@obtenerSuplenciasPorQuincena')
+    ->name('obtener.suplencias.quincena');
 
 });

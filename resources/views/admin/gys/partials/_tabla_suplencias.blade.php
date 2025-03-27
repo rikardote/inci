@@ -9,6 +9,7 @@
             <th>Suplente</th>
             <th>Fecha inicial</th>
             <th>Fecha final</th>
+            <th>Horas/Dias</th>
             <th>Incidencia</th>
             <th>No.de Empleado</th>
             <th>Trabajador</th>
@@ -25,6 +26,7 @@
                     <td>{{ $suplencia->nombre_suplente }}</td>
                     <td>{{ fecha_dmy($suplencia->fecha_inicial) }}</td>
                     <td>{{ fecha_dmy($suplencia->fecha_final) }}</td>
+                    <td>{{ $suplencia->hodias }}</td>
                     <td>{{ $suplencia->obtenerDescripcionIncidencia() }}</td>
                     <td>{{ $suplencia->num_empleado ?: '-' }}</td>
                     <td>{{ $suplencia->obtenerEmpleado($suplencia->num_empleado) }}</td>

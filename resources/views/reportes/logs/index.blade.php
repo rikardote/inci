@@ -436,7 +436,7 @@
             }
 
             // Aplicar desfase horario de 9 horas
-            date.setHours(date.getHours() - 8);
+            date.setHours(date.getHours() - 7);
 
             return date.toLocaleDateString('es-ES', {
                 day: '2-digit',

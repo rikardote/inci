@@ -37,12 +37,12 @@
         <div align="center">
             <a data-url="{{ route('employees.edit', $employe->num_empleado) }}" class="load-form-modal panelColorGreen"
                 data-toggle="modal" data-target='#form-modal'>
-                <span class="fas fa-pen-to-square fa-3x" aria-hidden='true'></span>
+                <span class="fa-solid fa-pen-to-square fa-3x" aria-hidden='true'></span>
             </a>
 
             @if (\Auth::user()->admin())
             <a href="#" onclick='deleteRow(this, <?= $employe->num_empleado ?>)'>
-                <span class="fas fa-trash-can fa-3x"></span>
+                <span class="fa-solid fa-trash-can fa-3x"></span>
             </a>
             @endif
         </div>
