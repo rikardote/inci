@@ -58,7 +58,7 @@ class GysController extends Controller
           // Add CSV headers
           fputcsv($output, [
               'Quincena', 'Año', 'RFC', 'C.T.', 'Puesto', 'Suplente',
-              'Fecha inicial', 'Fecha final', 'Incidencia', 'No.de Empleado', 'Trabajador', 'Monto'
+              'Fecha inicial', 'Fecha final', 'Horas/Dias' ,'Incidencia', 'No.de Empleado', 'Trabajador', 'Monto'
           ]);
 
           // Add data rows
@@ -72,6 +72,7 @@ class GysController extends Controller
                   $suplencia->nombre_suplente,
                   $suplencia->fecha_inicial,
                   $suplencia->fecha_final,
+                  $suplencia->hodias,
                   $suplencia->obtenerDescripcionIncidencia(),
                   $suplencia->num_empleado,
                   $suplencia->obtenerEmpleado($suplencia->num_empleado),
@@ -100,6 +101,24 @@ class GysController extends Controller
 
     return new Response($csv, 200, $headers);
 }
+    public function obtenerSuplenciasPorQuincena(Request $request)
+    {
+        $year = $request->input('year');
+        $quincena = $request->input('quincena');
+
+        // Obten solo las suplencias para este período específico
+        $suplenciasPeriodo = Suplencia::where('year', $year)
+            ->where('quincena', $quincena)
+            ->get();
+
+        // Renderiza solo la parte de la tabla con las suplencias
+        return view('admin.gys.partials._suplencias_tabla', [
+            'suplenciasPeriodo' => $suplenciasPeriodo,
+            'year' => $year,
+            'quincena' => $quincena
+        ]);
+    }
+
 
 
 }

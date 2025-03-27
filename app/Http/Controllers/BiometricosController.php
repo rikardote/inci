@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Yadakhov\InsertOnDuplicateKey;
-
-use App\Http\Requests;
-use App\Employe;
-use App\Incidencia;
-use App\Puesto;
-use App\Horario;
-use App\Deparment;
-use App\Checada;
+use \mPDF;
 use App\Qna;
+
+use DateTime;
+use App\Puesto;
+use DatePeriod;
+use App\Checada;
+use App\Employe;
+use App\Horario;
+use App\Periodo;
+use DateInterval;
+use App\Deparment;
+use App\Codigo_De_Incidencia;
 use Carbon\Carbon;
 use App\Attendance;
-use Rats\Zkteco\Lib\ZKTeco;
-use DateTime;
-use DatePeriod;
-use DateInterval;
+use App\Incidencia;
+use App\Http\Requests;
 use Laracasts\Flash\Flash;
-use \mPDF;
+use Rats\Zkteco\Lib\ZKTeco;
+use Illuminate\Http\Request;
 //use DB;
 use Illuminate\Support\Facades\DB;
+use Yadakhov\InsertOnDuplicateKey;
 
 class BiometricosController extends Controller
 {
@@ -354,6 +356,10 @@ public function verRegistrosBiometricos(Request $request)
                 return intval($grupo->first()->num_empleado);
             });
         }
+            $periodos = Periodo::orderBy('year', 'desc')->orderBy('periodo', 'desc')->get();
+        	$codigosdeincidencias = Codigo_De_Incidencia::all()->pluck('codigo', 'id')->toArray();
+            unset($codigosdeincidencias['94']); //remove derivado covid from codigos de incidencias
+			natcasesort($codigosdeincidencias);
 
         return view('biometrico.registros', compact(
             'centros',
@@ -366,7 +372,9 @@ public function verRegistrosBiometricos(Request $request)
             'quincena_seleccionada',
             'centro_seleccionado',
             'fecha_inicio',
-            'fecha_fin'
+            'fecha_fin',
+            'periodos',
+            'codigosdeincidencias'
         ));
 
     } catch (\Exception $e) {

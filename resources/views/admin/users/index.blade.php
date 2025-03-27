@@ -23,13 +23,13 @@
 
              <td>
                 <a data-url="{{ route('users.edit', $user->id) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
-             		<span class="fa-solid fa-pencil fa-2x" aria-hidden='true'></span>
+                     <span class="fa-solid fa-pencil fa-2x" aria-hidden='true'></span>
                   </a>
                   <a data-url="{{ route('user.change', $user->id) }}" class="load-form-modal panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
-             		<span class="fa-solid fa-user-secret fa-2x" aria-hidden='true'></span>
+                     <span class="fa-solid fa-user-secret fa-2x" aria-hidden='true'></span>
                   </a>
-             	<a href="{{route('user.destroy', $user->id) }}">
-                    <span class="fa-solid fa-times fa-2x" aria-hidden="true"></span>
+                 <a href="{{route('user.destroy', $user->id) }}">
+                    <span class="fa-solid fa-xmark fa-2x" aria-hidden="true"></span>
                 </a>
              </td>
             </tr>

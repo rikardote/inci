@@ -537,7 +537,7 @@ class Incidencia extends Model
                  ->where('deparments.id', '=', $dpto)
                  ->where('codigos_de_incidencias.code', $code)
                  ->whereBetween('fecha_inicio',[$fecha_inicio,$fecha_final])
-                 ->orderBy('num_empleado')
+                 ->orderBy('fecha_inicio','ASC')
                  ->get();
      return $incidencias;
     }
@@ -850,5 +850,113 @@ class Incidencia extends Model
                  ->orderBy('num_empleado')
                  ->get();
      return $incidencias;
+    }
+
+    /**
+     * Obtiene el total de días de incapacidades de un empleado específico en un período determinado
+     *
+     * @param string $numEmpleado Número de empleado
+     * @param string $fechaInicio Fecha de inicio del período
+     * @param string $fechaFinal Fecha final del período
+     * @return int Total de días de incapacidad
+     */
+    public static function getIncapacidadesEmpleado($numEmpleado, $fechaInicio, $fechaFinal)
+    {
+        // Consulta para obtener las incapacidades del empleado
+        $incapacidades = self::select(
+                'incidencias.total_dias'
+            )
+            ->join('codigos_de_incidencias', 'incidencias.codigodeincidencia_id', '=', 'codigos_de_incidencias.id')
+            ->join('employees', 'incidencias.employee_id', '=', 'employees.id')
+            ->where('employees.num_empleado', $numEmpleado)
+            ->where('codigos_de_incidencias.code', '55')
+            ->whereBetween('fecha_inicio', [$fechaInicio, $fechaFinal])
+            ->whereNull('incidencias.deleted_at')
+            ->get();
+
+        // Calcular el total de días sumando los días individuales
+        $totalDias = 0;
+        foreach ($incapacidades as $incapacidad) {
+            $totalDias += $incapacidad->total_dias;
+        }
+
+        return $totalDias;
+    }
+
+    /**
+     * Obtiene los detalles completos de incapacidades para un empleado
+     *
+     * @param string $numEmpleado Número de empleado
+     * @param string $fechaInicio Fecha de inicio del período
+     * @param string $fechaFinal Fecha final del período
+     * @return array Arreglo con incapacidades y total de días
+     */
+    public static function getDetallesIncapacidadesEmpleado($numEmpleado, $fechaInicio, $fechaFinal)
+    {
+        // Consulta para obtener todas las incapacidades con detalles
+        $incapacidades = self::select(
+                'incidencias.*',
+                'codigos_de_incidencias.description as codigo_descripcion',
+                'employees.name',
+                'employees.num_empleado',
+                'employees.father_lastname',
+                'employees.mother_lastname',
+                'employees.fecha_ingreso'
+            )
+            ->join('codigos_de_incidencias', 'incidencias.codigodeincidencia_id', '=', 'codigos_de_incidencias.id')
+            ->join('employees', 'incidencias.employee_id', '=', 'employees.id')
+            ->where('employees.num_empleado', $numEmpleado)
+            ->where('codigos_de_incidencias.code', '55')
+            ->whereBetween('fecha_inicio', [$fechaInicio, $fechaFinal])
+            ->whereNull('incidencias.deleted_at')
+            ->orderBy('incidencias.fecha_inicio')
+            ->get();
+
+        // Verificar que incapacidades no esté vacío
+        if ($incapacidades->isEmpty()) {
+            return [
+                'incapacidades' => [],
+                'total_dias' => 0
+            ];
+        }
+
+        // Calcular el total de días sumando los días individuales
+        $totalDias = 0;
+        foreach ($incapacidades as $incapacidad) {
+            $totalDias += $incapacidad->total_dias;
+        }
+
+        return [
+            'incapacidades' => $incapacidades,
+            'total_dias' => $totalDias
+        ];
+    }
+
+    /**
+     * Obtiene todas las incapacidades para múltiples empleados
+     */
+    public static function getIncapacidadesMultiples($empleadosIds, $fechasLimite)
+    {
+        $result = [];
+
+        // Para cada empleado, usar la versión detallada
+        foreach ($empleadosIds as $numEmpleado) {
+            if (!isset($fechasLimite[$numEmpleado])) {
+                continue;
+            }
+
+            $fechaInicio = $fechasLimite[$numEmpleado]['fecha_inicio'];
+            $fechaFinal = $fechasLimite[$numEmpleado]['fecha_final'];
+
+            // Usar la función de detalles para mantener compatibilidad
+            $datosEmpleado = self::getDetallesIncapacidadesEmpleado($numEmpleado, $fechaInicio, $fechaFinal);
+
+            // Solo agregar al resultado si hay incapacidades
+            if (!empty($datosEmpleado['incapacidades'])) {
+                $result[$numEmpleado] = $datosEmpleado;
+            }
+        }
+
+        return $result;
     }
 }

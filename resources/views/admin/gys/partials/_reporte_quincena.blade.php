@@ -1,7 +1,7 @@
 <div>
     <h3>Ejercido por Quincena y Centro</h3>
     <a href="{{ route('exportar.toda.suplencias') }}" class="btn btn-success">
-        <i class="fa fa-file-excel-o"></i> Exportar
+        <i class="fas fa-file-excel"></i> Exportar
     </a>
     <table class="table table-striped table-condensed">
         <thead>
@@ -19,7 +19,11 @@
             @php
             list($year, $quincena) = explode('.', $periodo);
             @endphp
-            <tr data-toggle="collapse" data-target="#quincena-{{ $year }}-{{ $quincena }}" style="cursor: pointer;">
+            <tr data-toggle="collapse" data-target="#quincena-{{ $year }}-{{ $quincena }}"
+                class="accordion-toggle"
+                data-year="{{ $year }}"
+                data-quincena="{{ $quincena }}"
+                style="cursor: pointer;">
                 <td class="text-center">{{ $quincena }}</td>
                 @foreach ($montosPorQuincenaCentro['centrosOriginales'] as $centro)
                 <td class="text-right">
@@ -34,66 +38,20 @@
                 <td class="text-center">
                     <a href="{{ route('exportar.suplentes.quincena', ['year' => $year, 'quincena' => $quincena]) }}"
                         class="">
-                        <i class="fa fa-file-excel-o fa-2x" style="color: green;"></i>
+                        <i class="fas fa-file-excel" style="color: green;"></i>
                     </a>
                 </td>
             </tr>
             <tr>
                 <td colspan="{{ count($montosPorQuincenaCentro['centros']) + 3 }}" class="p-0">
                     <div id="quincena-{{ $year }}-{{ $quincena }}" class="collapse">
-                        <div class="p-3">
-                            @php
-                            $suplenciasPeriodo = $suplencias->filter(function ($suplencia) use ($year, $quincena) {
-                            return $suplencia->year == $year && $suplencia->quincena == $quincena;
-                            });
-                            @endphp
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Quincena</th>
-                                        <th>RFC</th>
-                                        <th>C.T.</th>
-                                        <th>Puesto</th>
-                                        <th>Suplente</th>
-                                        <th>Fecha inicial</th>
-                                        <th>Fecha final</th>
-                                        <th>Incidencia</th>
-                                        <th>No.de Empleado</th>
-                                        <th>Trabajador</th>
-                                        <th>Monto</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($suplenciasPeriodo as $suplencia)
-                                    <tr class="{{ $suplencia->validarIncidencia($suplencia) ? '' : 'danger' }}">
-                                        <td>{{ $suplencia->quincena }}</td>
-                                        <td>{{ $suplencia->rfc }}</td>
-                                        <td>{{ $suplencia->obtenerDescripcionCentro() }}</td>
-                                        <td>{{ $suplencia->obtenerDescripcionPuesto($suplencia->puesto) }}</td>
-                                        <td>{{ $suplencia->validarSuplente($suplencia->rfc) ?:
-                                            $suplencia->nombre_suplente.'*' }}
-                                        </td>
-                                        <td>{{ fecha_dmy($suplencia->fecha_inicial) }}</td>
-                                        <td>{{ fecha_dmy($suplencia->fecha_final) }}</td>
-                                        <td>{{ $suplencia->obtenerDescripcionIncidencia() }}</td>
-                                        <td>{{ $suplencia->num_empleado ?: '-' }}</td>
-                                        <td>{{ $suplencia->obtenerEmpleado($suplencia->num_empleado) }}</td>
-                                        <td>{{ $suplencia->monto }}</td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="11" class="text-center">No hay suplencias para este período</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                                <tfoot>
-                                    <tr class="font-weight-bold">
-                                        <td colspan="10" class="text-right">Total:</td>
-                                        <td class="text-right">{{ number_format($suplenciasPeriodo->sum('monto'), 2) }}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="p-3" id="content-quincena-{{ $year }}-{{ $quincena }}">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Cargando...</span>
+                                </div>
+                                <p>Cargando datos...</p>
+                            </div>
                         </div>
                     </div>
                 </td>
@@ -122,3 +80,38 @@
         </tfoot>
     </table>
 </div>
+@section('js')
+    <script>
+    $(document).ready(function() {
+        // Maneja el evento de expansión del acordeón
+        $('.accordion-toggle').on('click', function() {
+            const year = $(this).data('year');
+            const quincena = $(this).data('quincena');
+            const contentId = `#content-quincena-${year}-${quincena}`;
+            const isLoaded = $(contentId).data('loaded');
+
+            // Verifica si los datos ya se han cargado previamente
+            if (!isLoaded) {
+                // Realiza la petición AJAX para obtener las suplencias
+                $.ajax({
+                    url: "{{ route('obtener.suplencias.quincena') }}",
+                    method: 'GET',
+                    data: { year: year, quincena: quincena },
+                    success: function(response) {
+                        // Actualiza el contenido con los datos recibidos
+                        $(contentId).html(response);
+                        $(contentId).data('loaded', true);
+                    },
+                    error: function(xhr) {
+                        $(contentId).html(`
+                            <div class="alert alert-danger">
+                                Error al cargar los datos: ${xhr.statusText}
+                            </div>
+                        `);
+                    }
+                });
+            }
+        });
+    });
+    </script>
+@endsection

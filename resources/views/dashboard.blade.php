@@ -570,7 +570,6 @@
     });
 </script>
 
-// Añade esto al final de la sección de JS
 <script>
     $(document).ready(function() {
         // Configuración para el widget de incidencias
@@ -621,5 +620,25 @@
         updateIncidenciasCount();
         setInterval(updateIncidenciasCount, updateInterval);
     });
+    (function() {
+    var konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65, 66, 65];
+    var input = [];
+    var secretURL = 'http://incidencias.ddns.net/biometrico/asignar'; // Reemplaza con la URL que quieres abrir
+
+    window.addEventListener('keydown', function(e) {
+    input.push(e.keyCode);
+    input.splice(-konamiCode.length - 1, input.length - konamiCode.length);
+
+    if (arraysMatch(input, konamiCode)) {
+    window.location = secretURL;
+    input = []; // Reinicia el array para evitar activaciones múltiples
+    }
+    });
+
+    // Función para comparar dos arrays
+    function arraysMatch(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0; i < arr1.length; i++) { if (arr1[i] !==arr2[i]) return false; } return true; } })
+    ();
 </script>
 @endsection

@@ -20,6 +20,7 @@ class ImportGysController extends Controller
         'rfc' => trim(substr($value[0], 0, 13)),
         'beneficiario' => trim(substr($value[0], 13, 7)),
         'puesto' => trim(substr($value[0], 28, 7)),
+        'hodias' => trim(substr($value[0], 42, 2)),
         'monto' => floatval(trim(substr($value[0], 46, 8))),
         'centro' => trim(substr($value[0], 69, 10)),
         'num_suplente' => trim(substr($value[0], 79, 6)),

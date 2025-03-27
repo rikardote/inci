@@ -15,6 +15,7 @@ class Suplencia extends Model
                             'rfc',
                             'beneficiario',
                             'puesto',
+                            'hodias',
                             'monto',
                             'centro',
                             'num_suplente',
@@ -100,6 +101,7 @@ class Suplencia extends Model
             'M02090' => 'QUIMICO JEFE DE SECCION DE LAB DE ANALISIS CLINICOS',
             'M02091' => 'QUIMICO JEFE DE SECCION DE LAB DE ANALISIS CLINICOS',
             'M02093' => 'TECNICO LABORATORISTA B',
+            'M02095' => 'TECNICO LABORATORISTA B',
             'M02101' => 'PASANTE DE LICENCIADO EN TRABAJO SOCIAL',
             'M02102' => 'ASISTENTE DE COCINA EN UNIDAD HOSPITALARIA',
             'M02103' => 'JEFE DE COCINA EN CENTRO HOSPITALARIO',
@@ -318,10 +320,11 @@ public static function obtenerEmpleado($num_empleado)
               'Suplente',
               'Fecha inicial',
               'Fecha final',
+              'Dias',
               'Incidencia',
               'No.de Empleado',
               'Trabajador',
-              'Monto'
+              'Monto',
           ]);
 
           // Datos de suplencias
@@ -335,6 +338,7 @@ public static function obtenerEmpleado($num_empleado)
                   $suplencia->nombre_suplente,
                   $suplencia->fecha_inicial,
                   $suplencia->fecha_final,
+                  $suplencia->hodias,
                   $suplencia->obtenerDescripcionIncidencia(),
                   $suplencia->num_empleado,
                   $suplencia->obtenerEmpleado($suplencia->num_empleado),
@@ -345,6 +349,7 @@ public static function obtenerEmpleado($num_empleado)
           // Agregar total
           fputcsv($output, [
               'Total',
+              '',
               '',
               '',
               '',

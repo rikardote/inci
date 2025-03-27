@@ -157,7 +157,8 @@ class Biometrico extends Command
             array('ip' => '192.160.169.230', 'location' => 'Almacén'),
             array('ip' => '192.165.240.253', 'location' => 'San Felipe'),
             array('ip' => '192.165.232.253', 'location' => 'Los Algodones'),
-            array('ip' => '192.165.171.253', 'location' => 'Tecate')
+            array('ip' => '192.165.171.253', 'location' => 'Tecate'),
+            array('ip' => '192.161.192.253', 'location' => 'EBDI 60')
         );
 
         foreach ($dispositivos as $dispositivo) {
