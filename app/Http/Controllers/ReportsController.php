@@ -46,20 +46,41 @@ class ReportsController extends Controller
          ->with('title', $title);
    }
    public function general_show(Request $request, $dpto)
-   {
+    {
+        // Obtener el departamento
+        $dpto = Deparment::where('code', '=', $dpto)->first();
 
-   	$dpto = Deparment::where('code', '=', $dpto)->first();
-    $qna = Qna::where('qna', $request->qna)->where('year',$request->year)->first();
-   	$incidencias = Incidencia::getIncidenciasCentro($qna->id, $dpto->id);
-    $title = "Reporte General Qna: " . $qna->qna . "/" . $qna->year . " - " . $qna->description;
+        // Obtener la quincena
+        $qna = Qna::where('qna', $request->qna)
+                ->where('year', $request->year)
+                ->first();
 
-   	return view('reportes.show')
-         ->with('incidencias', $incidencias)
-         ->with('title', $title)
-         ->with('qna',$qna)
-         ->with('dpto',$dpto);
+        // Obtener las incidencias del centro
+        $incidencias = Incidencia::getIncidenciasCentro($qna->id, $dpto->id);
 
-   }
+        // Agrupar las incidencias por empleado
+        $groupedIncidencias = [];
+        foreach ($incidencias as $incidencia) {
+            $groupedIncidencias[$incidencia->num_empleado]['empleado'] = $incidencia->father_lastname . ' ' . $incidencia->mother_lastname . ' ' . $incidencia->name;
+            $groupedIncidencias[$incidencia->num_empleado]['incidencias'][] = [
+                'codigo' => str_pad($incidencia->code, 2, '0', STR_PAD_LEFT),
+                'fecha_inicio' => fecha_dmy($incidencia->fecha_inicio),
+                'fecha_final' => fecha_dmy($incidencia->fecha_final),
+                'periodo' => isset($incidencia->periodo) ? $incidencia->periodo . '/' . $incidencia->periodo_year : '-',
+                'total_dias' => $incidencia->total_dias,
+            ];
+        }
+
+        // Título del reporte
+        $title = "Reporte General Qna: " . $qna->qna . "/" . $qna->year . " - " . $qna->description;
+
+        // Retornar la vista con los datos agrupados
+        return view('reportes.show')
+            ->with('groupedIncidencias', $groupedIncidencias)
+            ->with('title', $title)
+            ->with('qna', $qna)
+            ->with('dpto', $dpto);
+    }
    public function empleado()
    {
     $title = "Reporte General por empleado";
