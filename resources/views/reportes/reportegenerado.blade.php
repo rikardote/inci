@@ -1,108 +1,121 @@
-<table style="font-size:9.5pt text-align:center; font-family:family:Arial; width: 100%;  ">
-	<thead>
-	<tr style="background-color: rgb(171,165,160);  ">
-		<td>Num Empleado</td>
-		<td>Empleado</td>
-		<td>Codigo</td>
-		<td>Fecha Inicial</td>
-		<td>Fecha Final</td>
-		<td>Periodo</td>
-		<td>Total</td>
-	</tr>
-	</thead>
-	<tbody>
-	{{--*/ $tmp = "" /*--}}
-		@foreach($incidencias as $incidencia)
-			<tr rowspan="2">
-				@if($incidencia->num_empleado == $tmp)
-
-					<td></td>
-					<td>
-						@if(isset($incidencia->otorgado))
-                            <br>
-                            <small><strong>{{ $incidencia->otorgado }}</strong><strong> </small>
-                         @endif
-                         @if(isset($incidencia->becas_comments))
-                            <br>
-                            <small><strong>{{ $incidencia->becas_comments }}</strong> </small>
-                         @endif
-                         @if(isset($incidencia->horas_otorgadas))
-                            <br>
-                            <small><strong>{{ $incidencia->horas_otorgadas }}</strong> </small>
-                         @endif
-
-
-					</td>
-					@if($incidencia->code == 901)
-					 	<td align=center>OT</td>
-					@elseif($incidencia->code == 905)
-					 	<td align=center>PS</td>
-					@else
-					 	<td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
-					@endif
-					 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
-					 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-
-					 @if(isset($incidencia->periodo))
-							 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
-					 @else
-					 			<td></td>
-					 @endif
-					 <td align=center>{{ $incidencia->total }}</td>
-
-				</tr>
-
-
-				@else
-				<tr style="background:#000 padding-bottom:3mm;">
-					@if (empty($incidencia))
-			 			@for ($i=0; $i < 8; $i++)
-							<td></td>
-						@endfor
-					@endif
-		</tr>
-
-					<tr>
-						<td align=center>{{ $incidencia->num_empleado }}</td>
-						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}
-						 	@if(isset($incidencia->otorgado))
-                                <br>
-                                <small><strong>{{ $incidencia->otorgado }}</strong> </small>
-                         	@endif
-                            @if(isset($incidencia->becas_comments))
-                                <br>
-                                <small><strong>{{ $incidencia->becas_comments }}</strong> </small>
-                         	@endif
-                            @if(isset($incidencia->horas_otorgadas))
-                                <br>
-                                <small><strong>{{ $incidencia->horas_otorgadas }}</strong> </small>
+<table style="width:100%; border-collapse:collapse; font-family:Arial; font-size:9pt; text-align:center; border:1px solid #999; table-layout:fixed;">
+    <thead>
+        <tr>
+            <th style="width:10%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Num Empleado</th>
+            <th style="width:30%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Empleado</th>
+            <th style="width:8%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Codigo</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Fecha Inicial</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Fecha Final</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Periodo</th>
+            <th style="width:8%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @php
+            $tmp = "";
+            $firstRow = true;
+            $colorAlternado = false;
+        @endphp
+        @foreach($incidencias as $incidencia)
+            @if($incidencia->num_empleado == $tmp)
+                <tr class="{{ $colorAlternado ? 'fila-par' : 'fila-impar' }}">
+                    <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">&nbsp;</td>
+                    <td style="width:30%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:left;">
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->otorgado))
+                                <small><strong>{{ $incidencia->otorgado }}</strong></small>
                             @endif
+                        </div>
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->becas_comments))
+                                <small><strong>{{ $incidencia->becas_comments }}</strong></small>
+                            @endif
+                        </div>
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->horas_otorgadas))
+                                <small><strong>{{ $incidencia->horas_otorgadas }}</strong></small>
+                            @endif
+                        </div>
+                    </td>
+                    <td style="width:8%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if($incidencia->code == 901)
+                            OT
+                        @elseif($incidencia->code == 905)
+                            PS
+                        @else
+                            {{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ fecha_dmy($incidencia->fecha_final) }}</td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->periodo))
+                            {{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}
+                        @endif
+                    </td>
+                    <td style="width:8%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ $incidencia->total }}</td>
+                </tr>
+            @else
+                @if(!$firstRow)
+                    <!-- Separador mejorado entre empleados -->
+                    <tr>
+                        <td colspan="7" style="height:8px; background-color:#d9d9d9; padding:0; border-bottom:2px solid #666; border-top:2px solid #666;"></td>
+                    </tr>
+                    <!-- Espacio extra para mejor visualización -->
+                    <tr>
+                        <td colspan="7" style="height:3px; padding:0;"></td>
+                    </tr>
+                @endif
 
-						 </td>
+                <!-- Cambiar color de fondo para cada empleado -->
+                @php $colorAlternado = !$colorAlternado; @endphp
 
-						 @if($incidencia->code == 901)
-						 	<td align=center>OT</td>
-
-						 @elseif($incidencia->code == 905)
-					 		<td align=center>PS</td>
-						 @else
-						 	<td align=center>{{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT ) }}</td>
-						 @endif
-
-						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
-						 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-
-						 @if(isset($incidencia->periodo))
-								 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
-						 @else
-						 			<td></td>
-						 @endif
-						 <td align=center>{{ $incidencia->total }}</td>
-
-					</tr>
-					{{--*/ $tmp = $incidencia->num_empleado /*--}}
-				@endif
-		@endforeach
-	</tbody>
-
+                <tr class="{{ $colorAlternado ? 'fila-par' : 'fila-impar' }}" style="background-color: {{ $colorAlternado ? '#f8f8f8' : '#ffffff' }};">
+                    <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center; font-weight:bold;">{{ $incidencia->num_empleado }}</td>
+                    <td style="width:30%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:left;">
+                        <div style="font-weight:bold;">{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</div>
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->otorgado))
+                                <small><strong>{{ $incidencia->otorgado }}</strong></small>
+                            @endif
+                        </div>
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->becas_comments))
+                                <small><strong>{{ $incidencia->becas_comments }}</strong></small>
+                            @endif
+                        </div>
+                        <div style="min-height:16px;">
+                            @if(isset($incidencia->horas_otorgadas))
+                                <small><strong>{{ $incidencia->horas_otorgadas }}</strong></small>
+                            @endif
+                        </div>
+                    </td>
+                    <td style="width:8%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if($incidencia->code == 901)
+                            OT
+                        @elseif($incidencia->code == 905)
+                            PS
+                        @else
+                            {{ str_pad($incidencia->code,'2','0',STR_PAD_LEFT) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ fecha_dmy($incidencia->fecha_final) }}</td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->periodo))
+                            {{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}
+                        @endif
+                    </td>
+                    <td style="width:8%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ $incidencia->total }}</td>
+                </tr>
+                <tr>
+                    <td colspan="7" style="height:8px; background-color:#d9d9d9; padding:0; border-bottom:2px solid #666; border-top:2px solid #666;"></td>
+                </tr>
+                @php
+                    $tmp = $incidencia->num_empleado;
+                    $firstRow = false;
+                @endphp
+            @endif
+        @endforeach
+    </tbody>
 </table>
