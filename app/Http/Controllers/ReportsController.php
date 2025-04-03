@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use \mPDF;
+use Mpdf\Mpdf;
 
 use App\Qna;
 use App\Employe;
@@ -245,25 +245,72 @@ class ReportsController extends Controller
 
         $mpdf->Output($pdfFilePath, "D");
     }
+    //RH5
    public function reporte_pdf($qna_id, $dpto)
-    {
-        $dpto = Deparment::where('code', '=', $dpto)->first();
-        $incidencias = Incidencia::getIncidenciasCentroPDF($qna_id, $dpto->id);
+{
+    // Aumentar el límite de PCRE temporalmente
+    ini_set('pcre.backtrack_limit', '5000000');
 
-        $qna = Qna::find($qna_id);
-        $mpdf = new Mpdf('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.header', compact('dpto', 'qna'))->render();
-        $mpdf->SetFooter($dpto->description.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.reportegenerado', compact('incidencias'))->render();
-        $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
+    $config = [
+        'mode' => 'utf-8',
+        'format' => 'Letter',
+        'default_font_size' => '',
+        'default_font' => '',
+        'margin_left' => 12.7,
+        'margin_right' => 12.7,
+        'margin_top' => 0, // Aumentado para acomodar el header
+        'margin_bottom' => 15,
+        'margin_header' => 10,
+        'margin_footer' => 10,
+        'tempDir' => storage_path('app/public/tmp'), // Directorio temporal para mejor rendimiento
+    ];
+
+    $dpto = Deparment::where('code', '=', $dpto)->first();
+    $incidencias = Incidencia::getIncidenciasCentroPDF($qna_id, $dpto->id);
+    $qna = Qna::find($qna_id);
+
+    $mpdf = new Mpdf($config);
+
+    // Procesar en modo optimizado
+    $mpdf->setCompression(true);
+    $mpdf->useSubstitutions = false;
+    $mpdf->simpleTables = true;
+
+    $mpdf->autoMarginPadding = 0;
+    $mpdf->setAutoTopMargin = true;
+    $mpdf->setAutoBottomMargin = true;
+
+    // Establecer el encabezado
+    $header = \View('reportes.header', compact('dpto', 'qna'))->render();
+    $mpdf->SetHTMLHeader($header);
+
+    // Establecer el pie de página
+    $mpdf->SetFooter(['Fecha: {DATE j-m-Y}', '', 'Página {PAGENO} de {nb}']);
+    $mpdf->SetDisplayMode('fullpage');
+
+    // Dividir los datos en bloques más pequeños (máximo 500 registros por bloque)
+    $chunkSize = 500;
+    $incidenciasChunks = (is_object($incidencias) && method_exists($incidencias, 'toArray'))
+        ? array_chunk($incidencias->toArray(), $chunkSize)
+        : array_chunk($incidencias, $chunkSize);
+
+    foreach ($incidenciasChunks as $index => $chunk) {
+        // Generar el HTML para este fragmento
+        $html = \View('reportes.reportegenerado_chunk', [
+            'incidencias' => $chunk,
+            'isFirstChunk' => $index === 0
+        ])->render();
+
+        // Escribir este fragmento
         $mpdf->WriteHTML($html);
-
-        $mpdf->Output($pdfFilePath, "D");
     }
+
+    // Generar el nombre del archivo PDF
+    $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
+
+    // Generar y mostrar el PDF
+    $mpdf->Output($pdfFilePath, "I");
+}
     public function reporte_pdf_diario($qna_id, $dpto)
     {
         $dpto = Deparment::where('code', '=', $dpto)->first();
