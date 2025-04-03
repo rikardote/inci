@@ -826,6 +826,7 @@ class Incidencia extends Model
                  ->whereIn('deparments.id', $dptos)
                  ->whereIn('codigos_de_incidencias.code', ['60','62','63'])
                  ->where('num_empleado', '=', $empleado_id)
+                 ->groupBy('codigos_de_incidencias.code')
                  ->groupBy('periodo_id')
                  ->orderBy('periodo_id', 'ASC')
                  ->get();

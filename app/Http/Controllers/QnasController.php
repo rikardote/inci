@@ -1,8 +1,8 @@
 <?php
- 
+
 namespace App\Http\Controllers;
 
-use Request;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Laracasts\Flash\Flash;
 use Response;
@@ -24,13 +24,13 @@ class QnasController extends Controller
         if (!\Auth::user()->admin()) {
 
             return redirect()->route('home.index');
-            
+
         }
-        //$qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->limit(10)->get();
-        
+        $qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->limit(24)->get();
+
         /*Abrir todas las Qnas */
-        
-        $qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->get();
+
+        //$qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->get();
         return view('admin.qnas.index')->with('qnas', $qnas);
     }
 
@@ -119,23 +119,28 @@ class QnasController extends Controller
     }
     public function condicion($id)
     {
-        if (Request::ajax()) {
+        if (request()->ajax()) {
+            try {
+                $qna = Qna::findOrFail($id);
+                $qna->active = !$qna->active;
+                $qna->save();
 
-            $qna = Qna::find($id);
-            $qna->active = ($qna->active) ? FALSE : TRUE;
-              
-            $qna->save();
-
-            //$qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->limit(10)->get();
-            /*Abrir todas las Qnas */
-        
-            $qnas = Qna::orderBy('year', 'desc')->orderBy('qna', 'desc')->get();
-            //return Response::json($response); //redirect()->route('qnas.index');
-            return response()->json(
-                        $qnas,200
-                    );
-            
+                // Devolver solo la qna actualizada
+                return response()->json([
+                    'success' => true,
+                    'data' => $qna
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al actualizar el estado: ' . $e->getMessage()
+                ], 500);
+            }
         }
-        
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Solicitud no válida'
+        ], 400);
     }
 }
