@@ -245,7 +245,7 @@ class ReportsController extends Controller
            'reportes.header-sinderecho',        // Vista para el encabezado
            ['dpto' => $dpto, 'fecha_inicio' => $fecha_inicio],  // Datos para el encabezado
            'FIRMA CENTRO DE TRABAJO|VO.BO. DELEGADO SINDICAL<br>'.$dpto->description.'|Hoja {PAGENO} de {nb}', // Pie
-           'D',                                 // Modo de salida (descarga)
+           'I',                                 // Modo de salida (descarga)
            true                                 // Orientación horizontal
        );
    }
@@ -424,7 +424,7 @@ class ReportsController extends Controller
               'horario' => $horario
           ],
           $empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie
-          'D'                                  // Modo de salida (descarga)
+          'I'                                  // Modo de salida (descarga)
       );
   }
   public function pendientes()
