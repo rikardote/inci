@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mpdf\Mpdf;
+use App\Traits\PdfGeneratorTrait;
 
 use App\Qna;
 use App\Employe;
@@ -21,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
+    use PdfGeneratorTrait;
 
    public function general()
    {
@@ -142,36 +144,42 @@ class ReportsController extends Controller
    }
    public function diario_post(Request $request)
    {
-      $dptos = \Auth::user()->centros->pluck('id')->toArray();
-      $fecha = $request->fecha_inicio;
+       $dptos = \Auth::user()->centros->pluck('id')->toArray();
+       $fecha = $request->fecha_inicio;
 
-      if ($request->solo_medicos == true) {
-        $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
-        $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));
-      }
-      else {
-        $incidencias = Incidencia::GetIncidenciasPorDia($dptos, fecha_ymd($fecha));
-        //dd($incidencias);
-      }
+       try {
+           // Obtener incidencias según filtros
+           if ($request->solo_medicos == true) {
+               $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
+               $incidencias = Incidencia::GetIncidenciasPorDia_Solo_Medicos($dptos, $medicosIds, fecha_ymd($fecha));
+           } else {
+               $incidencias = Incidencia::GetIncidenciasPorDia($dptos, fecha_ymd($fecha));
+           }
 
-      if ($incidencias == null) {
-        Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
-        return redirect()->route('reports.diario');
-      }
-      else {
-        $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-          $header = \View('reportes.header_diario', compact('fecha'))->render();
-          $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-          $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
-          $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now()->format('d-m-Y').'.pdf';
-          $mpdf->setAutoTopMargin = 'stretch';
-          $mpdf->setAutoBottomMargin = 'stretch';
-          $mpdf->setHTMLHeader($header);
-          $mpdf->SetDisplayMode('fullpage');
-          $mpdf->WriteHTML($html);
+           // Verificación básica de datos
+           if (empty($incidencias)) {
+               Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
+               return redirect()->route('reports.diario');
+           }
 
-          $mpdf->Output($pdfFilePath, "D");
-      }
+
+           $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DIARIO_DEL_'.Carbon::now()->format('d-m-Y').'.pdf';
+
+           // Generar PDF usando el trait con la misma estructura que antes
+           return $this->generatePdf(
+               'reportes.reporte_diario_generado',
+               ['incidencias' => $incidencias],
+               $pdfFilePath,
+               'reportes.header_diario',
+               ['fecha' => $fecha],
+               'ISSSTE|Generado el: {DATE j-m-Y}|Hoja {PAGENO} de {nb}',
+               'I'
+           );
+       } catch (\Exception $e) {
+           \Log::error('Error en diario_post: ' . $e->getMessage() . ' - ' . $e->getTraceAsString());
+           Flash::error('Error al generar el PDF: ' . $e->getMessage());
+           return redirect()->route('reports.diario');
+       }
    }
    public function sinDerecho()
    {
@@ -216,121 +224,93 @@ class ReportsController extends Controller
       ->with('fecha_final', $fecha_final)
       ->with('dpto', $dpto);
    }
-   public function getsinDerechoPDF($dpto,$fecha_inicio,$fecha_final)
-    {
-        $lic = ['40','41','46','47','53','54','55'];
-        $inc = ['01','02','03','04','08','09','10','18','19','25','78','86','100','30','31'];
+   public function getsinDerechoPDF($dpto, $fecha_inicio, $fecha_final)
+   {
+       $lic = ['40','41','46','47','53','54','55'];
+       $inc = ['01','02','03','04','08','09','10','18','19','25','78','86','100','30','31'];
 
-        $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);
-        $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);
+       $incidencias_inc = Incidencia::noDerecho_inc($dpto, $fecha_inicio, $fecha_final, $inc);
+       $incidencias_lic = Incidencia::noDerecho_lic($dpto, $fecha_inicio, $fecha_final, $lic);
 
-        $incidencias = array_merge($incidencias_inc, $incidencias_lic);
+       $incidencias = array_merge($incidencias_inc, $incidencias_lic);
+       $incidencias = collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();
 
-        $incidencias =collect($incidencias)->unique('num_empleado')->sortBy('num_empleado')->toArray();
+       $dpto = Deparment::where('code', '=', $dpto)->first();
+       $pdfFilePath = $dpto->description.'.SIN-DERECHO.pdf';
 
-        $dpto = Deparment::where('code', '=', $dpto)->first();
-
-        $mpdf = new mPDF('', 'Letter-L');
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $header = \View('reportes.header-sinderecho', compact('dpto', 'fecha_inicio'))->render();
-        $mpdf->SetFooter('FIRMA CENTRO DE TRABAJO|VO.BO. DELEGADO SINDICAL<br>'.$dpto->description.'|Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.sinderechopdf', compact('incidencias'))->render();
-        $pdfFilePath = $dpto->description.'.SIN-DERECHO.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
-
-        $mpdf->Output($pdfFilePath, "D");
-    }
+       return $this->generatePdf(
+           'reportes.sinderechopdf',            // Vista para contenido
+           ['incidencias' => $incidencias],     // Datos para la vista
+           $pdfFilePath,                        // Nombre del archivo
+           'reportes.header-sinderecho',        // Vista para el encabezado
+           ['dpto' => $dpto, 'fecha_inicio' => $fecha_inicio],  // Datos para el encabezado
+           'FIRMA CENTRO DE TRABAJO|VO.BO. DELEGADO SINDICAL<br>'.$dpto->description.'|Hoja {PAGENO} de {nb}', // Pie
+           'D',                                 // Modo de salida (descarga)
+           true                                 // Orientación horizontal
+       );
+   }
     //RH5
    public function reporte_pdf($qna_id, $dpto)
-{
-    // Aumentar el límite de PCRE temporalmente
-    ini_set('pcre.backtrack_limit', '5000000');
+    {
+        // Obtener datos
+        $dpto = Deparment::where('code', '=', $dpto)->first();
+        if (!$dpto) {
+            Flash::error('Departamento no encontrado');
+            return redirect()->back();
+        }
 
-    $config = [
-        'mode' => 'utf-8',
-        'format' => 'Letter',
-        'default_font_size' => '',
-        'default_font' => '',
-        'margin_left' => 12.7,
-        'margin_right' => 12.7,
-        'margin_top' => 0, // Aumentado para acomodar el header
-        'margin_bottom' => 15,
-        'margin_header' => 10,
-        'margin_footer' => 10,
-        'tempDir' => storage_path('app/public/tmp'), // Directorio temporal para mejor rendimiento
-    ];
+        $qna = Qna::find($qna_id);
+        if (!$qna) {
+            Flash::error('Quincena no encontrada');
+            return redirect()->back();
+        }
 
-    $dpto = Deparment::where('code', '=', $dpto)->first();
-    $incidencias = Incidencia::getIncidenciasCentroPDF($qna_id, $dpto->id);
-    $qna = Qna::find($qna_id);
+        $incidencias = Incidencia::getIncidenciasCentroPDF($qna_id, $dpto->id);
 
-    $mpdf = new Mpdf($config);
+        // Nombre del archivo de salida
+        $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
 
-    // Procesar en modo optimizado
-    $mpdf->setCompression(true);
-    $mpdf->useSubstitutions = false;
-    $mpdf->simpleTables = true;
+        // Pie de página personalizado
+        $footer = '<table class="footer-table" width="100%" style="border: none;">
+            <tr style="border: none;">
+                <td width="33%" style="border: none; text-align: left;">'.$dpto->description.'</td>
+                <td width="33%" style="border: none; text-align: center;">Generado el: {DATE j-m-Y}</td>
+                <td width="33%" style="border: none; text-align: right;">Hoja {PAGENO} de {nb}</td>
+            </tr>
+        </table>';
 
-    $mpdf->autoMarginPadding = 0;
-    $mpdf->setAutoTopMargin = true;
-    $mpdf->setAutoBottomMargin = true;
-
-    // Establecer el encabezado
-    $header = \View('reportes.header', compact('dpto', 'qna'))->render();
-    $mpdf->SetHTMLHeader($header);
-
-    // Establecer el pie de página
-    $mpdf->SetFooter(['Fecha: {DATE j-m-Y}', '', 'Página {PAGENO} de {nb}']);
-    $mpdf->SetDisplayMode('fullpage');
-
-    // Dividir los datos en bloques más pequeños (máximo 500 registros por bloque)
-    $chunkSize = 500;
-    $incidenciasChunks = (is_object($incidencias) && method_exists($incidencias, 'toArray'))
-        ? array_chunk($incidencias->toArray(), $chunkSize)
-        : array_chunk($incidencias, $chunkSize);
-
-    foreach ($incidenciasChunks as $index => $chunk) {
-        // Generar el HTML para este fragmento
-        $html = \View('reportes.reportegenerado_chunk', [
-            'incidencias' => $chunk,
-            'isFirstChunk' => $index === 0
-        ])->render();
-
-        // Escribir este fragmento
-        $mpdf->WriteHTML($html);
+        // Generar el PDF con un solo método
+        return $this->generatePdf(
+            'reportes.reportegenerado',   // Vista de contenido
+            ['incidencias' => $incidencias], // Datos para la vista
+            $pdfFilePath,                // Nombre de archivo
+            'reportes.header',           // Vista de encabezado
+            ['dpto' => $dpto, 'qna' => $qna], // Datos para el encabezado
+            $footer,                     // Pie de página personalizado
+            'I'                          // Modo de salida: I (mostrar en navegador)
+        );
     }
 
-    // Generar el nombre del archivo PDF
-    $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
-
-    // Generar y mostrar el PDF
-    $mpdf->Output($pdfFilePath, "I");
-}
     public function reporte_pdf_diario($qna_id, $dpto)
     {
         $dpto = Deparment::where('code', '=', $dpto)->first();
         $incidencias = Incidencia::getIncidenciasCentroPDF_diario($qna_id, $dpto->id);
-
-
         $qna = Qna::find($qna_id);
-        $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.header', compact('dpto', 'qna'))->render();
-        $mpdf->SetFooter($dpto->description.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.reportegenerado', compact('incidencias'))->render();
-        $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
 
-        $mpdf->Output($pdfFilePath, "D");
+        $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
+
+        // Usar el método reutilizable
+        return $this->generatePdf(
+            'reportes.reportegenerado',
+            ['incidencias' => $incidencias],
+            $pdfFilePath,
+            'reportes.header',
+            ['dpto' => $dpto, 'qna' => $qna],
+            $dpto->description.'|Generado el: {DATE j-m-Y}|Hoja {PAGENO} de {nb}',
+            'D'  // Modo de salida: D (descargar)
+        );
     }
+
     public function show_incidenciasEmpleados($fecha_inicio,$fecha_final,$num_empleado)
     {
       $empleado = Employe::where('num_empleado', '=', $num_empleado)->first();
@@ -357,22 +337,21 @@ class ReportsController extends Controller
     }
     public function reporte_licencias_pdf($fecha_inicio, $fecha_final)
     {
-       $dptos = \Auth::user()->centros->pluck('id')->toArray();
-       $incidencias = Incidencia::getLicencias($fecha_inicio, $fecha_final, $dptos);
+        $dptos = \Auth::user()->centros->pluck('id')->toArray();
+        $incidencias = Incidencia::getLicencias($fecha_inicio, $fecha_final, $dptos);
 
-        //$qna = Qna::find($qna_id);
-        $mpdf = new mPDF('', 'Letter-L', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        //$header = \View('reportes.header', compact('dpto', 'qna'))->render();
-        $mpdf->SetFooter('*Expedida Posteriormente|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.reportelicencias', compact('incidencias'))->render();
         $pdfFilePath = 'Relacion de Licencias.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        //$mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
 
-        $mpdf->Output($pdfFilePath, "D");
+        return $this->generatePdf(
+            'reportes.reportelicencias',         // Vista para contenido
+            ['incidencias' => $incidencias],     // Datos para la vista
+            $pdfFilePath,                        // Nombre del archivo
+            null,                                // Sin vista de encabezado
+            [],                                  // Sin datos para el encabezado
+            '*Expedida Posteriormente|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie
+            'D',                                 // Modo de salida (descarga)
+            true                                 // Orientación horizontal
+        );
     }
     public function ausentismo()
     {
@@ -423,24 +402,30 @@ class ReportsController extends Controller
   }
   public function reporte_kardex_pdf($num_empleado, $fecha_inicio, $fecha_final)
   {
+      $incidencias = Incidencia::getIncidenciasEmpleado($fecha_inicio, $fecha_final, $num_empleado);
+      $empleado = Employe::where('num_empleado', '=', $num_empleado)->first();
+      $dpto = Deparment::find($empleado->deparment_id);
+      $jornada = Jornada::find($empleado->jornada_id);
+      $horario = Horario::find($empleado->horario_id);
 
-        $incidencias = Incidencia::getIncidenciasEmpleado($fecha_inicio, $fecha_final, $num_empleado);
-        $empleado = Employe::where('num_empleado', '=', $num_empleado)->first();
-        $dpto = Deparment::find($empleado->deparment_id);
-        $jornada = Jornada::find($empleado->jornada_id);
-        $horario = Horario::find($empleado->horario_id);
-        $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.header_kardex', compact('empleado', 'fecha_inicio', 'fecha_final', 'dpto', 'jornada','horario'))->render();
-        $mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.reportegenerado_kardex', compact('incidencias'))->render();
-        $pdfFilePath = $empleado->num_empleado.'-'.$empleado->name.'-'.$empleado->father_lastname.'-'.$empleado->mother_lastname.'.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
+      $pdfFilePath = $empleado->num_empleado.'-'.$empleado->name.'-'.$empleado->father_lastname.'-'.$empleado->mother_lastname.'.pdf';
 
-        $mpdf->Output($pdfFilePath, "D");
+      return $this->generatePdf(
+          'reportes.reportegenerado_kardex',   // Vista para contenido
+          ['incidencias' => $incidencias],     // Datos para la vista
+          $pdfFilePath,                        // Nombre del archivo
+          'reportes.header_kardex',            // Vista para el encabezado
+          [                                    // Datos para el encabezado
+              'empleado' => $empleado,
+              'fecha_inicio' => $fecha_inicio,
+              'fecha_final' => $fecha_final,
+              'dpto' => $dpto,
+              'jornada' => $jornada,
+              'horario' => $horario
+          ],
+          $empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie
+          'D'                                  // Modo de salida (descarga)
+      );
   }
   public function pendientes()
   {
@@ -579,23 +564,23 @@ class ReportsController extends Controller
                                                      ->with('fecha_inicial', $fecha_inicial)
                                                      ->with('fecha_final', $fecha_final);
   }
-  public function estadistica_por_incidencia_pdf($dpto, $fecha_inicial,$fecha_final,$code){
+  public function estadistica_por_incidencia_pdf($dpto, $fecha_inicial, $fecha_final, $code)
+  {
+      $incidencias = Incidencia::getIncidenciasByCode2($code, $fecha_inicial, $fecha_final, $dpto);
+      $fecha_inicio = fecha_dmy($fecha_inicial);
+      $fecha_final = fecha_dmy($fecha_final);
 
-    $incidencias = Incidencia::getIncidenciasByCode2($code, $fecha_inicial, $fecha_final, $dpto);
-    $fecha_inicio = fecha_dmy($fecha_inicial);
-    $fecha_final = fecha_dmy($fecha_final);
-    $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.header_por_incidencias', compact('fecha_inicio', 'fecha_final'))->render();
-        //$mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.estadistica_por_incidencia_pdf', compact('incidencias'))->render();
-        $pdfFilePath = 'reporte_por_incidencia.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
+      $pdfFilePath = 'reporte_por_incidencia.pdf';
 
-        $mpdf->Output($pdfFilePath, "D");
+      return $this->generatePdf(
+          'reportes.estadistica_por_incidencia_pdf',  // Vista para contenido
+          ['incidencias' => $incidencias],           // Datos para la vista
+          $pdfFilePath,                              // Nombre del archivo
+          'reportes.header_por_incidencias',         // Vista para el encabezado
+          ['fecha_inicio' => $fecha_inicio, 'fecha_final' => $fecha_final],  // Datos para encabezado
+          'Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie de página
+          'D'                                        // Modo de salida (descarga)
+      );
   }
   public function inasistencias(){
 
@@ -626,28 +611,24 @@ class ReportsController extends Controller
 
     return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
   }
-  public function val_aguinaldo_pdf(Request $request){
-    $fecha_inicial = "2024-01-01";
-    $fecha_final = "2024-12-31";
-    $dptos = \Auth::user()->centros->pluck('id')->toArray();
-    $incidencias = Incidencia::valAguinaldo($fecha_inicial, $fecha_final, $dptos);
-    $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.aguinaldo.header', compact('fecha_inicial', 'fecha_final'))->render();
-        //$mpdf->SetFooter($empleado->name.' '.$empleado->father_lastname.' '.$empleado->mother_lastname.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('reportes.aguinaldo.aguinaldo_pdf', compact('incidencias'))->render();
-        $pdfFilePath = 'Reporte_aguinaldo_2023.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
+  public function val_aguinaldo_pdf(Request $request)
+  {
+      $fecha_inicial = "2024-01-01";
+      $fecha_final = "2024-12-31";
+      $dptos = \Auth::user()->centros->pluck('id')->toArray();
+      $incidencias = Incidencia::valAguinaldo($fecha_inicial, $fecha_final, $dptos);
 
-        $mpdf->Output($pdfFilePath, "D");
+      $pdfFilePath = 'Reporte_aguinaldo_2023.pdf';
 
-
-
-
-    //return view('reportes.aguinaldo.show')->with('incidencias', $incidencias);
+      return $this->generatePdf(
+          'reportes.aguinaldo.aguinaldo_pdf',  // Vista para contenido
+          ['incidencias' => $incidencias],     // Datos para la vista
+          $pdfFilePath,                        // Nombre del archivo
+          'reportes.aguinaldo.header',         // Vista para el encabezado
+          ['fecha_inicial' => $fecha_inicial, 'fecha_final' => $fecha_final],  // Datos para encabezado
+          'Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie de página
+          'D'                                  // Modo de salida (descarga)
+      );
   }
   public function vacaciones()
    {
@@ -664,38 +645,31 @@ class ReportsController extends Controller
    public function captura_diaria_post(Request $request)
    {
       $dptos = \Auth::user()->centros->pluck('id')->toArray();
-      $dt1 = Carbon::parse(fecha_ymd($request->fecha_inicio));
       $fecha = $request->fecha_inicio;
       $fecha_inicial = fecha_ymd($request->fecha_inicio);
 
       if ($request->solo_medicos == true) {
-        $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
-        $incidencias = Incidencia::GetIncidenciasPorDia_Solo_MedicosPorDia($dptos, $medicosIds, $fecha_inicial);
+          $medicosIds = ['24','25','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69'];
+          $incidencias = Incidencia::GetIncidenciasPorDia_Solo_MedicosPorDia($dptos, $medicosIds, $fecha_inicial);
+      } else {
+          $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos, $fecha_inicial);
       }
-      else {
-        $incidencias = Incidencia::GetIncidenciasCapturaPorDia($dptos,$fecha_inicial);
-        //dd($incidencias);
-      }
-
 
       if (!$incidencias) {
-        Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
-        return redirect()->route('reports.captura_por_dia');
-      }
-
-      else {
-        $mpdf = new mPDF('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-          $header = \View('reportes.header_diario2', compact('fecha'))->render();
-          $mpdf->SetFooter('Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-          $html =  \View('reportes.reporte_diario_generado', compact('incidencias'))->render();
+          Flash::warning('No hay datos para esta fecha: '.fecha_dmy($fecha));
+          return redirect()->route('reports.captura_por_dia');
+      } else {
           $pdfFilePath = 'REPORTE_DE_INCIDENCIAS_DEL_DIA_'.Carbon::now()->format('d-m-Y').'.pdf';
-          $mpdf->setAutoTopMargin = 'stretch';
-          $mpdf->setAutoBottomMargin = 'stretch';
-          $mpdf->setHTMLHeader($header);
-          $mpdf->SetDisplayMode('fullpage');
-          $mpdf->WriteHTML($html);
 
-          $mpdf->Output($pdfFilePath, "D");
+          return $this->generatePdf(
+              'reportes.reporte_diario_generado',  // Vista para contenido
+              ['incidencias' => $incidencias],     // Datos para la vista
+              $pdfFilePath,                        // Nombre del archivo
+              'reportes.header_diario2',           // Vista para el encabezado
+              ['fecha' => $fecha],                 // Datos para el encabezado
+              'Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',  // Pie de página
+              'D'                                  // Modo de salida (descarga)
+          );
       }
    }
    public function otorgados(Request $request){

@@ -1,47 +1,87 @@
-<table style="font-size:7.5pt text-align:center; font-family:family:Arial; width: 100%;  ">
-    <thead>
-
-        <tr style="background-color: rgb(171,165,160);  ">
-            <td>Num Empleado</td>
-            <td>Empleado</td>
-            <td>Codigo</td>
-            <td>Fecha Inicial</td>
-            <td>Fecha Final</td>
-            <td>Categoria</td>
-            <td>Centro</td>
+<table cellspacing="0" style="width:100%; border-collapse:collapse; font-family:Arial; font-size:9pt; text-align:center; border:1px solid #999; table-layout:fixed;">
+    <thead >
+        <tr>
+            <th style="width:10%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Num Empleado</th>
+            <th style="width:30%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Empleado</th>
+            <th style="width:8%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Codigo</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Fecha Inicial</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Fecha Final</th>
+            <th style="width:13%; padding:4px; font-weight:bold; background-color:rgb(171,165,160); border:1px solid #666;">Centro</th>
         </tr>
     </thead>
-    <tbody style="font-size:8pt text-align:center; font-family:family:Arial; width: 100%;  ">
-        {{-- */ $tmp = "" /* --}}
-        @foreach ($incidencias as $incidencia)
-            <tr rowspan="2">
-                @if ($incidencia->num_empleado == $tmp)
-                    <td></td>
-                    <td></td>
-                    <td align=center>{{ str_pad($incidencia->code, '2', '0', STR_PAD_LEFT) }}</td>
-                    <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
-                    <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-            </tr>
-        @else
-            <tr style="background:#000 padding-bottom:3mm;">
-                @if (empty($incidencia))
-                    @for ($i = 0; $i < 8; $i++)
-                        <td></td>
-                    @endfor
-                @endif
-            </tr>
-            <tr>
-                <td align=center>{{ $incidencia->num_empleado }}</td>
-                <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</td>
-                <td align=center>{{ str_pad($incidencia->code, '2', '0', STR_PAD_LEFT) }}</td>
-                <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
-                <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
-                <td align=left>{{ $incidencia->puesto }}</td>
-                <td align=left>{{ get_departamento($incidencia->deparment_id) }}</td>
-            </tr>
-            {{-- */ $tmp = $incidencia->num_empleado /* --}}
-        @endif
-        @endforeach
-    </tbody>
+    <tbody style="font-family:Arial; font-size:9pt;">
+        @php
+            $tmp = "";
+            $isFirst = true;
+        @endphp
+        @forelse ($incidencias as $incidencia)
+            @if (isset($incidencia->num_empleado) && $incidencia->num_empleado == $tmp)
+                <tr>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;"></td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;"></td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->code))
+                            {{ str_pad($incidencia->code, 2, '0', STR_PAD_LEFT) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->fecha_inicio))
+                            {{ fecha_dmy($incidencia->fecha_inicio) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->fecha_final))
+                            {{ fecha_dmy($incidencia->fecha_final) }}
+                        @endif
+                    </td>
 
+                    <td style="border:1px solid #ccc; padding:2px;"></td>
+                </tr>
+            @else
+
+                @php $isFirst = false; @endphp
+                <tr>
+                    <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center; font-weight:bold;">
+                        {{ $incidencia->num_empleado ?? '' }}
+                    </td>
+                    <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:left; font-weight:bold;">
+                        {{ $incidencia->father_lastname ?? '' }}
+                        {{ $incidencia->mother_lastname ?? '' }}
+                        {{ $incidencia->name ?? '' }}
+                        <p style="font-weight: normal;">{{ $incidencia->puesto ?? '' }}</p>
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->code))
+                            {{ str_pad($incidencia->code, 2, '0', STR_PAD_LEFT) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->fecha_inicio))
+                            {{ fecha_dmy($incidencia->fecha_inicio) }}
+                        @endif
+                    </td>
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->fecha_final))
+                            {{ fecha_dmy($incidencia->fecha_final) }}
+                        @endif
+                    </td>
+
+                    <td style="width:13%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">
+                        @if(isset($incidencia->deparment_id) && $incidencia->deparment_id)
+                            {{ get_departamento($incidencia->deparment_id) }}
+                        @else
+                            &nbsp;
+                        @endif
+                    </td>
+                </tr>
+                @php $tmp = $incidencia->num_empleado ?? ''; @endphp
+            @endif
+        @empty
+            <tr>
+                <td
+                    <strong>No hay incidencias que mostrar para esta fecha</strong>
+                </td>
+            </tr>
+        @endforelse
+    </tbody>
 </table>

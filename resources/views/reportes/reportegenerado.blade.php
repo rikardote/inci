@@ -18,7 +18,7 @@
         @endphp
         @foreach($incidencias as $incidencia)
             @if($incidencia->num_empleado == $tmp)
-                <tr class="{{ $colorAlternado ? 'fila-par' : 'fila-impar' }}">
+                <tr>
                     <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">&nbsp;</td>
                     <td style="width:30%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:left;">
                         <div style="min-height:16px;">
@@ -57,20 +57,10 @@
                 </tr>
             @else
                 @if(!$firstRow)
-                    <!-- Separador mejorado entre empleados -->
-                    <tr>
-                        <td colspan="7" style="height:8px; background-color:#d9d9d9; padding:0; border-bottom:2px solid #666; border-top:2px solid #666;"></td>
-                    </tr>
-                    <!-- Espacio extra para mejor visualización -->
-                    <tr>
-                        <td colspan="7" style="height:3px; padding:0;"></td>
-                    </tr>
+                    <!-- Se han eliminado los separadores grises aquí -->
                 @endif
 
-                <!-- Cambiar color de fondo para cada empleado -->
-                @php $colorAlternado = !$colorAlternado; @endphp
-
-                <tr class="{{ $colorAlternado ? 'fila-par' : 'fila-impar' }}" style="background-color: {{ $colorAlternado ? '#f8f8f8' : '#ffffff' }};">
+                <tr>
                     <td style="width:10%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center; font-weight:bold;">{{ $incidencia->num_empleado }}</td>
                     <td style="width:30%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:left;">
                         <div style="font-weight:bold;">{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</div>
@@ -108,9 +98,7 @@
                     </td>
                     <td style="width:8%; padding:2px; border:1px solid #ccc; vertical-align:top; text-align:center;">{{ $incidencia->total }}</td>
                 </tr>
-                <tr>
-                    <td colspan="7" style="height:8px; background-color:#d9d9d9; padding:0; border-bottom:2px solid #666; border-top:2px solid #666;"></td>
-                </tr>
+                <!-- Se ha eliminado el separador gris inferior aquí -->
                 @php
                     $tmp = $incidencia->num_empleado;
                     $firstRow = false;
