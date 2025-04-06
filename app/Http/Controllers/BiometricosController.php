@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use \mPDF;
-use App\Qna;
 
+use App\Qna;
 use DateTime;
 use App\Puesto;
 use DatePeriod;
@@ -14,20 +15,24 @@ use App\Horario;
 use App\Periodo;
 use DateInterval;
 use App\Deparment;
-use App\Codigo_De_Incidencia;
 use Carbon\Carbon;
 use App\Attendance;
 use App\Incidencia;
 use App\Http\Requests;
+use Carbon\CarbonPeriod;
 use Laracasts\Flash\Flash;
 use Rats\Zkteco\Lib\ZKTeco;
-use Illuminate\Http\Request;
 //use DB;
+use Illuminate\Http\Request;
+use App\Codigo_De_Incidencia;
+use App\Traits\PdfGeneratorTrait;
 use Illuminate\Support\Facades\DB;
 use Yadakhov\InsertOnDuplicateKey;
 
 class BiometricosController extends Controller
 {
+    use PdfGeneratorTrait;
+
 	public function __construct()
     {
         $this->middleware('auth');
@@ -408,47 +413,57 @@ private function tieneParametrosValidos(Request $request)
             return $registro;
         });
     }
-*/public function exportar(Request $request)
+*/
+    public function exportar(Request $request)
     {
+        try {
+            // Obtener parámetros y validar
+            $centro = $request->input('centro');
+            $año = $request->input('año');
+            $quincena = $request->input('quincena');
 
-        // Obtener parámetros
-        $centro = $request->input('centro');
-        $año = $request->input('año');
-        $quincena = $request->input('quincena');
+            if (!$centro || !$año || !$quincena) {
+                throw new \Exception('Parámetros de entrada incompletos.');
+            }
 
-        $dpto = Deparment::find($centro);
+            $dpto = Deparment::find($centro);
+            $qna = Qna::where('qna', $quincena)->where('year', $año)->first();
 
-        $qna = Qna::where('qna', $quincena)->where('year',$año)->first();
+            if (!$dpto || !$qna) {
+                throw new \Exception('Departamento o quincena no encontrados.');
+            }
 
-        $fecha_inicio = getFechaInicioPorQna($qna->id);
-        $fecha_final = getFechaFinalPorQna($fecha_inicio);
+            $fecha_inicio = getFechaInicioPorQna($qna->id);
+            $fecha_final = getFechaFinalPorQna($fecha_inicio);
 
-        $begin = new DateTime( $fecha_inicio );
-        $end = new DateTime( $fecha_final );
-        $end = $end->modify( '+1 day' );
+            $fechaInicioCarbon = Carbon::parse($fecha_inicio);
+            $fechaFinalCarbon = Carbon::parse($fecha_final);
 
-        $interval = new DateInterval('P1D');
-        $daterange = new DatePeriod($begin, $interval ,$end);
+            $daterange = CarbonPeriod::create(
+                $fechaInicioCarbon,
+                $fechaFinalCarbon
+            )->toArray();
 
-    	//$checadas = Checada::get_Checadas($dpto, $qna->qna, $qna->year);
-        $empleados = Employe::get_empleados($centro);
-        //dd($empleados);
-        $mpdf = new Mpdf('', 'Letter', 0, '', 12.7, 12.7, 14, 12.7, 8, 8);
-        $header = \View('reportes.header', compact('dpto', 'qna'))->render();
-        $mpdf->SetFooter($dpto->description.'|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}');
-        $html =  \View('biometrico.show_pdf', compact('empleados','daterange'))->render();
-        $pdfFilePath = $qna->qna.'-'.$qna->year.'-'.$dpto->description.'.pdf';
-        $mpdf->setAutoTopMargin = 'stretch';
-        $mpdf->setAutoBottomMargin = 'stretch';
-        $mpdf->setHTMLHeader($header);
-        $mpdf->SetDisplayMode('fullpage');
-        $mpdf->WriteHTML($html);
-        //$mpdf->Output($pdfFilePath, "D");
-        $mpdf->Output();
+            $empleados = Employe::get_empleados($centro);
 
+            // Nombre del archivo PDF
+            $pdfFilePath = $qna->qna . '-' . $qna->year . '-' . $dpto->description . '.pdf';
 
-
-
+            // Generar el PDF usando el trait
+            return $this->generatePdf(
+                'biometrico.show_pdf',
+                compact('empleados', 'daterange'),
+                $pdfFilePath,
+                'biometrico.header',
+                compact('dpto', 'qna'),
+                $dpto->description . '|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',
+                'I'
+            );
+        } catch (\Exception $e) {
+            Log::error('Error al exportar PDF: ' . $e->getMessage() . ' en ' . $e->getFile() . ':' . $e->getLine());
+            Flash::error('Error al generar el PDF: ' . $e->getMessage());
+            return back();
+        }
     }
 
 }

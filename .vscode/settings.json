@@ -9,7 +9,7 @@
     "window.newWindowDimensions": "inherit",
     "editor.multiCursorModifier": "ctrlCmd",
     "files.trimTrailingWhitespace": true,
-    "diffEditor.renderSideBySide": false,
+    "diffEditor.renderSideBySide": true,
     "editor.snippetSuggestions": "top",
     "editor.detectIndentation": false,
     "window.nativeFullScreen": false,
