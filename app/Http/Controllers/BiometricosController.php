@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use \mPDF;
 use App\Qna;
 
+=======
+use Log;
+use \mPDF;
+
+use App\Qna;
+>>>>>>> origin/reporte-diario
 use DateTime;
 use App\Puesto;
 use DatePeriod;
@@ -14,20 +21,35 @@ use App\Horario;
 use App\Periodo;
 use DateInterval;
 use App\Deparment;
+<<<<<<< HEAD
 use App\Codigo_De_Incidencia;
+=======
+>>>>>>> origin/reporte-diario
 use Carbon\Carbon;
 use App\Attendance;
 use App\Incidencia;
 use App\Http\Requests;
+<<<<<<< HEAD
 use Laracasts\Flash\Flash;
 use Rats\Zkteco\Lib\ZKTeco;
 use Illuminate\Http\Request;
 //use DB;
+=======
+use Carbon\CarbonPeriod;
+use Laracasts\Flash\Flash;
+use Rats\Zkteco\Lib\ZKTeco;
+//use DB;
+use Illuminate\Http\Request;
+use App\Codigo_De_Incidencia;
+use App\Traits\PdfGeneratorTrait;
+>>>>>>> origin/reporte-diario
 use Illuminate\Support\Facades\DB;
 use Yadakhov\InsertOnDuplicateKey;
 
 class BiometricosController extends Controller
 {
+    use PdfGeneratorTrait;
+
 	public function __construct()
     {
         $this->middleware('auth');
@@ -408,6 +430,7 @@ private function tieneParametrosValidos(Request $request)
             return $registro;
         });
     }
+<<<<<<< HEAD
 */public function exportar(Request $request)
     {
 
@@ -449,6 +472,69 @@ private function tieneParametrosValidos(Request $request)
 
 
 
+=======
+*/
+    public function exportar(Request $request)
+    {
+        try {
+            // Obtener parámetros y validar
+            $centro = $request->input('centro');
+            $año = $request->input('año');
+            $quincena = $request->input('quincena');
+
+            if (!$centro || !$año || !$quincena) {
+                throw new \Exception('Parámetros de entrada incompletos.');
+            }
+
+            $dpto = Deparment::find($centro);
+            $qna = Qna::where('qna', $quincena)->where('year', $año)->first();
+
+            if (!$dpto || !$qna) {
+                throw new \Exception('Departamento o quincena no encontrados.');
+            }
+
+            $fecha_inicio = getFechaInicioPorQna($qna->id);
+            $fecha_final = getFechaFinalPorQna($fecha_inicio);
+
+            $fechaInicioCarbon = Carbon::parse($fecha_inicio);
+            $fechaFinalCarbon = Carbon::parse($fecha_final);
+
+            $daterange = CarbonPeriod::create(
+            $fechaInicioCarbon,
+            $fechaFinalCarbon)->toArray();
+            $daterange = collect(CarbonPeriod::create($fecha_inicio, $fecha_final)->toArray());
+
+            // Usar el método obtenerRegistros del modelo Checada
+            $checada = new Checada();
+            $resultados = $checada->obtenerRegistros($dpto->id, $fecha_inicio, $fecha_final);
+            $registros = $resultados instanceof \Illuminate\Support\Collection ? $resultados : collect($resultados);
+
+            // Agrupar por número de empleado y ordenar
+            $empleados = $registros->groupBy('num_empleado')->sortBy(function($grupo) {
+                return intval($grupo->first()->num_empleado);
+            });
+
+
+
+            // Nombre del archivo PDF
+            $pdfFilePath = $qna->qna . '-' . $qna->year . '-' . $dpto->description . '.pdf';
+
+            // Generar el PDF usando el trait
+            return $this->generatePdf(
+                'biometrico.show_pdf',
+                compact('empleados', 'fecha_inicio', 'fecha_final', 'daterange'),
+                $pdfFilePath,
+                'biometrico.header',
+                compact('dpto', 'qna'),
+                $dpto->description . '|Generado el: {DATE j-m-Y} |Hoja {PAGENO} de {nb}',
+                'I'
+            );
+        } catch (\Exception $e) {
+            Log::error('Error al exportar PDF: ' . $e->getMessage() . ' en ' . $e->getFile() . ':' . $e->getLine());
+            Flash::error('Error al generar el PDF: ' . $e->getMessage());
+            return back();
+        }
+>>>>>>> origin/reporte-diario
     }
 
 }

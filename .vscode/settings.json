@@ -9,7 +9,11 @@
     "window.newWindowDimensions": "inherit",
     "editor.multiCursorModifier": "ctrlCmd",
     "files.trimTrailingWhitespace": true,
+<<<<<<< HEAD
     "diffEditor.renderSideBySide": false,
+=======
+    "diffEditor.renderSideBySide": true,
+>>>>>>> origin/reporte-diario
     "editor.snippetSuggestions": "top",
     "editor.detectIndentation": false,
     "window.nativeFullScreen": false,

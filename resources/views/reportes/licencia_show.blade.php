@@ -1,15 +1,8 @@
 @extends('layout.main')
 
-@section('css')
-	<link rel="stylesheet" href="{{ asset('css/flotante.css') }}">
-@endsection
+@section('title', 'Reporte de Licencias Medicas')
 
 @section('content')
-<div class="social">
-	<ul>
-		<li><a href="{{route('reporte.licencias_pdf',[$fecha_inicio, $fecha_final])}}" class="icon-pdf"><i class="fa fa-file-pdf-o fa-2x "></i></a></li>
-	</ul>
-</div>
 
 <table class="table table-hover table-condensed">
 		<thead>
@@ -37,14 +30,14 @@
 				@if($incidencia->fecha_expedida > $incidencia->fecha_inicio)
 					<td><strong>{{fecha_dmy($incidencia->fecha_expedida)}}*<strong></td>
 				@else
-					<td>@if($incidencia->fecha_expedida) 
+					<td>@if($incidencia->fecha_expedida)
 						{{fecha_dmy($incidencia->fecha_expedida)}}
 						 @else
 						 <strong>**********</strong>
 						 @endif
 					</td>
 				@endif
-				
+
 			</tr>
 			@endforeach
 		</tbody>

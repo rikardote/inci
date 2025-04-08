@@ -1,22 +1,22 @@
 @extends('layout.main')
 
 @section('title', $title)
- 
+
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/flotante.css') }}">
 @endsection
- 
+
 @section('content')
-   
+
     @include('reportes.kardex.searchEmpleado')
      @if(isset($num_empleado))
     <div class="social">
         <ul>
-            <li><a href="{{route('reporte.kardex.pdf', [$num_empleado, $fecha_inicio, $fecha_final])}}" class="icon-pdf"><i class="fa fa-file-pdf-o fa-2x "></i></a></li>
+            <li><a href="{{route('reporte.kardex.pdf', [$num_empleado, $fecha_inicio, $fecha_final])}}"class="icon-pdf"><i class="fa-solid fa-file-pdf fa-1x"> Generar PDF</i></li>
         </ul>
     </div>
     @endif
-    
+
 @endsection
 
 @section('js')
@@ -60,5 +60,5 @@
 //     changeYear: true,
 //     firstDay: 1
 // });
-</script> 
+</script>
 @endsection
