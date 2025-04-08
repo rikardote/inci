@@ -440,11 +440,21 @@ private function tieneParametrosValidos(Request $request)
             $fechaFinalCarbon = Carbon::parse($fecha_final);
 
             $daterange = CarbonPeriod::create(
-                $fechaInicioCarbon,
-                $fechaFinalCarbon
-            )->toArray();
+            $fechaInicioCarbon,
+            $fechaFinalCarbon)->toArray();
+            $daterange = collect(CarbonPeriod::create($fecha_inicio, $fecha_final)->toArray());
 
-            $empleados = Employe::get_empleados($centro);
+            // Usar el método obtenerRegistros del modelo Checada
+            $checada = new Checada();
+            $resultados = $checada->obtenerRegistros($dpto->id, $fecha_inicio, $fecha_final);
+            $registros = $resultados instanceof \Illuminate\Support\Collection ? $resultados : collect($resultados);
+
+            // Agrupar por número de empleado y ordenar
+            $empleados = $registros->groupBy('num_empleado')->sortBy(function($grupo) {
+                return intval($grupo->first()->num_empleado);
+            });
+
+
 
             // Nombre del archivo PDF
             $pdfFilePath = $qna->qna . '-' . $qna->year . '-' . $dpto->description . '.pdf';
@@ -452,7 +462,7 @@ private function tieneParametrosValidos(Request $request)
             // Generar el PDF usando el trait
             return $this->generatePdf(
                 'biometrico.show_pdf',
-                compact('empleados', 'daterange'),
+                compact('empleados', 'fecha_inicio', 'fecha_final', 'daterange'),
                 $pdfFilePath,
                 'biometrico.header',
                 compact('dpto', 'qna'),

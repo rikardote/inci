@@ -1,13 +1,12 @@
 <style>
     table {
         font-family: Arial, sans-serif;
-
         width: 100%;
         margin-bottom: 6px;
+        border-collapse: collapse;
     }
 
-    th,
-    td {
+    th, td {
         border: 1px solid #dddddd;
         padding: 4px;
         text-align: center;
@@ -24,61 +23,60 @@
         font-size: 11px;
         font-weight: bold;
         padding: 2px;
-        border: 0px solid #cccccc;
+        border: none;
+        border-bottom: 1px solid #dddddd;
+        min-height: 20px; /* Fuerza una altura mínima */
     }
-
-
-    /* Estilos para colocar nombre y horario en extremos */
-
 </style>
 
-@foreach ($empleados as $empleado)
-@php
-$diasHabiles = collect($daterange)->filter(function ($date) {
-return !in_array($date->format('w'), [0, 6]);
-});
-@endphp
+@foreach ($empleados as $grupo)
+    @php
+        $empleado = $grupo->first(); // Obtener el primer registro del grupo
+    @endphp
+    <table style="width: 100%;">
+        <!-- Cabecera del empleado -->
+        <tr class="employee-header">
+            <td colspan="{{ $daterange->filter(function($date) { return !in_array($date->format('w'), [0, 6]); })->count() }}">
+                <table style="width: 100%; border-collapse: collapse; background-color: transparent; border: 0px;">
+                    <tr>
+                        <td style="text-align: left; font-weight: bold; font-size: 11px;">
+                            {{ $empleado->num_empleado }} - {{ $empleado->apellido_paterno }} {{ $empleado->apellido_materno }} {{ $empleado->nombre }}
+                        </td>
+                        <td style="text-align: right; font-weight: bold; font-size: 11px;">
+                            Horario: {{ $empleado->horario_entrada }} - {{ $empleado->horario_salida }}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
 
-<table style="width: 100%; border: 8px;">
-    <!-- Cabecera del empleado -->
-    <tr class="employee-header">
-        <td colspan="{{ $diasHabiles->count() }}">
-            <table style="width: 100%; border-collapse: collapse; background-color: transparent; border: 0px;">
-                <tr>
-                    <td style="text-align: left; font-weight: bold; font-size: 11px;">
-                        {{ $empleado->num_empleado }} - {{ $empleado->father_lastname }} {{ $empleado->mother_lastname }} {{
-                        $empleado->name }}
-                    </td>
-                    <td style="text-align: right; font-weight: bold; font-size: 11px;">
-                        Horario: {{ $empleado->horario }}
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+        <!-- Encabezado de días -->
+        <tr>
+            @foreach ($daterange->filter(function($date) { return !in_array($date->format('w'), [0, 6]); }) as $date)
+                <th style="width: {{ 100 / $daterange->filter(function($date) { return !in_array($date->format('w'), [0, 6]); })->count() }}%;">
+                    {{ ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'][$date->format('w')] }}<br>
+                    {{ $date->format('d') }}
+                </th>
+            @endforeach
+        </tr>
 
-    <!-- Encabezado de días -->
-    <tr>
-        @foreach ($diasHabiles as $date)
-        <th style="width: {{ 100 / $diasHabiles->count() }}%;">
-            {{ ['Lun','Mar','Mie','Jue','Vie'][$date->format('w') - 1] }}<br>
-            {{ $date->format('d') }}
-        </th>
-        @endforeach
-    </tr>
-
-    <!-- Fila de asistencia -->
-    <tr>
-        @foreach ($diasHabiles as $date)
-        .fixed-width {
-            width: {{ 100 / $diasHabiles->count() }}%;
-            }
-        @php
-        $entrada = check_entrada($date->format("Y-m-d"), $empleado->num_empleado);
-        $salida = check_salida($date->format("Y-m-d"), $empleado->num_empleado, $entrada);
-        @endphp
-        <td style="width: {{ 100 / $diasHabiles->count() }}%;">{{ $entrada ?? '-' }}-{{ $salida ?? '-' }}</td>
-        @endforeach
-    </tr>
-</table>
+        <!-- Fila de asistencia -->
+        <tr>
+            @foreach ($daterange->filter(function($date) { return !in_array($date->format('w'), [0, 6]); }) as $date)
+                @php
+                    $registro = $grupo->filter(function($item) use ($date) {
+                        return $item->fecha === $date->format('Y-m-d');
+                    })->first();
+                @endphp
+                <td style="width: {{ 100 / $daterange->filter(function($date) { return !in_array($date->format('w'), [0, 6]); })->count() }}%;">
+                    @if ($registro)
+                        {{ $registro->hora_entrada ? date('H:i', strtotime($registro->hora_entrada)) : '' }} -
+                        {{ $registro->hora_salida ? date('H:i', strtotime($registro->hora_salida)) : '' }}
+                    @else
+                        - -
+                    @endif
+                </td>
+            @endforeach
+        </tr>
+    </table>
 @endforeach
