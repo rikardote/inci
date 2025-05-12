@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Exports\SuplenciasExport;
+//use App\Exports\SuplenciasExport;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 
@@ -23,22 +23,25 @@ class GysController extends Controller
 
     }
 
-    public function exportarSuplentesPorQuincena($year, $quincena)
-    {
-        $filename = 'suplencias_quincena_' . $quincena . '_' . $year . '.csv';
-
-        $headers = [
+    private function generateCsvResponse($content, $filename) {
+        return new Response($content, 200, [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
             'Pragma' => 'no-cache',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0'
-        ];
+        ]);
+    }
 
-        return new Response(
+    public function exportarSuplentesPorQuincena($year, $quincena)
+    {
+        if (!is_numeric($year) || !is_numeric($quincena)) {
+            abort(400, 'Parámetros inválidos');
+        }
+        $filename = "suplencias_quincena_{$quincena}_{$year}.csv";
+        return $this->generateCsvResponse(
             Suplencia::exportarSuplentesPorQuincena($year, $quincena),
-            200,
-            $headers
+            $filename
         );
     }
   public function exportarTodasSuplencias()
@@ -118,7 +121,39 @@ class GysController extends Controller
             'quincena' => $quincena
         ]);
     }
+    public function eliminarSuplenciasPorQuincena(Request $request)
+    {
+        $year = $request->input('year');
+        $quincena = $request->input('quincena');
 
+        Suplencia::where('year', $year)
+            ->where('quincena', $quincena)
+            ->delete();
+
+        $montosActualizados = Suplencia::montosPorQuincenaCentro();
+
+        return response()->json([
+            'success' => true,
+            'montosPorQuincenaCentro' => $montosActualizados
+        ]);
+    }
+    public function eliminarSuplenciaIndividual($id)
+    {
+        try {
+        $suplencia = Suplencia::findOrFail($id);
+        $suplencia->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Suplencia eliminada correctamente.'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al eliminar la suplencia: ' . $e->getMessage()
+        ], 500);
+    }
+    }
 
 
 }

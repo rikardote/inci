@@ -490,6 +490,14 @@
                         <div class="module-title">Mantenimiento</div>
                     </a>
                 </div>
+                <div class="module-card module-biometric">
+                    <a href="{{ route('mantenimiento.respaldo') }}">
+                        <div class="module-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="module-title">Respaldo de Base de Datos</div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

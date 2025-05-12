@@ -75,7 +75,6 @@
         <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
         <script src="{{ asset('plugins/flatpickr/dist_l10n_es.js') }}"></script>
 
-
         <script src="{{ asset('js/script.js') }}"></script>
 
 

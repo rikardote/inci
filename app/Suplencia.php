@@ -201,14 +201,15 @@ class Suplencia extends Model
             ->selectRaw('SUM(monto) as monto_total')
             ->groupBy('centro', 'quincena', 'year')
             ->orderBy('year')
-            ->orderBy('quincena')
+            ->orderByRaw('CAST(quincena AS UNSIGNED)')
             ->orderBy('centro')
             ->get();
 
         $periodos = $datos->groupBy(function($item) {
-            return $item->year . '.' . $item->quincena;
+            return $item->year . "." . $item->quincena;
         })->sortBy(function($item, $key) {
-            return $key;
+            list($year, $quincena) = explode(".", $key);
+            return [(int)$year, (int)$quincena];
         });
 
             // Obtenemos los centros y los mapeamos a sus códigos

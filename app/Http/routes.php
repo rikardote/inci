@@ -487,7 +487,16 @@ Route::group(['middleware' => 'web'], function () {
     ]);
     Route::post('/mantenimiento/toggle', 'MantenimientoController@toggle')->name('mantenimiento.toggle');
 
-        /* P R I M A  D O M I N I C A L */
+    Route::get('mantenimiento/respaldo', [
+        'uses' => 'MantenimientoController@respaldo',
+        'as' => 'mantenimiento.respaldo'
+    ]);
+    Route::get('mantenimiento/descargar', [
+        'uses' => 'MantenimientoController@descargar',
+        'as' => 'mantenimiento.descargar'
+    ]);
+
+            /* P R I M A  D O M I N I C A L */
         Route::get('/reporte/prima_dominical', [
             'uses' => 'ReportsController@prima_dominical',
             'as' => 'reports.prima_dominical'
@@ -546,5 +555,9 @@ Route::group(['middleware' => 'web'], function () {
     ->name('exportar.reporte.mensual');
     Route::get('obtener-suplencias-quincena', 'GysController@obtenerSuplenciasPorQuincena')
     ->name('obtener.suplencias.quincena');
+    Route::post('/admin/gys/reporte-quincena/eliminar', 'GysController@eliminarSuplenciasPorQuincena')
+    ->name('eliminar.suplencias.quincena');
+    Route::delete('/admin/gys/suplencias/{id}', 'GysController@eliminarSuplenciaIndividual')
+    ->name('eliminar.suplencia.individual');
 
 });
